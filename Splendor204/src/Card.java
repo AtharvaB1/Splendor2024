@@ -1,6 +1,4 @@
 public class Card {
-    //i love splandor!!!!!!!!!!
-    //i LOOOOOOOOVVVVVVEEEEEE spleandor!!!!!!!!!!!!!!!!!
-    //i dont love spleandor :(
+    //STOP COMMITING 20 TIMES JT!!
     
 }
