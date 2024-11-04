@@ -34,6 +34,9 @@ public class Logic {
         for(int i=0; i<count;i++){
             players.add(new Player(i));
         }
-
+        decks = new ArrayList<>();
+        for(int i=1; i<=3;i++){
+            decks.add(new Deck(i));
+        }
     }
 }
