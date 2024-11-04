@@ -2,7 +2,9 @@ import java.util.*;
 public class Logic {
     private ArrayList<Player> players;
     private ArrayList<Deck> decks;
+    @SuppressWarnings("unused")//remove later, suppress currplayer not used (lots of methods not worked on yet)
     private int currPlayer;
+    @SuppressWarnings("unused")//remove later, suppress boolean not used (i havent worked on the method yet)
     private boolean turnOver; //add more here
     private HashMap<String, Integer> tokens;
     

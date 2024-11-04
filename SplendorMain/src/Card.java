@@ -1,13 +1,12 @@
 import java.util.*;
-
 import javax.imageio.ImageIO;
-
 import java.awt.image.*;
 
+@SuppressWarnings("unused")// remove later, suppress problems of img not used
 public class Card{
     private BufferedImage img;
     private int WhiteCost, BlueCost, GreenCost, RedCost, BlackCost;
-    String gem;
+    private String gem;
     private int VP;
     public Card(String input){
         try {
@@ -25,7 +24,11 @@ public class Card{
         VP = Integer.parseInt(vars[5]);
         gem = vars[6];
 
-        System.out.println(WhiteCost+BlackCost+GreenCost+RedCost+VP+""+gem);
+        System.out.println(WhiteCost+BlueCost+GreenCost+RedCost+BlackCost+VP+""+gem);
 
+    }
+
+    public int getVP(){
+        return VP;
     }
 }
