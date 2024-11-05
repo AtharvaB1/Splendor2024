@@ -15,7 +15,9 @@ public class Player
         heldCards = new ArrayList<Card>();
         heldPatrons = new ArrayList<Patron>();
         tokens = new HashMap<String,Integer>();
-        discounts = new HashMap<>();
+        tokens.put("White", 0); tokens.put("Green", 0); tokens.put("Blue", 0); tokens.put("Red", 0); tokens.put("Black", 0); tokens.put("Wild", 0);
+        discounts = new HashMap<String,Integer>();
+        discounts.put("White",0); discounts.put("Green",0); discounts.put("Blue",0); discounts.put("Red",0); discounts.put("Black",0);
     }
 
 
@@ -26,51 +28,48 @@ public class Player
    
     //gets the total acount of tokens the player has
     public int tokenCount(){
-        int ret = 0;
+        int count = 0;
         Iterator<String> iter = tokens.keySet().iterator();
         for(int i = 0; i < tokens.size(); i++)
-            ret += tokens.get(iter.next());
-        return ret;
+            count += tokens.get(iter.next());
+        return count;
     }
 
 
     //returns an int amount of tokens that the player has for that type
-    public int getTokenType(String gem){
-        return tokens.get(gem);
+    public int getTokenType(String token){
+        return tokens.get(token);
     }
 
 
     // adds the tokens in the arrayList to the player, logic will run stuff to see if player needs to remove any tokens
-    public void addTokens(Map<String, Integer> addGems){
-        Iterator<String> iter = addGems.keySet().iterator();
+    public void addTokens(Map<String, Integer> addTokens){
+        Iterator<String> iter = addTokens.keySet().iterator();
         while(iter.hasNext())
         {
-            String gemType = iter.next();
-            if(tokens.containsKey(gemType))
-                tokens.replace(gemType, tokens.get(gemType)+addGems.get(gemType));
-            else
-                tokens.put(gemType, 1);  
+            String tokenType = iter.next();
+            tokens.put(tokenType, tokens.get(tokenType)+1);  
         }  
     }
 
 
     //removes the tokens in the arrayList from the player
     // returns true if it is legal to add, does nothing and returns false if it is not legal
-    public boolean removeTokens(Map<String, Integer> removeGems){
-        Iterator<String> iter = removeGems.keySet().iterator();
+    //time is too late, adjust this method and more after to make player good
+    public boolean removeTokens(Map<String, Integer> removeTokens){
+        Iterator<String> iter = removeTokens.keySet().iterator();
         while(iter.hasNext())
         {
-            String gemType = iter.next();
-            if(tokens.get(gemType)-removeGems.get(gemType) < 0)
+            String tokenType = iter.next();
+            if(tokens.get(tokenType)-removeTokens.get(tokenType) < 0)
                 return false;
         }
 
-        iter = removeGems.keySet().iterator();
+        iter = removeTokens.keySet().iterator();
         while(iter.hasNext())
         {
             String gemType = (String) iter.next();
-            if(tokens.containsKey(gemType))
-                tokens.replace(gemType, tokens.get(gemType)-removeGems.get(gemType));
+            tokens.replace(gemType, tokens.get(gemType)-removeTokens.get(gemType));
         }
         return true;
     }

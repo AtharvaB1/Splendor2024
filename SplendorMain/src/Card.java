@@ -19,7 +19,7 @@ public class Card{
         cost.put("White",Integer.parseInt(vars[0]));
         cost.put("Blue",Integer.parseInt(vars[1]));
         cost.put("Green",Integer.parseInt(vars[2]));
-        cost.put("Blue",Integer.parseInt(vars[3]));
+        cost.put("Red",Integer.parseInt(vars[3]));
         cost.put("Black",Integer.parseInt(vars[4]));
         VP = Integer.parseInt(vars[5]);
         gem = vars[6];

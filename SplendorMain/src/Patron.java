@@ -14,10 +14,10 @@ public class Patron {
             return;
         }
         String[] vars = input.split(" ");
-        cost.put("White",Integer.parseInt(vars[0]));
-        cost.put("Blue",Integer.parseInt(vars[1]));
-        cost.put("Green",Integer.parseInt(vars[2]));
-        cost.put("Blue",Integer.parseInt(vars[3]));
+        cost.put("Red",Integer.parseInt(vars[0]));
+        cost.put("Green",Integer.parseInt(vars[1]));
+        cost.put("Blue",Integer.parseInt(vars[2]));
+        cost.put("White",Integer.parseInt(vars[3]));
         cost.put("Black",Integer.parseInt(vars[4]));
     }
     public Map<String, Integer> getPatCost() {
