@@ -36,4 +36,3 @@ public class Card{
         return cost;
     }
 }
-//I love spleandooorrrr
