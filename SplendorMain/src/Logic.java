@@ -1,5 +1,8 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 public class Logic {
+    private ArrayList<Patron> patrons;
     private ArrayList<Player> players;
     private ArrayList<Deck> decks;
     @SuppressWarnings("unused")//remove later, suppress currplayer not used (lots of methods not worked on yet)
@@ -34,11 +37,25 @@ public class Logic {
         }
         players = new ArrayList<>();
         for(int i=0; i<count;i++){
-            players.add(new Player(i));
+            players.add(new Player());
         }
         decks = new ArrayList<>();
         for(int i=1; i<=3;i++){
             decks.add(new Deck(i));
+        }
+        patrons = new ArrayList<>();
+        Scanner patCreate;
+        File pats = new File("src\\Patrons\\Patron.txt");
+        try {
+            patCreate = new Scanner(pats);
+        } catch (FileNotFoundException e) {
+            System.out.println(e+"your file is screwed");
+            e.printStackTrace();
+            return;
+        }
+        patCreate.nextLine();
+        while(patCreate.hasNext()){
+            patrons.add(new Patron(patCreate.nextLine()));
         }
     }
 }

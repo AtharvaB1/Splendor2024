@@ -5,7 +5,8 @@ public class Player
     private ArrayList<Card> reservedCards;
     private ArrayList<Card> heldCards;
     private ArrayList<Patron> heldPatrons;
-    private Map<String, Integer> gems;
+    private HashMap<String, Integer> tokens;
+    private HashMap<String, Integer> discounts;
    
     //constructor
     public Player(){
@@ -13,95 +14,71 @@ public class Player
         reservedCards = new ArrayList<Card>();
         heldCards = new ArrayList<Card>();
         heldPatrons = new ArrayList<Patron>();
-        gems = new HashMap<String, Integer>();
+        tokens = new HashMap<String,Integer>();
+        discounts = new HashMap<>();
     }
 
 
-    //returns the hashmap of the gems the player has
-    public Map<String, Integer> getTotalGems(){
-        return gems;
+    //returns the hashmap of the tokens the player has
+    public Map<String,Integer> getTokens(){
+        return tokens;
     }
    
-    //gets the total acount of gems the player has
-    public int getGemSize(){
+    //gets the total acount of tokens the player has
+    public int tokenCount(){
         int ret = 0;
-        Iterator<String> iter = gems.keySet().iterator();
-        for(int i = 0; i < gems.size(); i++)
-            ret += gems.get(iter.next());
+        Iterator<String> iter = tokens.keySet().iterator();
+        for(int i = 0; i < tokens.size(); i++)
+            ret += tokens.get(iter.next());
         return ret;
     }
 
 
-    //gets the total acount of gems the inputed list has
-    public int getGemSize(Map<String, Integer> addGems){
-        int ret = 0;
+    //returns an int amount of tokens that the player has for that type
+    public int getTokenType(String gem){
+        return tokens.get(gem);
+    }
+
+
+    // adds the tokens in the arrayList to the player, logic will run stuff to see if player needs to remove any tokens
+    public void addTokens(Map<String, Integer> addGems){
         Iterator<String> iter = addGems.keySet().iterator();
         while(iter.hasNext())
-            ret += addGems.get(iter.next());
-        return ret;
-    }
-
-
-    //returns an int amount of gems that the player has for that type
-    public int getGemType(String gem){
-        return gems.get(gem);
-    }
-
-
-    // adds the gems in the arrayList to the player,
-    // returns true if it is legal to add, does nothing and returns false if it is not legal
-    public boolean addGems(Map<String, Integer> addGems){
-        if(getGemSize() + getGemSize(addGems) > 10)
-            return false;
-
-
-        Iterator iter = addGems.keySet().iterator();
-        while(iter.hasNext())
         {
-            String gemType = (String) iter.next();
-            if(gems.containsKey(gemType))
-                gems.replace(gemType, gems.get(gemType)+addGems.get(gemType));
+            String gemType = iter.next();
+            if(tokens.containsKey(gemType))
+                tokens.replace(gemType, tokens.get(gemType)+addGems.get(gemType));
             else
-                gems.put(gemType, 1);  
+                tokens.put(gemType, 1);  
         }  
-        return true;  
     }
 
 
-    //removes the gems in the arrayList from the player
+    //removes the tokens in the arrayList from the player
     // returns true if it is legal to add, does nothing and returns false if it is not legal
-    public boolean removeGems(Map<String, Integer> removeGems){
-        Iterator iter = removeGems.keySet().iterator();
+    public boolean removeTokens(Map<String, Integer> removeGems){
+        Iterator<String> iter = removeGems.keySet().iterator();
         while(iter.hasNext())
         {
-            String gemType = (String) iter.next();
-            if(gems.get(gemType)-removeGems.get(gemType) < 0)
+            String gemType = iter.next();
+            if(tokens.get(gemType)-removeGems.get(gemType) < 0)
                 return false;
         }
-
 
         iter = removeGems.keySet().iterator();
         while(iter.hasNext())
         {
             String gemType = (String) iter.next();
-            if(gems.containsKey(gemType))
-                gems.replace(gemType, gems.get(gemType)-removeGems.get(gemType));
+            if(tokens.containsKey(gemType))
+                tokens.replace(gemType, tokens.get(gemType)-removeGems.get(gemType));
         }
         return true;
     }
 
 
-    //returns a hashMap of all the gems Types and the amount of discpount the player ha for them (can easily remove the hashmap if needed)
+    //returns a hashMap of all the gems Types and the amount of discount the player has for them (can easily remove the hashmap if needed)
     public Map<String, Integer> getTotalDiscount(){
-        Map retMap = new HashMap<String, Integer>();
-        for(int i = 0; i < heldCards.size(); i++)
-        {
-            if(retMap.containsKey(heldCards.get(i).getGem()))
-                retMap.replace(heldCards.get(i).getGem(), retMap.get(heldCards.get(i).getGem())+1);
-            else
-                retMap.put(heldCards.get(i).getGem(), 1);
-        }
-        return retMap;
+        return discounts;
     }
 
 
@@ -116,10 +93,10 @@ public class Player
 
     //returns if the player has enough discounts to buy a patreon card
     //returns true if they can, and false if they cant, will not effect any values
-    public boolean canBuyPatreon(Patreon thisPatreon)
+    public boolean canBuyPatreon(Patron thisPatron)
     {
         Map<String, Integer> comp = getTotalDiscount();
-        Map<String, Integer> reqDiscount = thisPatreon.getPatCost();
+        Map<String, Integer> reqDiscount = thisPatron.getPatCost();
         Iterator<String> iter = reqDiscount.keySet().iterator();
         while(iter.hasNext())
         {
@@ -134,7 +111,7 @@ public class Player
     //returns if the gem lists length is over 10 or not
     public boolean isOverTen()
     {
-        if(getGemSize() > 10)
+        if(tokenCount() > 10)
         {
             return true;
         }
@@ -169,6 +146,11 @@ public class Player
     //takes the selected card and adds it into the cards ArrayList
     public void takeCard(Card taken){
         heldCards.add(taken);
+        if(discounts.get(taken.getGem())!=null){
+            discounts.put(taken.getGem(), discounts.get(taken.getGem())+1);
+        } else{
+            discounts.put(taken.getGem(), 1);
+        }
     }
 
 
@@ -194,7 +176,7 @@ public class Player
             reservedCards.add(reserve);
             Map<String, Integer> wild = new HashMap<String,Integer>();
             wild.put("Wild", 1);
-            addGems(wild);
+            addTokens(wild);
             return true;
         }
         return false;  
@@ -204,8 +186,8 @@ public class Player
     //removes the gems that are unaccounted by discounts and adds the card into the cards ArrayList
     //(returns true if the player has enough tokens and discounts, returns false and does not do anything if player does not have enough)
     public boolean buyCard(Card card){
-        Map<String,Integer> cardCost = card.cardCost();
-        if(removeGems(cardCost))
+        Map<String,Integer> cardCost = card.getCost();
+        if(removeTokens(cardCost))
         {
             heldCards.add(card);
             return true;

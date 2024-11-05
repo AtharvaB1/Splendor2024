@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 public class Deck {
-    HashSet<Card> cards;
+    ArrayList<Card> cards;
 
     public Deck(int level){
         File card = new File("src\\Cards\\Card"+level+".txt");
@@ -14,7 +14,7 @@ public class Deck {
             return;
         }
         scan.nextLine();
-        cards = new HashSet<>();
+        cards = new ArrayList<>();
         while(scan.hasNextLine()){
             cards.add(new Card(scan.nextLine()));
         }

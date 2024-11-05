@@ -1,14 +1,12 @@
-import java.util.*;
-import javax.imageio.ImageIO;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
-@SuppressWarnings("unused")// remove later, suppress problems of img not used
-public class Card{
+public class Patron {
+    @SuppressWarnings("unused") //suppress img not being used, will be used later so please remove when implemented
     private BufferedImage img;
     private HashMap<String,Integer> cost;
-    private String gem;
-    private int VP;
-    public Card(String input){
+    public Patron(String input){
         try {
             //img = ImageIO.read(Card.class.getResource("/Image/"+input+".png")); //pls edit when actual pictures are there
         } catch (Exception e) {
@@ -21,19 +19,8 @@ public class Card{
         cost.put("Green",Integer.parseInt(vars[2]));
         cost.put("Blue",Integer.parseInt(vars[3]));
         cost.put("Black",Integer.parseInt(vars[4]));
-        VP = Integer.parseInt(vars[5]);
-        gem = vars[6];
     }
-
-    public int getVP(){
-        return VP;
-    }
-
-    public String getGem() {
-        return gem;
-    }
-
-    public HashMap<String,Integer> getCost(){
+    public Map<String, Integer> getPatCost() {
         return cost;
     }
 }
