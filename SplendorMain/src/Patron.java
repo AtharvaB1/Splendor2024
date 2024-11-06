@@ -16,8 +16,6 @@ public class Patron {
             return;
         }
 
-
-
         vPoints = 3;
         String[] vars = input.split(" ");
         cost.put("Red",Integer.parseInt(vars[0]));

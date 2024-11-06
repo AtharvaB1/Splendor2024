@@ -20,12 +20,11 @@ public class Player
         discounts.put("White",0); discounts.put("Green",0); discounts.put("Blue",0); discounts.put("Red",0); discounts.put("Black",0);
     }
 
-
     //returns the hashmap of the tokens the player has
     public Map<String,Integer> getTokens(){
         return tokens;
     }
-   
+
     //gets the total acount of tokens the player has
     public int tokenCount(){
         int count = 0;
@@ -35,12 +34,10 @@ public class Player
         return count;
     }
 
-
     //returns an int amount of tokens that the player has for that type
     public int getTokenType(String token){
         return tokens.get(token);
     }
-
 
     // adds the tokens in the arrayList to the player, logic will run stuff to see if player needs to remove any tokens
     public void addTokens(Map<String, Integer> addTokens){
@@ -51,7 +48,6 @@ public class Player
             tokens.put(tokenType, tokens.get(tokenType)+1);  
         }  
     }
-
 
     //removes the tokens in the arrayList from the player
     // returns true if it is legal to add, does nothing and returns false if it is not legal
@@ -74,12 +70,10 @@ public class Player
         return true;
     }
 
-
     //returns a hashMap of all the gems Types and the amount of discount the player has for them (can easily remove the hashmap if needed)
     public Map<String, Integer> getTotalDiscount(){
         return discounts;
     }
-
 
     //returns the amount of discount the player has for the specified material(ruby, sapphire, etc)
     public int getDiscountType(String thisGem){
@@ -88,7 +82,6 @@ public class Player
         else
             return 0;
     }
-
 
     //returns if the player has enough discounts to buy a patreon card
     //returns true if they can, and false if they cant, will not effect any values
@@ -106,7 +99,6 @@ public class Player
         return true;
     }
 
-
     //returns if the gem lists length is over 10 or not
     public boolean isOverTen()
     {
@@ -117,30 +109,25 @@ public class Player
         return false;
     }
 
-
     //returns the player score
     public int getTotalVP(){
         return victoryPoints;
     }
-
 
     //returns a list of all held player cards
     public ArrayList<Card> getTotalCards(){
         return heldCards;
     }
 
-
     //returns a list of all reserved player cards
     public ArrayList<Card> getTotalReservedCards(){
         return reservedCards;
     }
 
-
     //returns a list of all held patreon cards
     public ArrayList<Patron> getTotalPatrons(){
         return heldPatrons;
     }
-
 
     //takes the selected card and adds it into the cards ArrayList
     public void takeCard(Card taken){
@@ -152,12 +139,10 @@ public class Player
         }
     }
 
-
     //takes the selected patron and add it to the patrons ArrayList
     public void takePatron(Patron taken){
         heldPatrons.add(taken);
     }
-
 
     //checks if the player has less than 3 reserved cards.
     public boolean canReserve(){
@@ -165,7 +150,6 @@ public class Player
             return true;
         return false;
     }
-
 
     //takes the selected card and adds it to the reservedCards arraylist, also adds a wild gem to the gems arrayList (if one is available)
     //returns true if the player actually can reserve a card, does nothing and returns false if not (it will still return true if it can reserve a card but cant add a wild token)
@@ -181,7 +165,6 @@ public class Player
         return false;  
     }
 
-
     //removes the gems that are unaccounted by discounts and adds the card into the cards ArrayList
     //(returns true if the player has enough tokens and discounts, returns false and does not do anything if player does not have enough)
     public boolean buyCard(Card card){
@@ -194,7 +177,6 @@ public class Player
         return false;
     }
 
-
     //runs after every turn, checks if player has cards required to achieve Patron, automatically gives player the patron and doesn’t require their input.
     //(true if player has enough discounts, returns false and does not do anything if player does not have engough discounts)
     //only covers a sigle patreon, so we are gonna have to call this as many times as there are patreons on the board
@@ -206,7 +188,6 @@ public class Player
         }
         return false;
     }
-
 
 }//end of class
 
