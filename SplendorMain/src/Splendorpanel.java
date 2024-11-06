@@ -1,7 +1,7 @@
 import javax.swing.JPanel;
 
 public class Splendorpanel extends JPanel{
-    public Splendorpanel(){
+    public Splendorpanel(int p){
         
     }
 }
