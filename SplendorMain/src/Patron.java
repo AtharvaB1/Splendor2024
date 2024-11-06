@@ -1,12 +1,10 @@
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Patron {
     @SuppressWarnings("unused") //suppress img not being used, will be used later so please remove when implemented
     private BufferedImage img;
     private HashMap<String,Integer> cost;
-    private int vPoints;
 
     public Patron(String input){
         try {
@@ -16,7 +14,6 @@ public class Patron {
             return;
         }
 
-        vPoints = 3;
         String[] vars = input.split(" ");
         cost.put("Red",Integer.parseInt(vars[0]));
         cost.put("Green",Integer.parseInt(vars[1]));
@@ -24,7 +21,7 @@ public class Patron {
         cost.put("White",Integer.parseInt(vars[3]));
         cost.put("Black",Integer.parseInt(vars[4]));
     }
-    public Map<String, Integer> getPatCost() {
+    public HashMap<String,Integer> getPatCost() {
         return cost;
     }
 }

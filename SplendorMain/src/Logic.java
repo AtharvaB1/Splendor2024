@@ -13,6 +13,8 @@ public class Logic {
     
     public Logic(int count){
         tokens = new HashMap<>();
+
+        
         if(count==4){
             tokens.put("White",7); tokens.put("Blue",7); tokens.put("Green",7); tokens.put("Red",7); tokens.put("Black",7); tokens.put("Wild",5);    
         } else if(count==3){

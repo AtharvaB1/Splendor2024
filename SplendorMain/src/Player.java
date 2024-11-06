@@ -20,10 +20,12 @@ public class Player
         discounts.put("White",0); discounts.put("Green",0); discounts.put("Blue",0); discounts.put("Red",0); discounts.put("Black",0);
     }
 
+
     //returns the hashmap of the tokens the player has
     public Map<String,Integer> getTokens(){
         return tokens;
     }
+
 
     //gets the total acount of tokens the player has
     public int tokenCount(){
@@ -34,10 +36,12 @@ public class Player
         return count;
     }
 
+
     //returns an int amount of tokens that the player has for that type
     public int getTokenType(String token){
         return tokens.get(token);
     }
+
 
     // adds the tokens in the arrayList to the player, logic will run stuff to see if player needs to remove any tokens
     public void addTokens(Map<String, Integer> addTokens){
@@ -49,52 +53,66 @@ public class Player
         }  
     }
 
-    //removes the tokens in the arrayList from the player
-    // returns true if it is legal to add, does nothing and returns false if it is not legal
-    //time is too late, adjust this method and more after to make player good
-    public boolean removeTokens(Map<String, Integer> removeTokens){
-        Iterator<String> iter = removeTokens.keySet().iterator();
-        while(iter.hasNext())
-        {
-            String tokenType = iter.next();
-            if(tokens.get(tokenType)-removeTokens.get(tokenType) < 0)
-                return false;
-        }
 
+    //removes the tokens in the arrayList from the player, logic will check if they can remove
+    public void removeTokens(Map<String, Integer> removeTokens){
+        Iterator<String> iter = removeTokens.keySet().iterator();
         iter = removeTokens.keySet().iterator();
         while(iter.hasNext())
         {
             String gemType = (String) iter.next();
             tokens.replace(gemType, tokens.get(gemType)-removeTokens.get(gemType));
         }
-        return true;
     }
+
 
     //returns a hashMap of all the gems Types and the amount of discount the player has for them (can easily remove the hashmap if needed)
     public Map<String, Integer> getTotalDiscount(){
         return discounts;
     }
 
+
     //returns the amount of discount the player has for the specified material(ruby, sapphire, etc)
     public int getDiscountType(String thisGem){
-        if(getTotalDiscount().containsKey(thisGem))
-            return getTotalDiscount().get(thisGem);
-        else
-            return 0;
+        return discounts.get(thisGem);
     }
+
 
     //returns if the player has enough discounts to buy a patreon card
     //returns true if they can, and false if they cant, will not effect any values
+    public boolean canBuyCard(Card card){
+        int wildToken = 0;
+        HashMap<String,Integer> rich = new HashMap<>();
+        Iterator<String> iter = discounts.keySet().iterator();
+        rich.putAll(tokens);
+        while(iter.hasNext()){
+            String x = iter.next();
+            rich.put(x, rich.get(x)+discounts.get(x));
+        }
+        wildToken = rich.get("Wild");
+        Iterator<String> check = card.getCost().keySet().iterator();
+        while(check.hasNext()){
+            String x = check.next();
+            int y = card.getCost().get(x);
+            if(rich.get(x)-y<0){
+                y-=rich.get(x);
+                wildToken-=y;
+            }
+        }
+        if(wildToken<0)
+            return false;
+        return true;
+    }
+
     public boolean canBuyPatreon(Patron thisPatron)
     {
-        Map<String, Integer> comp = getTotalDiscount();
-        Map<String, Integer> reqDiscount = thisPatron.getPatCost();
-        Iterator<String> iter = reqDiscount.keySet().iterator();
-        while(iter.hasNext())
-        {
-            String discount = iter.next();
-            if(comp.get(discount) < reqDiscount.get(discount))
+        HashMap<String,Integer> cost = thisPatron.getPatCost();
+        Iterator<String> iter = cost.keySet().iterator();
+        while(iter.hasNext()){
+            String x = iter.next();
+            if(discounts.get(x)-cost.get(x)<0){
                 return false;
+            }
         }
         return true;
     }
@@ -102,8 +120,7 @@ public class Player
     //returns if the gem lists length is over 10 or not
     public boolean isOverTen()
     {
-        if(tokenCount() > 10)
-        {
+        if(tokenCount() > 10){
             return true;
         }
         return false;
@@ -114,20 +131,24 @@ public class Player
         return victoryPoints;
     }
 
+
     //returns a list of all held player cards
     public ArrayList<Card> getTotalCards(){
         return heldCards;
     }
+
 
     //returns a list of all reserved player cards
     public ArrayList<Card> getTotalReservedCards(){
         return reservedCards;
     }
 
+
     //returns a list of all held patreon cards
     public ArrayList<Patron> getTotalPatrons(){
         return heldPatrons;
     }
+
 
     //takes the selected card and adds it into the cards ArrayList
     public void takeCard(Card taken){
@@ -146,48 +167,28 @@ public class Player
 
     //checks if the player has less than 3 reserved cards.
     public boolean canReserve(){
-        if(heldCards.size() < 3)
+        if(reservedCards.size() < 3)
             return true;
         return false;
     }
 
+
     //takes the selected card and adds it to the reservedCards arraylist, also adds a wild gem to the gems arrayList (if one is available)
     //returns true if the player actually can reserve a card, does nothing and returns false if not (it will still return true if it can reserve a card but cant add a wild token)
-    public boolean reserveCard(Card reserve){
-        if(canReserve())
-        {
-            reservedCards.add(reserve);
-            Map<String, Integer> wild = new HashMap<String,Integer>();
-            wild.put("Wild", 1);
-            addTokens(wild);
-            return true;
-        }
-        return false;  
+    public void reserveCard(Card reserve){
+          reservedCards.add(reserve);
     }
 
     //removes the gems that are unaccounted by discounts and adds the card into the cards ArrayList
     //(returns true if the player has enough tokens and discounts, returns false and does not do anything if player does not have enough)
-    public boolean buyCard(Card card){
-        Map<String,Integer> cardCost = card.getCost();
-        if(removeTokens(cardCost))
-        {
-            heldCards.add(card);
-            return true;
-        }
-        return false;
+    public void buyCard(Card card){
+        heldCards.add(card);
     }
 
     //runs after every turn, checks if player has cards required to achieve Patron, automatically gives player the patron and doesn’t require their input.
     //(true if player has enough discounts, returns false and does not do anything if player does not have engough discounts)
     //only covers a sigle patreon, so we are gonna have to call this as many times as there are patreons on the board
-    public boolean buyPatron(Patron patron){
-        if(canBuyPatreon(patron))
-        {
-            heldPatrons.add(patron);
-            return true;
-        }
-        return false;
+    public void buyPatron(Patron patron){
+        heldPatrons.add(patron);
     }
-
 }//end of class
-
