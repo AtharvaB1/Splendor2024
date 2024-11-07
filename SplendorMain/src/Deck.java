@@ -18,5 +18,5 @@ public class Deck {
         while(scan.hasNextLine()){
             cards.add(new Card(scan.nextLine()));
         }
-    } // test nikhil 1111
+    }
 }

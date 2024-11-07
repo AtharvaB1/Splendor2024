@@ -1,19 +1,17 @@
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
-import java.awt.event.*;
 
-public class MenuPanel extends JPanel implements MouseListener{
+public class PlayerChoicePanel extends JPanel{
     private BufferedImage background;
-
-    public MenuPanel(){
+    
+    public PlayerChoicePanel(){
         try{
 //            background = ImageIO.read(null);
         } catch(Exception e){
 
         }
     }
-
+    
     public void paint(Graphics g){
         super.paint(g);
     }
