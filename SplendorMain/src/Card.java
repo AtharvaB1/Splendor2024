@@ -6,7 +6,7 @@ public class Card{
     private BufferedImage img;
     private HashMap<String,Integer> cost;
     private String gem;
-    private int VP;
+    private int victoryPoints;
     public Card(String input){
         try {
             //img = ImageIO.read(Card.class.getResource("/Image/"+input+".png")); //pls edit when actual pictures are there
@@ -20,12 +20,12 @@ public class Card{
         cost.put("Green",Integer.parseInt(vars[2]));
         cost.put("Red",Integer.parseInt(vars[3]));
         cost.put("Black",Integer.parseInt(vars[4]));
-        VP = Integer.parseInt(vars[5]);
+        victoryPoints = Integer.parseInt(vars[5]);
         gem = vars[6];
     }
 
     public int getVP(){
-        return VP;
+        return victoryPoints;
     }
 
     public String getGem() {
