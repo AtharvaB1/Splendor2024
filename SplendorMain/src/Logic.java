@@ -1,19 +1,14 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-<<<<<<< Updated upstream
-import java.util.Iterator;
-import javax.naming.PartialResultException;
-=======
-import javax.lang.model.util.ElementScanner14;
->>>>>>> Stashed changes
+
 public class Logic {
     private ArrayList<Patron> patrons;
     private ArrayList<Player> players;
     private ArrayList<Deck> decks;
-    @SuppressWarnings("unused")//remove later, suppress currplayer not used (lots of methods not worked on yet)
+   // @SuppressWarnings("unused")//remove later, suppress currplayer not used (lots of methods not worked on yet)
     private int currPlayer;
-    @SuppressWarnings("unused")//remove later, suppress boolean not used (i havent worked on the method yet)
+    //@SuppressWarnings("unused")//remove later, suppress boolean not used (i havent worked on the method yet)
     private boolean isLastTurn; //add more here
     private boolean isGameOver;
     private int numPlayers;
@@ -54,7 +49,6 @@ public class Logic {
         }
     }
 
-<<<<<<< Updated upstream
     //returns the current player
     public Player getPlayer()
     {
@@ -108,12 +102,10 @@ public class Logic {
             if(!thisPlayer.isOverTen())
             {
                 Map<String,Integer> temp = new HashMap<String,Integer>();
+                temp.put("Wild", 1);
                 thisPlayer.addTokens(temp);
             }
-            else
-            { 
-                //add a system to change out a card here
-            }
+            
         }
     }
 
@@ -154,26 +146,36 @@ public class Logic {
         }
         return retList;
     }*/ 
-=======
+
     public void getTokens(HashMap<String,Integer> thisTokens)//atuv wanted this to be a hashset he is a DUMBASS
     {
         Player thisPlayer = getPlayer();
         if(thisPlayer.tokenCount() + thisTokens.size() > 10){return;}
-        if(thisTokens.size() == 3)
+
+        
+        if(tokenCount(thisTokens) == 3)
         {
             thisPlayer.addTokens(thisTokens);
         }
-        else if(tokens.size() == 2)
+        else if(tokenCount(thisTokens) == 2 )
         {
-            thisPlayer.addTokens(thisTokens);
+            Iterator<String> iter = thisTokens.keySet().iterator();
+            String gemChecked = iter.next();
+            if(tokens.get(gemChecked) >= 4)
+                thisPlayer.addTokens(thisTokens);
         }
         else 
         {
             System.out.println("WRONG NUMBER OF TOKENS!!!!!!!!!");
         }
-
-    
-        
     }
->>>>>>> Stashed changes
+
+    //gets the total acount of tokens the inputted hashMap has, identical to tokencount in player
+    public int tokenCount(HashMap<String,Integer> thisTokens){
+        int count = 0;
+        Iterator<String> iter = thisTokens.keySet().iterator();
+        for(int i = 0; i < thisTokens.size(); i++)
+            count += thisTokens.get(iter.next());
+        return count;
+    }
 }
