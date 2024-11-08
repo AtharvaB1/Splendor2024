@@ -1,8 +1,12 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+<<<<<<< Updated upstream
 import java.util.Iterator;
 import javax.naming.PartialResultException;
+=======
+import javax.lang.model.util.ElementScanner14;
+>>>>>>> Stashed changes
 public class Logic {
     private ArrayList<Patron> patrons;
     private ArrayList<Player> players;
@@ -50,6 +54,7 @@ public class Logic {
         }
     }
 
+<<<<<<< Updated upstream
     //returns the current player
     public Player getPlayer()
     {
@@ -149,4 +154,26 @@ public class Logic {
         }
         return retList;
     }*/ 
+=======
+    public void getTokens(HashMap<String,Integer> thisTokens)//atuv wanted this to be a hashset he is a DUMBASS
+    {
+        Player thisPlayer = getPlayer();
+        if(thisPlayer.tokenCount() + thisTokens.size() > 10){return;}
+        if(thisTokens.size() == 3)
+        {
+            thisPlayer.addTokens(thisTokens);
+        }
+        else if(tokens.size() == 2)
+        {
+            thisPlayer.addTokens(thisTokens);
+        }
+        else 
+        {
+            System.out.println("WRONG NUMBER OF TOKENS!!!!!!!!!");
+        }
+
+    
+        
+    }
+>>>>>>> Stashed changes
 }
