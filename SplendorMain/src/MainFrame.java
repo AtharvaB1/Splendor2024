@@ -9,6 +9,7 @@ public class MainFrame extends JFrame
     //made these static because its what i did last time, could make them not static but this will still work so we dont need to
     private static JFrame frame;
     private static JPanel menu;
+    private static JPanel select;
     private static JPanel game;
     private static JPanel end;
 
@@ -24,7 +25,10 @@ public class MainFrame extends JFrame
         frame.setExtendedState(6);
         frame.setVisible(true);
         frame.setResizable(false);
-        frame.add(menu);
+//        menu = new MenuPanel();
+//        frame.add(menu);
+        select = new PlayerChoicePanel();
+        frame.setVisible(true);
 
         //Logic logic = new Logic(4); this is STUPID!!!!!!!!!!1!!!!!!!!!!!!!!!!
     }
