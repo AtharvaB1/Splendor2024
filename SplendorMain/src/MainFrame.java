@@ -30,8 +30,7 @@ public class MainFrame extends JFrame
     }
 
     //switches from the menuPanel to SplendorPanel, initilizes a new instance of the splendorpanel while still in meupanel, then removes manupanel and sets it to null, starts the game based on int players
-    public static void startGame(int players)
-    {
+    public static void startGame(int players){
         //we might only need logic to have player amounts but this dosent hurt
         game = new Splendorpanel(players);
         frame.remove(menu);
@@ -40,9 +39,8 @@ public class MainFrame extends JFrame
         frame.revalidate();
     }
 
-     //switches from the SplendorPanel to EbdPanel, initilizes a new instance of the endpanel while still in splendorpanel, then removes splendorpanel and sets it to null, ends the game
-    public static void endGame(int players)
-    {
+    //switches from the SplendorPanel to EbdPanel, initilizes a new instance of the endpanel while still in splendorpanel, then removes splendorpanel and sets it to null, ends the game
+    public static void endGame(){
         end = new EndPanel();
         frame.remove(game);
         game = null;
@@ -51,8 +49,7 @@ public class MainFrame extends JFrame
     }
 
     //switches from the endPanel to menPanel, initilizes a new instance of the menupanel while still in endpanel, then removes endpanel and sets it to null, restarts the game
-    public static void restartGame(int players)
-    {
+    public static void restartGame(){
         menu = new MenuPanel();
         frame.remove(end);
         end = null;
