@@ -1,3 +1,4 @@
+import java.awt.Image;
 import java.awt.image.*;
 import java.util.*;
 
@@ -34,5 +35,8 @@ public class Card{
 
     public HashMap<String,Integer> getCost(){
         return cost;
+    }
+    public Image getCardFront(){
+        return img;
     }
 }

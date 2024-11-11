@@ -1,5 +1,6 @@
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.awt.Image;
 
 public class Patron {
     @SuppressWarnings("unused") //suppress img not being used, will be used later so please remove when implemented
@@ -23,5 +24,9 @@ public class Patron {
     }
     public HashMap<String,Integer> getPatCost() {
         return cost;
+    }
+
+    public Image getPatFace(){
+        return img;
     }
 }
