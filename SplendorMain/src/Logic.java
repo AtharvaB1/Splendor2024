@@ -49,14 +49,17 @@ public class Logic {
     }
 
     //returns the current player
-    public Player getPlayer()
-    {
+    public Player getPlayer(){
         return players.get(currPlayer);
     }
 
+    // returns isLastTurn
+    public boolean isItLastTurn(){
+        return isLastTurn;
+    }
+
     //increases curr player, and passes turn to next player, if last turn then it will check if next player is player 1
-    public void endTurn()
-    {
+    public void endTurn(){
         //god i want to use mod here so baddddllllyyy but i cannnt it has to start at one
         currPlayer++;
         if(currPlayer == numPlayers)
@@ -67,8 +70,7 @@ public class Logic {
     }
 
     //called at end of every turn, will check if currPlayer has >=15 VP before passing turn
-    public void isLastTurn()
-    {
+    public void isLastTurn(){
         for(int i = 0; i < numPlayers; i++)
         {
             if(players.get(i).getTotalVP() >= 15);
@@ -80,8 +82,7 @@ public class Logic {
     }
 
     //buys a card foir the current player, checks player’s tokens and does nothing if they do not have enough
-    public void buyCard(Card thisCard)
-    {
+    public void buyCard(Card thisCard){
         Player thisPlayer = players.get(currPlayer);
         if(thisPlayer.canBuyCard(thisCard))
         {
@@ -92,8 +93,7 @@ public class Logic {
     }
     
     //reserved a card for the current player, does nothing if they cannot reserve
-    public void reserveCard(Card thisCard)
-    {
+    public void reserveCard(Card thisCard){
         Player thisPlayer = players.get(currPlayer);
         if(thisPlayer.canReserve())
         {
@@ -108,10 +108,8 @@ public class Logic {
         }
     }
 
-    
     //will be called at the end of turn, gets ArrayList of player cards token type and checks if it matches with any patron.
-    public void getAPatron()
-    {
+    public void getAPatron(){
         Player thisPlayer = players.get(currPlayer);
         for(int i = 0; i < patrons.size(); i++)
         {
@@ -125,8 +123,7 @@ public class Logic {
     }
     
     //returns a ArrayList of all the player scores, with player one being the first entry, player 2 being the secong, and so on
-    public ArrayList<Integer> getScores()
-    {
+    public ArrayList<Integer> getScores(){
         ArrayList<Integer> retList = new ArrayList<Integer>();
         for(int i = 0; i < players.size(); i++)
         {
@@ -135,23 +132,25 @@ public class Logic {
         return retList;
     }
     
-   /* //returns a TREEMAP of the player scores, sience it is a t
-    public TreeMap<String, Integer> getSortedScores()
-    {
-        TreeMap<String, Integer> retList = new TreeMap<String, Integer>();
+    //returns a TREEMAP of the player scores, IBELIIIIIVEVVVVVVVVVVEEEEEEEE
+    public TreeMap<Integer, String> getSortedScores(){
+        TreeMap<Integer, String> retList = new TreeMap<Integer, String>();
         for(int i = 0; i < players.size(); i++)
         {
-            retList.put("Player" + (i+1), players.get(i).getTotalVP());
+            int thisScore = players.get(i).getTotalVP();
+            if(!retList.containsKey(thisScore))
+                retList.put(thisScore, "" + (i+1));
+            else
+                retList.replace(thisScore, retList.get(thisScore) + " " + (i+1));
         }
         return retList;
-    }*/ 
+    }
 
-    public void getTokens(HashMap<String,Integer> thisTokens)//atuv wanted this to be a hashset he is a DUMBASS
-    {
+    // takes outs the inputted amount of tokens from the tokens hashmap, if it is possible
+    public void getTokens(HashMap<String,Integer> thisTokens){
         Player thisPlayer = getPlayer();
         if(thisPlayer.tokenCount() + thisTokens.size() > 10){return;}
 
-        
         if(tokenCount(thisTokens) == 3)
         {
             thisPlayer.addTokens(thisTokens);
