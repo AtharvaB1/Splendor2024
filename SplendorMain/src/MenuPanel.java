@@ -16,7 +16,6 @@ public class MenuPanel extends JPanel implements MouseListener{
         } catch(IOException e){
             System.out.println("Image error in menu panel");
         }
-        System.out.println("test print");
         addMouseListener(this);
     }
 
@@ -25,10 +24,12 @@ public class MenuPanel extends JPanel implements MouseListener{
         g.drawImage(background, 0, 0, getWidth(), getHeight(), null);        
     }
 
-    public void mouseClicked(MouseEvent e){
+    public void mouseClicked(MouseEvent e){ // need to fix thiis so that button works for all screen sizes
         if(e.getButton()==MouseEvent.BUTTON1){
-            if(e.getX()>=480 && e.getX()<=810 && e.getY()>=320 && e.getY()<=480){
+            System.out.println(getWidth() + " " + getHeight());
+            if(e.getX()>=MainFrame.getScreenWidth()*(96/259) && e.getX()<=MainFrame.getScreenWidth()*(162/259) && e.getY()>=MainFrame.getScreenHeight()*(64/139) && e.getY()<=MainFrame.getScreenHeight()*(96/139)){
                 System.out.println("Button area clicked");
+                //MainFrame.selectPlayers();
             }
         }
     }

@@ -7,7 +7,7 @@ public class MainFrame extends JFrame
     private int width;
     private int height;
     //made these static because its what i did last time, could make them not static but this will still work so we dont need to
-    private static JFrame frame;
+    public static JFrame frame;
     private static JPanel menu;
     private static JPanel select;
     private static JPanel game;
@@ -27,18 +27,35 @@ public class MainFrame extends JFrame
         frame.setResizable(false);
         menu = new MenuPanel();
         frame.add(menu);
-//        select = new PlayerChoicePanel();
+        // select = new PlayerChoicePanel();
+        // frame.add(select);
         frame.setVisible(true);
 
         //Logic logic = new Logic(4); this is STUPID!!!!!!!!!!1!!!!!!!!!!!!!!!!
+    }
+
+    public static int getScreenWidth(){
+        return frame.getWidth();
+    }
+
+    public static int getScreenHeight(){
+        return frame.getHeight();
+    }
+
+    public static void selectPlayers(){
+        select = new PlayerChoicePanel();
+        frame.remove(menu);
+        menu = null;
+        frame.add(select);
+        frame.revalidate();
     }
 
     //switches from the menuPanel to SplendorPanel, initilizes a new instance of the splendorpanel while still in meupanel, then removes manupanel and sets it to null, starts the game based on int players
     public static void startGame(int players){
         //we might only need logic to have player amounts but this dosent hurt
         game = new Splendorpanel(players);
-        frame.remove(menu);
-        menu = null;
+        frame.remove(select);
+        select = null;
         frame.add(game);
         frame.revalidate();
     }
