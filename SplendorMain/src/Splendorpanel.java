@@ -1,5 +1,6 @@
 import javax.swing.JPanel;
 import javax.swing.*;
+import java.util.*;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -54,6 +55,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
         drawCards(g);
         drawPatron(g);  
         drawDeck(g);   
+        drawTokens(g);
     }
 
 
@@ -98,9 +100,21 @@ public class Splendorpanel extends JPanel implements MouseListener{
         }
     }
 
-    public void drawTokens(){
+    public void drawTokens(Graphics g){
         Set <String> keys = logic.getTokens().keySet();
-        for(int i = 0; i<keys)
+        String[] colors = {"White", "Red", "Green", "Blue", "Brown", "Wild"};
+        //int x =  starting position for top token, incremented in loop
+        //int y=
+
+        for(int i = 0; i<colors.length; i++){
+            String name = colors[i];
+            if(logic.getTokens().get(colors[i])>0){
+                //g.drawImage(name + ".jpg", x, y, w, h, null);
+
+            }
+        }
+
+
     }
 
     //public boolean[] checkDeck(){

@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 public class Deck {
     ArrayList<Card> cards;
+    boolean isEmpty;
 
     public Deck(int level){
         File card = new File("src\\Cards\\Card"+level+".txt");
@@ -18,5 +19,20 @@ public class Deck {
         while(scan.hasNextLine()){
             cards.add(new Card(scan.nextLine()));
         }
+    }
+
+    public ArrayList<Card> getDeck(){
+        return cards;
+    }
+
+    public Card drawCard(){
+        return cards.get(0); //remember to print deck with index 0 on top and last index on the table
+    }
+
+    public boolean deckEmpty(){
+        if(cards.isEmpty()){
+            return true;
+        }
+        return false;
     }
 }

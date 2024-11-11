@@ -177,4 +177,13 @@ public class Logic {
             count += thisTokens.get(iter.next());
         return count;
     }
+    public ArrayList<Deck> getDecks(){
+        return decks;
+    }
+    public ArrayList<Patron> getPatrons(){
+        return patrons;
+    }
+    public HashMap <String, Integer> getTokens(){
+        return tokens;
+    }
 }
