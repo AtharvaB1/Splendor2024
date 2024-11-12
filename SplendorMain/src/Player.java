@@ -10,7 +10,7 @@ public class Player
     private String name;
    
     //constructor
-    public Player(int n){
+    public Player(){
         victoryPoints = 0;
         name = "Player " + n;
         reservedCards = new ArrayList<Card>();
@@ -98,6 +98,7 @@ public class Player
         return true;
     }
 
+    //returns if the player is able to buy the inputted patreon
     public boolean canBuyPatreon(Patron thisPatron)
     {
         HashMap<String,Integer> cost = thisPatron.getPatCost();
@@ -164,9 +165,13 @@ public class Player
     public void reserveCard(Card reserve){
           reservedCards.add(reserve);
     }
+<<<<<<< HEAD
+
+=======
     
     public String getName(){
         return name;
     }
     //github desktop pull test
+>>>>>>> af046a97f754d3061e5f204a9edb6c5aea19cc43
 }//end of class

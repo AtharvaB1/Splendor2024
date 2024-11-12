@@ -5,13 +5,17 @@ public class Logic {
     private ArrayList<Patron> patrons;
     private ArrayList<Player> players;
     private ArrayList<Deck> decks;
-   // @SuppressWarnings("unused")//remove later, suppress currplayer not used (lots of methods not worked on yet)
-    private int currPlayer;
-    //@SuppressWarnings("unused")//remove later, suppress boolean not used (i havent worked on the method yet)
-    private boolean isLastTurn; //add more here
-    private boolean isGameOver;
-    private int numPlayers;
     private HashMap<String, Integer> tokens;
+   // @SuppressWarnings("unused")//remove later, suppress currplayer not used (lots of methods not worked on yet)
+    private int numPlayers;
+    private int currPlayer;
+    public ArrayList<Patron> currPatrons;
+    public ArrayList<Card> currRow1;
+    public ArrayList<Card> currRow2;
+    public ArrayList<Card> currRow3;
+    //@SuppressWarnings("unused")//remove later, suppress boolean not used (i havent worked on the method yet)
+    private boolean isLastTurn; 
+    private boolean isGameOver;
     
     public Logic(int count){
         tokens = new HashMap<>();
@@ -46,6 +50,25 @@ public class Logic {
         patCreate.nextLine();
         while(patCreate.hasNext()){
             patrons.add(new Patron(patCreate.nextLine()));
+        }
+
+        currRow1 = new ArrayList<Card>();
+        currRow2 = new ArrayList<Card>();
+        currRow3 = new ArrayList<Card>();
+        for(int i = 0; i < 5; i++){
+            currRow1.add(decks.get(0).drawCard());
+        }
+        for(int i = 0; i < 5; i++){
+            currRow2.add(decks.get(1).drawCard());
+        }
+        for(int i = 0; i < 5; i++){
+            currRow3.add(decks.get(2).drawCard());
+        }
+
+        currPatrons = new ArrayList<Patron>();
+        for(int i = 0; i < 5; i++){
+            currPatrons.add(patrons.get(0));
+            patrons.remove(0);
         }
     }
 
@@ -94,7 +117,6 @@ public class Logic {
            thisPlayer.takeCard(thisCard);
            thisPlayer.removeTokens(thisCard.getCost());
         }
-
     }
     
     //reserved a card for the current player, does nothing if they cannot reserve
@@ -109,19 +131,18 @@ public class Logic {
                 temp.put("Wild", 1);
                 thisPlayer.addTokens(temp);
             }
-            
         }
     }
 
     //will be called at the end of turn, gets ArrayList of player cards token type and checks if it matches with any patron.
     public void getAPatron(){
-        Player thisPlayer = players.get(currPlayer);
-        for(int i = 0; i < patrons.size(); i++)
+        Player thisPlayer = getPlayer();
+        for(int i = 0; i < currPatrons.size(); i++)
         {
-            if(thisPlayer.canBuyPatreon(patrons.get(i)))
+            if(thisPlayer.canBuyPatreon(currPatrons.get(i)))
             {
-                thisPlayer.takePatron(patrons.get(i));
-                patrons.remove(i);
+                thisPlayer.takePatron(currPatrons.get(i));
+                currPatrons.remove(i);
                 i--;
             }
         }
@@ -181,13 +202,44 @@ public class Logic {
             count += thisTokens.get(iter.next());
         return count;
     }
+    
+    //returns the 3 main decks for the game
     public ArrayList<Deck> getDecks(){
         return decks;
     }
+    
+    //returns all patreons 
     public ArrayList<Patron> getPatrons(){
         return patrons;
     }
+
+    //returns the all tokens that are not hekld by players
     public HashMap <String, Integer> getTokens(){
         return tokens;
     }
+
+    //returns the current patreons in play
+    public ArrayList<Patron> getCurrPatrons(){
+        return patrons;
+    }
+
+    //returns row one of the cards matrix
+    public ArrayList<Card> getRowOne(){
+        return currRow1;
+    }
+
+    //returns row two of the cards matrix
+    public ArrayList<Card> getRowTwo(){
+        return currRow2;
+    }
+
+    //returns row three of the cards matrix
+    public ArrayList<Card> getRowThree(){
+        return currRow3;
+    }
+
+    //need to add:
+    //mehthods for removing and placing a card from the 3 diffrent rows
+    //method for returing the entire card matrix (optional)
+
 }

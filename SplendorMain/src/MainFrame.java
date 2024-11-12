@@ -33,15 +33,18 @@ public class MainFrame extends JFrame
 
         //Logic logic = new Logic(4); this is STUPID!!!!!!!!!!1!!!!!!!!!!!!!!!!
     }
-
+     
+    //retunrs screen width
     public static int getScreenWidth(){
         return frame.getWidth();
     }
 
+    //returns screen height
     public static int getScreenHeight(){
         return frame.getHeight();
     }
 
+    //switches from the menuPanel to playerChoicePanel, initilizes a new instance of the playerChoicePanel while still in menu, then removes menupanel and sets it to null, goes to the select player number screen
     public static void selectPlayers(){
         select = new PlayerChoicePanel();
         frame.remove(menu);
@@ -60,7 +63,7 @@ public class MainFrame extends JFrame
         frame.revalidate();
     }
 
-    //switches from the SplendorPanel to EbdPanel, initilizes a new instance of the endpanel while still in splendorpanel, then removes splendorpanel and sets it to null, ends the game
+    //switches from the SplendorPanel to EndPanel, initilizes a new instance of the endpanel while still in splendorpanel, then removes splendorpanel and sets it to null, ends the game
     public static void endGame(){
         end = new EndPanel();
         frame.remove(game);
@@ -69,7 +72,7 @@ public class MainFrame extends JFrame
         frame.revalidate();
     }
 
-    //switches from the endPanel to menPanel, initilizes a new instance of the menupanel while still in endpanel, then removes endpanel and sets it to null, restarts the game
+    //switches from the endPanel to menuPanel, initilizes a new instance of the menupanel while still in endpanel, then removes endpanel and sets it to null, restarts the game
     public static void restartGame(){
         menu = new MenuPanel();
         frame.remove(end);

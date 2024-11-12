@@ -25,8 +25,14 @@ public class Deck {
         return cards;
     }
 
-    public Card drawCard(){
+    public Card peekCard(){
         return cards.get(0); //remember to print deck with index 0 on top and last index on the table
+    }
+
+    public Card drawCard(){
+        Card ret = cards.get(0);
+        cards.remove(0);
+        return ret; 
     }
 
     public boolean deckEmpty(){
