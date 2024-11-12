@@ -11,7 +11,7 @@ public class PlayerChoicePanel extends JPanel implements MouseListener{
     
     public PlayerChoicePanel(){
         try{
-            background = ImageIO.read(PlayerChoicePanel.class.getResource("/images/selectBackground.jpg"));
+            background = ImageIO.read(PlayerChoicePanel.class.getResource("/images/selectBackground.png"));
         } catch(IOException e){
             System.out.println("Image error in player choice panel");
         }
@@ -26,9 +26,21 @@ public class PlayerChoicePanel extends JPanel implements MouseListener{
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
+        System.out.println("(" + e.getX() + ", " + e.getY() + ")");
+        int width = getWidth(); // 1281
+        int height = getHeight(); // 658
+        
+        double[][] p2s = {{width*.104, width*.294}, // x = 133, 377   y = 350, 430
+                            {height*.532, height*.653}};
+        //double[][] p3s = {{width*.104, width*.294}, // x = 527, 774   y = 350, 430
+        //                     {height*.532, height*.653}};
+        // double[][] p4s = {{width*.104, width*.294}, // x = 921, 1172   y = 350, 430
+        //                     {height*.532, height*.653}};
         if(e.getButton()==e.BUTTON1){
-            if(e.getX()>=134)
-            System.out.println("(" + e.getX() + ", " + e.getY() + ")");
+            if(e.getX()>=p2s[0][0] && e.getX()<=p2s[0][1] &&
+                e.getY()>=p2s[1][0] && e.getY()<=p2s[1][1]){
+                    System.out.println("2 players clicked");
+            }
         }
     }
 

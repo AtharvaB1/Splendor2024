@@ -25,10 +25,10 @@ public class MainFrame extends JFrame
         frame.setExtendedState(6);
         frame.setVisible(true);
         frame.setResizable(false);
-        menu = new MenuPanel();
-        frame.add(menu);
-        // select = new PlayerChoicePanel();
-        // frame.add(select);
+        //menu = new MenuPanel();
+        //frame.add(menu);
+        select = new PlayerChoicePanel();
+        frame.add(select);
         frame.setVisible(true);
 
         //Logic logic = new Logic(4); this is STUPID!!!!!!!!!!1!!!!!!!!!!!!!!!!

@@ -25,13 +25,20 @@ public class MenuPanel extends JPanel implements MouseListener{
     }
 
     public void mouseClicked(MouseEvent e){ // need to fix thiis so that button works for all screen sizes
-        if(e.getButton()==MouseEvent.BUTTON1){
-            System.out.println(getWidth() + " " + getHeight());
-            if(e.getX()>=MainFrame.getScreenWidth()*(96/259) && e.getX()<=MainFrame.getScreenWidth()*(162/259) && e.getY()>=MainFrame.getScreenHeight()*(64/139) && e.getY()<=MainFrame.getScreenHeight()*(96/139)){
-                System.out.println("Button area clicked");
-                //MainFrame.selectPlayers();
-            }
+        int width = getWidth();
+        int height = getHeight();
+        System.out.println("(" + width +", "+height+")");
+        double[] x = {width*.375, width*.612};
+        double[] y = {height*.46, height*.69};
+        
+        if(e.getButton()==e.BUTTON1){
+            if(e.getX()>=x[0] && e.getY()<=x[1] && 
+                e.getY()>=y[0] && e.getY()<=y[1]){
+                    //System.out.println("button clicked");
+                    MainFrame.selectPlayers();
+                }
         }
+
     }
 
     @Override
