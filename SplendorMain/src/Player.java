@@ -96,6 +96,7 @@ public class Player
         return true;
     }
 
+    //returns if the player is able to buy the inputted patreon
     public boolean canBuyPatreon(Patron thisPatron)
     {
         HashMap<String,Integer> cost = thisPatron.getPatCost();
@@ -162,5 +163,5 @@ public class Player
     public void reserveCard(Card reserve){
           reservedCards.add(reserve);
     }
-    //github desktop pull test
+
 }//end of class
