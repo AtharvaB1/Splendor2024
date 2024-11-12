@@ -7,10 +7,12 @@ public class Player
     private ArrayList<Patron> heldPatrons;
     private HashMap<String, Integer> tokens;
     private HashMap<String, Integer> discounts;
+    private String name;
    
     //constructor
-    public Player(){
+    public Player(int n){
         victoryPoints = 0;
+        name = "Player " + n;
         reservedCards = new ArrayList<Card>();
         heldCards = new ArrayList<Card>();
         heldPatrons = new ArrayList<Patron>();
@@ -161,6 +163,10 @@ public class Player
     //reserves card, logic checks if they can reserve it
     public void reserveCard(Card reserve){
           reservedCards.add(reserve);
+    }
+    
+    public String getName(){
+        return name;
     }
     //github desktop pull test
 }//end of class
