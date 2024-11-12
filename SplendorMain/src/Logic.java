@@ -16,6 +16,7 @@ public class Logic {
     public Logic(int count){
         tokens = new HashMap<>();
         numPlayers = count;
+        currPlayer = 0;
         
         if(count==4){
             tokens.put("White",7); tokens.put("Blue",7); tokens.put("Green",7); tokens.put("Red",7); tokens.put("Black",7); tokens.put("Wild",5);    
@@ -26,7 +27,7 @@ public class Logic {
         }
         players = new ArrayList<>();
         for(int i=0; i<count;i++){
-            players.add(new Player());
+            players.add(new Player(i+1));
         }
         decks = new ArrayList<>();
         for(int i=1; i<=3;i++){
@@ -51,6 +52,10 @@ public class Logic {
     //returns the current player
     public Player getPlayer(){
         return players.get(currPlayer);
+    }
+
+    public ArrayList <Player> getAllPlayers(){
+        return players;
     }
 
     // returns isLastTurn
