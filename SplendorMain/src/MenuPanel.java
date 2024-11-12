@@ -12,7 +12,6 @@ public class MenuPanel extends JPanel implements MouseListener{
     public MenuPanel(){
         try{
             background = ImageIO.read(MenuPanel.class.getResource("/images/menuBackground.jpg"));
-//            background = ImageIO.read(new File("menuBackground.jpg"));
         } catch(IOException e){
             System.out.println("Image error in menu panel");
         }
@@ -21,20 +20,19 @@ public class MenuPanel extends JPanel implements MouseListener{
 
     public void paint(Graphics g){
         super.paint(g);
-        g.drawImage(background, 0, 0, getWidth(), getHeight(), null);        
+        g.drawImage(background, 0, 0, getWidth(), getHeight(), null);   // background     
     }
 
-    public void mouseClicked(MouseEvent e){ // need to fix thiis so that button works for all screen sizes
+    public void mouseClicked(MouseEvent e){ 
         int width = getWidth();
         int height = getHeight();
         System.out.println("(" + width +", "+height+")");
-        double[] x = {width*.375, width*.612};
+        double[] x = {width*.375, width*.612}; // button's x and y coords
         double[] y = {height*.46, height*.69};
         
         if(e.getButton()==e.BUTTON1){
             if(e.getX()>=x[0] && e.getY()<=x[1] && 
                 e.getY()>=y[0] && e.getY()<=y[1]){
-                    //System.out.println("button clicked");
                     MainFrame.selectPlayers();
                 }
         }

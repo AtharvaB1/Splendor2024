@@ -26,20 +26,31 @@ public class PlayerChoicePanel extends JPanel implements MouseListener{
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
+        System.out.println(getWidth() +" " + getHeight());
         System.out.println("(" + e.getX() + ", " + e.getY() + ")");
         int width = getWidth(); // 1281
         int height = getHeight(); // 658
-        
-        double[][] p2s = {{width*.104, width*.294}, // x = 133, 377   y = 350, 430
+
+        // positions of each button's x and y coords
+        double[][] p2s = {{width*.104, width*.294}, // x = 133, 377   y = 350, 430 
                             {height*.532, height*.653}};
-        //double[][] p3s = {{width*.104, width*.294}, // x = 527, 774   y = 350, 430
-        //                     {height*.532, height*.653}};
-        // double[][] p4s = {{width*.104, width*.294}, // x = 921, 1172   y = 350, 430
-        //                     {height*.532, height*.653}};
+        double[][] p3s = {{width*.411, width*.604}, // x = 527, 774   y = 350, 430
+                            {height*.532, height*.653}};
+        double[][] p4s = {{width*.719, width*.915}, // x = 921, 1172   y = 350, 430
+                            {height*.532, height*.653}};
+
         if(e.getButton()==e.BUTTON1){
             if(e.getX()>=p2s[0][0] && e.getX()<=p2s[0][1] &&
                 e.getY()>=p2s[1][0] && e.getY()<=p2s[1][1]){
-                    System.out.println("2 players clicked");
+                    MainFrame.startGame(2);
+            }
+            if(e.getX()>=p3s[0][0] && e.getX()<=p3s[0][1] &&
+                e.getY()>=p3s[1][0] && e.getY()<=p3s[1][1]){
+                    MainFrame.startGame(3);
+            }
+            if(e.getX()>=p4s[0][0] && e.getX()<=p4s[0][1] &&
+                e.getY()>=p4s[1][0] && e.getY()<=p4s[1][1]){
+                    MainFrame.startGame(4);
             }
         }
     }
