@@ -10,11 +10,6 @@ public class Logic {
     private int numPlayers;
     private int currPlayer;
     public ArrayList<Patron> currPatrons;
-
-    //TODO MAKE THESE INTO ONE ARRAYLIST!!!!!! VERY IMPORTANY!!!!!!!!
-    public ArrayList<Card> currRow1;
-    public ArrayList<Card> currRow2;
-    public ArrayList<Card> currRow3;
     //@SuppressWarnings("unused")//remove later, suppress boolean not used (i havent worked on the method yet)
     private boolean isLastTurn; 
     private boolean isGameOver;
@@ -53,19 +48,6 @@ public class Logic {
         patCreate.nextLine();
         while(patCreate.hasNext()){
             patrons.add(new Patron(patCreate.nextLine()));
-        }
-
-        currRow1 = new ArrayList<Card>();
-        currRow2 = new ArrayList<Card>();
-        currRow3 = new ArrayList<Card>();
-        for(int i = 0; i < 5; i++){
-            currRow1.add(decks.get(0).drawCard());
-        }
-        for(int i = 0; i < 5; i++){
-            currRow2.add(decks.get(1).drawCard());
-        }
-        for(int i = 0; i < 5; i++){
-            currRow3.add(decks.get(2).drawCard());
         }
 
         currPatrons = new ArrayList<Patron>();
@@ -227,24 +209,18 @@ public class Logic {
         return patrons;
     }
 
-    //returns row one of the cards matrix
-    public ArrayList<Card> getRowOne(){
-        return currRow1;
+    //gets the first four cards of a selected deck, currently brocken
+    public ArrayList<Card> getFirstFour(int deckType)
+    {
+        ArrayList<Card> retList = new ArrayList<Card>();
+        for(int i = 0; i < 4; i++)
+        {  
+            retList.add(decks.get(deckType).drawCard());
+        }
+        return retList;
     }
 
-    //returns row two of the cards matrix
-    public ArrayList<Card> getRowTwo(){
-        return currRow2;
-    }
-
-    //returns row three of the cards matrix
-    public ArrayList<Card> getRowThree(){
-        return currRow3;
-    }
-
-    //need to add:
-    //mehthods for removing and placing a card from the 3 diffrent rows - THIS WILL NOW ME ONE ARRAYLIST
-    //method for returing the entire card matrix (optional)
-    //the buy reserve and buy patreon methods do not remove the card being buyed, fix that in a way that uses the currCard methods
+    //TODO
+    //the buy reserve and buy patreon methods do not remove the card being buyed, fix that
     
 }//end of class
