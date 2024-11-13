@@ -15,7 +15,7 @@ public class Card{
         try {
             //img = ImageIO.read(Card.class.getResource("/Image/"+input+".png")); //pls edit when actual pictures are there
         } catch (Exception e) {
-            System.out.println(e+"ur imgs are screwed");
+            System.out.println(e+"ur imgs are screwed - Card");
             return;
         }
         String[] vars = input.split(" ");

@@ -46,7 +46,7 @@ public class Logic {
         try {
             patCreate = new Scanner(pats);
         } catch (FileNotFoundException e) {
-            System.out.println(e+"your file is screwed");
+            System.out.println(e+"your file is screwed- patron");
             e.printStackTrace();
             return;
         }

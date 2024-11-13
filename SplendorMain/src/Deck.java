@@ -11,7 +11,7 @@ public class Deck {
         try {
             scan = new Scanner(card);
         } catch (FileNotFoundException e) {
-            System.out.println(e+"your file is screwed");
+            System.out.println(e+"your file is screwed - Deck");
             e.printStackTrace();
             return;
         }

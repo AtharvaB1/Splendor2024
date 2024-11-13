@@ -10,15 +10,17 @@ import javax.swing.*;
 
 public class Splendorpanel extends JPanel implements MouseListener{
     private int pCount; //num of players
-    //private String tok1, tok2, tok3; //tokens players click on?
+   // private String tok1, tok2, tok3; //tokens players click on?
+    private HashMap<String,Integer> heldTokens; //three tokens held by current player when interacted with
     private BufferedImage bkg; //, rule1, rule2, rule3, back1, back2, back3; // background and rules, backs of three diff card types
     Logic logic; //logic class
-    JButton endTurn, rPrev, rNext, rClose; 
+    JButton endTurn, rPrev, rNext, rClose; //might not be using anymore
     private Card[][] mat;
     private Patron [] pat;
 
     //constructor
     public Splendorpanel(int p){
+        heldTokens = new HashMap<String,Integer>();
         mat = new Card[3][4];
         pCount = p;
         Logic logic = new Logic(pCount);
@@ -33,7 +35,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
             //back2=
             //back3= (top row of cards)
         } catch (Exception e) {
-            System.out.println(e+"ur imgs are screwed");
+            System.out.println(e+"image issue splendor panel");
             return;
         }
         addMouseListener(this);
@@ -129,6 +131,8 @@ public class Splendorpanel extends JPanel implements MouseListener{
                 //g.drawImage(name + ".jpg", x, y, w, h, null);
 
             }
+            //x++ _;
+            //y++ _;
         }
     }
 
@@ -141,6 +145,20 @@ public class Splendorpanel extends JPanel implements MouseListener{
     }
 
     public void mousePressed(MouseEvent e){
+        int mouseX = e.getX();
+        int mouseY - e.getY();
+       /* if(x>= _ && x<= _ && y>= __ && y<= __){ area of each token, ex for white, may do loop
+           if(heldTokens.contains("White")){
+              heldTokens.replace("White", heldTokens.get("White"), heldTokens.get("White") +1 );
+           } else {
+               heldTokens.put("White", 1);
+           }
+          }
+
+
+       */
+
+        }
         // TODO Auto-generated method stub
     }
 
