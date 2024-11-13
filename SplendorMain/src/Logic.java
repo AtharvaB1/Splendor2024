@@ -10,6 +10,8 @@ public class Logic {
     private int numPlayers;
     private int currPlayer;
     public ArrayList<Patron> currPatrons;
+
+    //TODO MAKE THESE INTO ONE ARRAYLIST!!!!!! VERY IMPORTANY!!!!!!!!
     public ArrayList<Card> currRow1;
     public ArrayList<Card> currRow2;
     public ArrayList<Card> currRow3;
@@ -17,6 +19,7 @@ public class Logic {
     private boolean isLastTurn; 
     private boolean isGameOver;
     
+    //constructor
     public Logic(int count){
         tokens = new HashMap<>();
         numPlayers = count;
@@ -77,6 +80,7 @@ public class Logic {
         return players.get(currPlayer);
     }
 
+    //returns the entrie players arrayList
     public ArrayList <Player> getAllPlayers(){
         return players;
     }
@@ -239,7 +243,8 @@ public class Logic {
     }
 
     //need to add:
-    //mehthods for removing and placing a card from the 3 diffrent rows
+    //mehthods for removing and placing a card from the 3 diffrent rows - THIS WILL NOW ME ONE ARRAYLIST
     //method for returing the entire card matrix (optional)
-
-}
+    //the buy reserve and buy patreon methods do not remove the card being buyed, fix that in a way that uses the currCard methods
+    
+}//end of class

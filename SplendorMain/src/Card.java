@@ -8,7 +8,10 @@ public class Card{
     private HashMap<String,Integer> cost;
     private String gem;
     private int victoryPoints;
-    public Card(String input){
+    public int tier;
+
+    //constructor
+    public Card(String input, int t){
         try {
             //img = ImageIO.read(Card.class.getResource("/Image/"+input+".png")); //pls edit when actual pictures are there
         } catch (Exception e) {
@@ -23,19 +26,25 @@ public class Card{
         cost.put("Black",Integer.parseInt(vars[4]));
         victoryPoints = Integer.parseInt(vars[5]);
         gem = vars[6];
+        tier = t;
     }
 
+    //returns amount of victory points the card has
     public int getVP(){
         return victoryPoints;
     }
-
+    
+    //returns the gem type of the card
     public String getGem() {
         return gem;
-    }
-
+    } 
+    
+    //returns the cost of the card in gems
     public HashMap<String,Integer> getCost(){
         return cost;
     }
+
+    //returns the front image of the card
     public Image getCardFront(){
         return img;
     }
