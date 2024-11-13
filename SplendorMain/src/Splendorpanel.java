@@ -1,23 +1,23 @@
-import javax.imageio.ImageIO;
-import javax.swing.*;
-//import java.util.*;
 import java.awt.Font;
 import java.awt.Graphics;
-//import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.Set;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 //import java.util.Set;
 
 public class Splendorpanel extends JPanel implements MouseListener{
     private int pCount; //num of players
-   // private String tok1, tok2, tok3; //tokens players click on?
+    //private String tok1, tok2, tok3; //tokens players click on?
     private BufferedImage bkg; //, rule1, rule2, rule3, back1, back2, back3; // background and rules, backs of three diff card types
     Logic logic; //logic class
     JButton endTurn, rPrev, rNext, rClose; 
     private Card[][] mat;
     private Patron [] pat;
 
+    //constructor
     public Splendorpanel(int p){
         mat = new Card[3][4];
         pCount = p;
@@ -49,21 +49,18 @@ public class Splendorpanel extends JPanel implements MouseListener{
         }
         
     }
-
+    
+    //main paint method for the entire splendorPanel
     public void paint(Graphics g){
-       super.paint(g);
-
-
-
-        
+        super.paint(g);
         //need to set actual location
-       // drawCards(g); 
-       // drawPatron(g);  
+        //drawCards(g); 
+        //drawPatron(g);  
         //drawDeck(g);   
         //drawTokens(g);
     }
 
-
+    //draws the player info, cand the current player on screen
     public void drawSetUp(Graphics g){
         g.drawImage(bkg, 0, 0, getWidth(), getHeight(), null); //background
 
@@ -78,7 +75,8 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
 
     }
-
+    
+    //draws the current cards that can be selected
     public void drawCards(Graphics g){
         int cardX = 0; //set start position of cards, increment x and y by __ for the cards after in the loop
         int cardY = 0;
@@ -93,17 +91,17 @@ public class Splendorpanel extends JPanel implements MouseListener{
         }
 
     }
-
+    
+    //draws the current patreons that can be selected
     public void drawPatron(Graphics g){
         // int patX = __; set patron position and increment x in loop
 
         for(int i = 0; i<pat.length; i++){
             // g.drawImage(pat[i].getPatFace(), __, __, w, h, null);
         }
-        
-
     }
 
+    //draws the backs of decks 1, 2, and 3
     public void drawDeck(Graphics g){
         for(int i = 0; i<3; i++){
             if(!logic.getDecks().get(i).deckEmpty()){
@@ -118,8 +116,9 @@ public class Splendorpanel extends JPanel implements MouseListener{
         }
     }
 
+    //draws the current tokens that can be taken
     public void drawTokens(Graphics g){
-        Set <String> keys = logic.getTokens().keySet();
+        Set<String> keys = logic.getTokens().keySet();
         String[] colors = {"White", "Red", "Green", "Blue", "Brown", "Wild"};
         //int x =  starting position for top token, incremented in loop
         //int y=
@@ -131,25 +130,35 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
             }
         }
-
-
     }
 
     //public boolean[] checkDeck(){
 
-   // }
+    //}
 
     public void getToken(String x){
 
     }
-  
 
-    public void mousePressed(MouseEvent e){}
-    public void mouseEntered(MouseEvent e){}
-    public void mouseClicked(MouseEvent e){}
-    public void mouseExited(MouseEvent e){}
-    public void mouseReleased(MouseEvent e){}
+    public void mousePressed(MouseEvent e){
+        // TODO Auto-generated method stub
+    }
 
+    public void mouseEntered(MouseEvent e){
+        // TODO Auto-generated method stub
+    }
 
-}
+    public void mouseClicked(MouseEvent e){
+        // TODO Auto-generated method stub
+    }
+
+    public void mouseExited(MouseEvent e){
+        // TODO Auto-generated method stub
+    }
+
+    public void mouseReleased(MouseEvent e){
+        // TODO Auto-generated method stub
+    }
+
+}//end of class
 

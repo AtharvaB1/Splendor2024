@@ -1,14 +1,15 @@
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
 public class PlayerChoicePanel extends JPanel implements MouseListener{
     private BufferedImage background;
     
+    //constructor
     public PlayerChoicePanel(){
         try{
             background = ImageIO.read(PlayerChoicePanel.class.getResource("/images/selectBackground.png"));
@@ -18,12 +19,14 @@ public class PlayerChoicePanel extends JPanel implements MouseListener{
         addMouseListener(this);
     }
     
+    //main paint method
     public void paint(Graphics g){
         super.paint(g);
         g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
     }
 
     @Override
+    //main click detection, checks to see if a click was inside a button range and then starts up the game with the selected buttons amount of players
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
         System.out.println(getWidth() +" " + getHeight());
@@ -74,4 +77,5 @@ public class PlayerChoicePanel extends JPanel implements MouseListener{
     public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
     }
-}
+
+}//end of class

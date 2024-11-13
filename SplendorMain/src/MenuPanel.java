@@ -1,14 +1,15 @@
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
 public class MenuPanel extends JPanel implements MouseListener{
     private BufferedImage background;
 
+    //constructor
     public MenuPanel(){
         try{
             background = ImageIO.read(MenuPanel.class.getResource("/images/menuBackground.jpg"));
@@ -18,11 +19,13 @@ public class MenuPanel extends JPanel implements MouseListener{
         addMouseListener(this);
     }
 
+    //main paint method
     public void paint(Graphics g){
         super.paint(g);
         g.drawImage(background, 0, 0, getWidth(), getHeight(), null);   // background     
     }
-
+    
+    //main click detection, ckeck if the start button is within the clicked range, then swithces to the playerselect panel
     public void mouseClicked(MouseEvent e){ 
         int width = getWidth();
         int height = getHeight();
@@ -36,30 +39,25 @@ public class MenuPanel extends JPanel implements MouseListener{
                     MainFrame.selectPlayers();
                 }
         }
-
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
-
     }
 }
