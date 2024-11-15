@@ -13,6 +13,7 @@ public class Logic {
     //@SuppressWarnings("unused")//remove later, suppress boolean not used (i havent worked on the method yet)
     private boolean isLastTurn; 
     private boolean isGameOver;
+    private boolean tokenSelected;
     
     //constructor
     public Logic(int count){
@@ -172,13 +173,16 @@ public class Logic {
     }
 
     //takes outs the inputted amount of tokens from the tokens hashmap, if it is possible
-    public void getTokens(HashMap<String,Integer> thisTokens){
+    public boolean getTokens(HashMap<String,Integer> thisTokens){
         Player thisPlayer = getPlayer();
-        if(thisPlayer.tokenCount() + thisTokens.size() > 10){return;}
+        if(thisPlayer.tokenCount() + thisTokens.size() > 10){
+            return false;
+        }
 
         if(tokenCount(thisTokens) == 3)
         {
             thisPlayer.addTokens(thisTokens);
+            return true;
         }
         else if(tokenCount(thisTokens) == 2 )
         {
@@ -186,11 +190,13 @@ public class Logic {
             String gemChecked = iter.next();
             if(tokens.get(gemChecked) >= 4)
                 thisPlayer.addTokens(thisTokens);
+                return true;
         }
         else 
         {
             System.out.println("WRONG NUMBER OF TOKENS!!!!!!!!!");
         }
+        return false;
     }
 
     //gets the total acount of tokens the inputted hashMap has, identical to tokencount in player
