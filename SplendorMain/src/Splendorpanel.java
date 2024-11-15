@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -6,7 +7,8 @@ import java.awt.image.BufferedImage;
 import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-//import java.util.Set;
+import java.util.Set;
+import java.util.HashMap;
 
 public class Splendorpanel extends JPanel implements MouseListener{
     private int pCount; //num of players
@@ -51,16 +53,28 @@ public class Splendorpanel extends JPanel implements MouseListener{
         }
         
     }
+
+
     
     //main paint method for the entire splendorPanel
     public void paint(Graphics g){
         super.paint(g);
+        if(!logic.getTokens(heldTokens)){ //if more than 10 tokens, if more than 3 tokens drawn, or if more than two of the same color
+            heldTokens.clear(); //clear temporary hand
+           drawError(g); //draw error and make players remove or redraw tokens
+        }
         //need to set actual location
+        //drawSetUp(g);
         //drawCards(g); 
         //drawPatron(g);  
         //drawDeck(g);   
         //drawTokens(g);
     }
+
+
+
+
+
 
     //draws the player info, cand the current player on screen
     public void drawSetUp(Graphics g){
@@ -136,6 +150,12 @@ public class Splendorpanel extends JPanel implements MouseListener{
         }
     }
 
+    public void drawError(Graphics g){
+        g.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        g.setColor(Color.RED);
+        g.drawString("Check if you have more than ten tokens\nor if you drew more than three tokens\nor more than two of the same type", 1000, 1000); //set real location later
+    }
+
     //public boolean[] checkDeck(){
 
     //}
@@ -145,22 +165,31 @@ public class Splendorpanel extends JPanel implements MouseListener{
     }
 
     public void mousePressed(MouseEvent e){
+        String[] colors = {"White", "Red", "Green", "Blue", "Brown", "Wild"};
+        Integer [] tokensX = { }; //location of tokens on board, top right corner of square
+        Integer [] tokensY = {};
+        int d = 45; //diameter of token image, set actual size later
         int mouseX = e.getX();
-        int mouseY - e.getY();
-       /* if(x>= _ && x<= _ && y>= __ && y<= __){ area of each token, ex for white, may do loop
-           if(heldTokens.contains("White")){
-              heldTokens.replace("White", heldTokens.get("White"), heldTokens.get("White") +1 );
-           } else {
-               heldTokens.put("White", 1);
-           }
-          }
+        int mouseY = e.getY();
 
+            for(int i = 0; i<colors.length; i++){
+                if(mouseX>= tokensX[i] && mouseX<= tokensX[i] + d && mouseY>= tokensY[i] && mouseY<= tokensY[i]+d ){ //area of each token, moves clicked 
+                    if(heldTokens.containsKey(colors[i])){
+                       heldTokens.replace(colors[i], heldTokens.get(colors[i]), heldTokens.get(colors[i]) +1 );
+                    } else {
+                        heldTokens.put(colors[i], 1);
+                    }
+                   }
+            }
+            if(!logic.getTokens(heldTokens)){ //if wrong gameplay, repaint to show error
+                repaint();
+            }
 
-       */
+            
+
 
         }
         // TODO Auto-generated method stub
-    }
 
     public void mouseEntered(MouseEvent e){
         // TODO Auto-generated method stub
