@@ -48,4 +48,5 @@ public class Card{
     public Image getCardFront(){
         return img;
     }
-}
+    
+}//end of class

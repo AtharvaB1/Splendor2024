@@ -58,4 +58,5 @@ public class MenuPanel extends JPanel implements MouseListener{
     public void mouseExited(MouseEvent e) {
 
     }
-}
+
+}//end of class

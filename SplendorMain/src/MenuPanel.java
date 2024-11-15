@@ -60,4 +60,5 @@ public class MenuPanel extends JPanel implements MouseListener{
     public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
     }
-}
+
+}//end of class
