@@ -31,6 +31,11 @@ public class Deck {
     public Card drawCard(){
         return cards.get(0); //remember to print deck with index 0 on top and last index on the table
     }
+
+    //returns the top card from the selected point in the deck
+    public Card drawCard(int loc){
+        return cards.get(loc);
+    }
     
     //retrurns the top card from the deck, and them removes the top card from the deck
     public Card takeCard(){
@@ -39,6 +44,20 @@ public class Deck {
         return ret; 
     }
 
+    //returns the card from the selected location and removes it
+    public Card takeCard(int loc){
+        Card ret = cards.get(0);
+        cards.remove(0);
+        return ret; 
+    }
+
+    //returns the card from the selected location and removes it
+    public Card takeCard(Card loc){
+        cards.remove(loc);
+        return loc; 
+    }
+
+
     //returns if the deck is empty or not
     public boolean deckEmpty(){
         if(cards.isEmpty()){
@@ -46,4 +65,5 @@ public class Deck {
         }
         return false;
     }
-}
+    
+}//end of class

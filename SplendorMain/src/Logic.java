@@ -95,7 +95,7 @@ public class Logic {
         }
     }
 
-    //buys a card foir the current player, checks player’s tokens and does nothing if they do not have enough
+    //buys a card for the current player, checks player’s tokens and does nothing if they do not have enough, checks all the deck if they have the card and removes the card
     public void buyCard(Card thisCard){
         Player thisPlayer = players.get(currPlayer);
         if(thisPlayer.canBuyCard(thisCard))
@@ -103,6 +103,23 @@ public class Logic {
            thisPlayer.takeCard(thisCard);
            thisPlayer.removeTokens(thisCard.getCost());
         }
+        for(int i = 0; i < 3; i++)
+        {
+            if(getFirstFour(i).contains(thisCard))
+                decks.get(i).takeCard(thisCard);
+            return;
+        }
+    }
+
+    //buys a card foir the current player, checks player’s tokens and does nothing if they do not have enough automaticly does the the provided deck and removes the card, more efficant but need to know the location of the card to use
+    public void buyCard(Card thisCard, int deckNum){
+        Player thisPlayer = players.get(currPlayer);
+        if(thisPlayer.canBuyCard(thisCard))
+        {
+           thisPlayer.takeCard(thisCard);
+           thisPlayer.removeTokens(thisCard.getCost());
+        }
+        decks.get(deckNum).takeCard(thisCard);
     }
     
     //reserved a card for the current player, does nothing if they cannot reserve
@@ -120,7 +137,7 @@ public class Logic {
         }
     }
 
-    //will be called at the end of turn, gets ArrayList of player cards token type and checks if it matches with any patron.
+    //will be called at the end of turn, gets ArrayList of player cards token type and checks if it matches with any patron, removes the patron if does.
     public void getAPatron(){
         Player thisPlayer = getPlayer();
         for(int i = 0; i < currPatrons.size(); i++)
@@ -158,7 +175,7 @@ public class Logic {
         return retList;
     }
 
-    // takes outs the inputted amount of tokens from the tokens hashmap, if it is possible
+    //takes outs the inputted amount of tokens from the tokens hashmap, if it is possible
     public void getTokens(HashMap<String,Integer> thisTokens){
         Player thisPlayer = getPlayer();
         if(thisPlayer.tokenCount() + thisTokens.size() > 10){return;}
@@ -215,12 +232,9 @@ public class Logic {
         ArrayList<Card> retList = new ArrayList<Card>();
         for(int i = 0; i < 4; i++)
         {  
-            retList.add(decks.get(deckType).drawCard());
+            retList.add(decks.get(deckType).drawCard(i));
         }
         return retList;
     }
-
-    //TODO
-    //the buy reserve and buy patreon methods do not remove the card being buyed, fix that
     
 }//end of class
