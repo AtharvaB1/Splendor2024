@@ -1,6 +1,5 @@
 import java.util.*;
-public class Player
-{
+public class Player implements Comparable<Player>{
     private int victoryPoints;
     private ArrayList<Card> reservedCards;
     private ArrayList<Card> heldCards;
@@ -169,6 +168,11 @@ public class Player
     //returns name
     public String getName(){
         return name;
+    }
+
+    @Override
+    public int compareTo(Player o) {
+        return this.getTotalVP() - o.getTotalVP();
     }
    
 }//end of class

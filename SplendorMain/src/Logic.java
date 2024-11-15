@@ -162,15 +162,11 @@ public class Logic {
     }
     
     //returns a TREEMAP of the player scores, IBELIIIIIVEVVVVVVVVVVEEEEEEEE
-    public TreeMap<Integer, String> getSortedScores(){
-        TreeMap<Integer, String> retList = new TreeMap<Integer, String>();
+    public TreeSet<Player> getSortedPlayers(){
+        TreeSet<Player> retList = new TreeSet<Player>();
         for(int i = 0; i < players.size(); i++)
         {
-            int thisScore = players.get(i).getTotalVP();
-            if(!retList.containsKey(thisScore))
-                retList.put(thisScore, "" + (i+1));
-            else
-                retList.replace(thisScore, retList.get(thisScore) + " " + (i+1));
+            retList.add(players.get(i));
         }
         return retList;
     }
@@ -226,7 +222,7 @@ public class Logic {
         return patrons;
     }
 
-    //gets the first four cards of a selected deck, currently brocken
+    //gets the first four cards of a selected deck
     public ArrayList<Card> getFirstFour(int deckType)
     {
         ArrayList<Card> retList = new ArrayList<Card>();

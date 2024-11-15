@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -146,7 +147,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
     public void mousePressed(MouseEvent e){
         int mouseX = e.getX();
-        int mouseY - e.getY();
+        int mouseY = e.getY();
        /* if(x>= _ && x<= _ && y>= __ && y<= __){ area of each token, ex for white, may do loop
            if(heldTokens.contains("White")){
               heldTokens.replace("White", heldTokens.get("White"), heldTokens.get("White") +1 );
@@ -158,7 +159,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
        */
 
-        }
+       // }
         // TODO Auto-generated method stub
     }
 
