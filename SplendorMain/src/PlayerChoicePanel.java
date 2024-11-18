@@ -16,6 +16,7 @@ public class PlayerChoicePanel extends JPanel implements MouseListener{
         } catch(IOException e){
             System.out.println("Image error in player choice panel");
         }
+        System.out.println("player choice panel opened");
         addMouseListener(this);
     }
     
