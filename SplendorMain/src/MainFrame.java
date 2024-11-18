@@ -1,4 +1,6 @@
 import java.awt.*; //add more imports using frame
+import java.util.*;
+
 import javax.swing.*;
 @SuppressWarnings("unused")//remove later, suppress warnings of imports not used
 
@@ -64,8 +66,8 @@ public class MainFrame extends JFrame
     }
 
     //switches from the SplendorPanel to EndPanel, initilizes a new instance of the endpanel while still in splendorpanel, then removes splendorpanel and sets it to null, ends the game
-    public static void endGame(){
-        end = new EndPanel();
+    public static void endGame(TreeSet<Player> s){
+        end = new EndPanel(s);
         frame.remove(game);
         game = null;
         frame.add(end);
