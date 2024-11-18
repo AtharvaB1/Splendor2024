@@ -171,7 +171,30 @@ public class Logic {
         }
         return retList;
     }
+    
+    //returns if the current player can take the selected amount of tokens
+    public boolean canGetTokens(HashMap<String,Integer> thisTokens){
+        Player thisPlayer = getPlayer();
+        if(thisPlayer.tokenCount() + thisTokens.size() > 10){
+            return false;
+        }
 
+        if(tokenCount(thisTokens) == 3){
+            return true;
+        }
+        else if(tokenCount(thisTokens) == 2){
+            Iterator<String> iter = thisTokens.keySet().iterator();
+            String gemChecked = iter.next();
+            if(tokens.get(gemChecked) >= 4)
+                return true;
+        }
+        else {
+            System.out.println("WRONG NUMBER OF TOKENS!!!!!!!!!");
+            return false;
+        }
+        return false;
+    }
+    
     //takes outs the inputted amount of tokens from the tokens hashmap, if it is possible
     public boolean getTokens(HashMap<String,Integer> thisTokens){
         Player thisPlayer = getPlayer();
@@ -198,6 +221,7 @@ public class Logic {
         }
         return false;
     }
+
 
     //gets the total acount of tokens the inputted hashMap has, identical to tokencount in player
     public int tokenCount(HashMap<String,Integer> thisTokens){
