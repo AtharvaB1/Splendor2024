@@ -29,6 +29,7 @@ public class MainFrame extends JFrame
         frame.add(menu);
         //select = new PlayerChoicePanel();
         //frame.add(select);
+        System.out.println("test 123 123 123");
         frame.setVisible(true);
 
         //Logic logic = new Logic(4); this is STUPID!!!!!!!!!!1!!!!!!!!!!!!!!!!
@@ -65,7 +66,7 @@ public class MainFrame extends JFrame
 
     //switches from the SplendorPanel to EndPanel, initilizes a new instance of the endpanel while still in splendorpanel, then removes splendorpanel and sets it to null, ends the game
     public static void endGame(){
-        end = new EndPanel();
+        //end = new EndPanel();
         frame.remove(game);
         game = null;
         frame.add(end);
