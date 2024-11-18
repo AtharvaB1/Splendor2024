@@ -31,6 +31,7 @@ public class MainFrame extends JFrame
         frame.add(menu);
         //select = new PlayerChoicePanel();
         //frame.add(select);
+        System.out.println("test 123 123 123");
         frame.setVisible(true);
 
         //Logic logic = new Logic(4); this is STUPID!!!!!!!!!!1!!!!!!!!!!!!!!!!
