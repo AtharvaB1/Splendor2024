@@ -1,6 +1,5 @@
 import java.util.*;
-public class Player
-{
+public class Player implements Comparable<Player>{
     private int victoryPoints;
     private ArrayList<Card> reservedCards;
     private ArrayList<Card> heldCards;
@@ -8,10 +7,12 @@ public class Player
     private HashMap<String, Integer> tokens;
     private HashMap<String, Integer> discounts;
     private String name;
+    private int num;
    
     //constructor
     public Player(int n){
         victoryPoints = 0;
+        num = n;
         name = "Player " + n;
         reservedCards = new ArrayList<Card>();
         heldCards = new ArrayList<Card>();
@@ -169,6 +170,19 @@ public class Player
     //returns name
     public String getName(){
         return name;
+    }
+
+    //returns the nunber of the player (order in which they play)
+    public int getNum(){
+        return num;
+    }
+
+    @Override
+    public int compareTo(Player o) {
+        if(this.getTotalVP() - o.getTotalVP() != 0)
+            return this.getTotalVP() - o.getTotalVP();
+        else
+            return this.getNum() - o.getNum();
     }
    
 }//end of class

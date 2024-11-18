@@ -1,6 +1,7 @@
 import java.awt.Image;
 import java.awt.image.*;
 import java.util.*;
+import javax.imageio.*;
 
 @SuppressWarnings("unused")// remove later, suppress problems of img not used
 public class Card{
@@ -13,9 +14,9 @@ public class Card{
     //constructor
     public Card(String input, int t){
         try {
-            //img = ImageIO.read(Card.class.getResource("/Image/"+input+".png")); //pls edit when actual pictures are there
+            //img = ImageIO.read(Card.class.getResource("src\\images\\Card Images\\" + input+ ".png")); //imgs broken
         } catch (Exception e) {
-            System.out.println(e+"ur imgs are screwed");
+            System.out.println(e+"ur imgs are screwed - Card "+input);
             return;
         }
         String[] vars = input.split(" ");
@@ -48,4 +49,5 @@ public class Card{
     public Image getCardFront(){
         return img;
     }
-}
+    
+}//end of class

@@ -10,14 +10,10 @@ public class Logic {
     private int numPlayers;
     private int currPlayer;
     public ArrayList<Patron> currPatrons;
-
-    //TODO MAKE THESE INTO ONE ARRAYLIST!!!!!! VERY IMPORTANY!!!!!!!!
-    public ArrayList<Card> currRow1;
-    public ArrayList<Card> currRow2;
-    public ArrayList<Card> currRow3;
     //@SuppressWarnings("unused")//remove later, suppress boolean not used (i havent worked on the method yet)
     private boolean isLastTurn; 
     private boolean isGameOver;
+    private boolean tokenSelected;
     
     //constructor
     public Logic(int count){
@@ -46,26 +42,13 @@ public class Logic {
         try {
             patCreate = new Scanner(pats);
         } catch (FileNotFoundException e) {
-            System.out.println(e+"your file is screwed");
+            System.out.println(e+"your file is screwed- patron");
             e.printStackTrace();
             return;
         }
         patCreate.nextLine();
         while(patCreate.hasNext()){
             patrons.add(new Patron(patCreate.nextLine()));
-        }
-
-        currRow1 = new ArrayList<Card>();
-        currRow2 = new ArrayList<Card>();
-        currRow3 = new ArrayList<Card>();
-        for(int i = 0; i < 5; i++){
-            currRow1.add(decks.get(0).drawCard());
-        }
-        for(int i = 0; i < 5; i++){
-            currRow2.add(decks.get(1).drawCard());
-        }
-        for(int i = 0; i < 5; i++){
-            currRow3.add(decks.get(2).drawCard());
         }
 
         currPatrons = new ArrayList<Patron>();
@@ -113,7 +96,7 @@ public class Logic {
         }
     }
 
-    //buys a card foir the current player, checks player’s tokens and does nothing if they do not have enough
+    //buys a card for the current player, checks player’s tokens and does nothing if they do not have enough, checks all the deck if they have the card and removes the card
     public void buyCard(Card thisCard){
         Player thisPlayer = players.get(currPlayer);
         if(thisPlayer.canBuyCard(thisCard))
@@ -121,6 +104,23 @@ public class Logic {
            thisPlayer.takeCard(thisCard);
            thisPlayer.removeTokens(thisCard.getCost());
         }
+        for(int i = 0; i < 3; i++)
+        {
+            if(getFirstFour(i).contains(thisCard))
+                decks.get(i).takeCard(thisCard);
+            return;
+        }
+    }
+
+    //buys a card foir the current player, checks player’s tokens and does nothing if they do not have enough automaticly does the the provided deck and removes the card, more efficant but need to know the location of the card to use
+    public void buyCard(Card thisCard, int deckNum){
+        Player thisPlayer = players.get(currPlayer);
+        if(thisPlayer.canBuyCard(thisCard))
+        {
+           thisPlayer.takeCard(thisCard);
+           thisPlayer.removeTokens(thisCard.getCost());
+        }
+        decks.get(deckNum).takeCard(thisCard);
     }
     
     //reserved a card for the current player, does nothing if they cannot reserve
@@ -138,7 +138,7 @@ public class Logic {
         }
     }
 
-    //will be called at the end of turn, gets ArrayList of player cards token type and checks if it matches with any patron.
+    //will be called at the end of turn, gets ArrayList of player cards token type and checks if it matches with any patron, removes the patron if does.
     public void getAPatron(){
         Player thisPlayer = getPlayer();
         for(int i = 0; i < currPatrons.size(); i++)
@@ -163,27 +163,26 @@ public class Logic {
     }
     
     //returns a TREEMAP of the player scores, IBELIIIIIVEVVVVVVVVVVEEEEEEEE
-    public TreeMap<Integer, String> getSortedScores(){
-        TreeMap<Integer, String> retList = new TreeMap<Integer, String>();
+    public TreeSet<Player> getSortedPlayers(){
+        TreeSet<Player> retList = new TreeSet<Player>();
         for(int i = 0; i < players.size(); i++)
         {
-            int thisScore = players.get(i).getTotalVP();
-            if(!retList.containsKey(thisScore))
-                retList.put(thisScore, "" + (i+1));
-            else
-                retList.replace(thisScore, retList.get(thisScore) + " " + (i+1));
+            retList.add(players.get(i));
         }
         return retList;
     }
 
-    // takes outs the inputted amount of tokens from the tokens hashmap, if it is possible
-    public void getTokens(HashMap<String,Integer> thisTokens){
+    //takes outs the inputted amount of tokens from the tokens hashmap, if it is possible
+    public boolean getTokens(HashMap<String,Integer> thisTokens){
         Player thisPlayer = getPlayer();
-        if(thisPlayer.tokenCount() + thisTokens.size() > 10){return;}
+        if(thisPlayer.tokenCount() + thisTokens.size() > 10){
+            return false;
+        }
 
         if(tokenCount(thisTokens) == 3)
         {
             thisPlayer.addTokens(thisTokens);
+            return true;
         }
         else if(tokenCount(thisTokens) == 2 )
         {
@@ -191,11 +190,13 @@ public class Logic {
             String gemChecked = iter.next();
             if(tokens.get(gemChecked) >= 4)
                 thisPlayer.addTokens(thisTokens);
+                return true;
         }
         else 
         {
             System.out.println("WRONG NUMBER OF TOKENS!!!!!!!!!");
         }
+        return false;
     }
 
     //gets the total acount of tokens the inputted hashMap has, identical to tokencount in player
@@ -227,24 +228,15 @@ public class Logic {
         return patrons;
     }
 
-    //returns row one of the cards matrix
-    public ArrayList<Card> getRowOne(){
-        return currRow1;
+    //gets the first four cards of a selected deck
+    public ArrayList<Card> getFirstFour(int deckType)
+    {
+        ArrayList<Card> retList = new ArrayList<Card>();
+        for(int i = 0; i < 4; i++)
+        {  
+            retList.add(decks.get(deckType).drawCard(i));
+        }
+        return retList;
     }
-
-    //returns row two of the cards matrix
-    public ArrayList<Card> getRowTwo(){
-        return currRow2;
-    }
-
-    //returns row three of the cards matrix
-    public ArrayList<Card> getRowThree(){
-        return currRow3;
-    }
-
-    //need to add:
-    //mehthods for removing and placing a card from the 3 diffrent rows - THIS WILL NOW ME ONE ARRAYLIST
-    //method for returing the entire card matrix (optional)
-    //the buy reserve and buy patreon methods do not remove the card being buyed, fix that in a way that uses the currCard methods
     
 }//end of class

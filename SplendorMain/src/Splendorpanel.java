@@ -1,24 +1,29 @@
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-//import java.util.Set;
+import java.util.Set;
+import java.util.HashMap;
 
 public class Splendorpanel extends JPanel implements MouseListener{
     private int pCount; //num of players
-    //private String tok1, tok2, tok3; //tokens players click on?
+   // private String tok1, tok2, tok3; //tokens players click on?
+    private HashMap<String,Integer> heldTokens; //three tokens held by current player when interacted with
     private BufferedImage bkg; //, rule1, rule2, rule3, back1, back2, back3; // background and rules, backs of three diff card types
     Logic logic; //logic class
-    JButton endTurn, rPrev, rNext, rClose; 
+    JButton endTurn, rPrev, rNext, rClose; //might not be using anymore
     private Card[][] mat;
     private Patron [] pat;
 
     //constructor
     public Splendorpanel(int p){
+        heldTokens = new HashMap<String,Integer>();
         mat = new Card[3][4];
         pCount = p;
         Logic logic = new Logic(pCount);
@@ -33,7 +38,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
             //back2=
             //back3= (top row of cards)
         } catch (Exception e) {
-            System.out.println(e+"ur imgs are screwed");
+            System.out.println(e+"image issue splendor panel");
             return;
         }
         addMouseListener(this);
@@ -53,7 +58,12 @@ public class Splendorpanel extends JPanel implements MouseListener{
     //main paint method for the entire splendorPanel
     public void paint(Graphics g){
         super.paint(g);
+        if(!logic.getTokens(heldTokens)){ //if more than 10 tokens, if more than 3 tokens drawn, or if more than two of the same color
+            heldTokens.clear(); //clear temporary hand
+           drawError(g); //draw error and make players remove or redraw tokens
+        }
         //need to set actual location
+        //drawSetUp(g);
         //drawCards(g); 
         //drawPatron(g);  
         //drawDeck(g);   
@@ -129,7 +139,15 @@ public class Splendorpanel extends JPanel implements MouseListener{
                 //g.drawImage(name + ".jpg", x, y, w, h, null);
 
             }
+            //x++ _;
+            //y++ _;
         }
+    }
+
+    public void drawError(Graphics g){
+        g.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        g.setColor(Color.RED);
+        g.drawString("Check if you have more than ten tokens\nor if you drew more than three tokens\nor more than two of the same type", 1000, 1000); //set real location later
     }
 
     //public boolean[] checkDeck(){
@@ -141,21 +159,43 @@ public class Splendorpanel extends JPanel implements MouseListener{
     }
 
     public void mousePressed(MouseEvent e){
-        // TODO Auto-generated method stub
+        String[] colors = {"White", "Red", "Green", "Blue", "Brown", "Wild"};
+        Integer [] tokensX = { }; //location of tokens on board, top right corner of square
+        Integer [] tokensY = {};
+        int d = 45; //diameter of token image, set actual size later
+        int mouseX = e.getX();
+        int mouseY = e.getY();
+
+            for(int i = 0; i<colors.length; i++){
+                if(mouseX>= tokensX[i] && mouseX<= tokensX[i] + d && mouseY>= tokensY[i] && mouseY<= tokensY[i]+d ){ //area of each token, moves clicked 
+                    if(heldTokens.containsKey(colors[i])){
+                       heldTokens.replace(colors[i], heldTokens.get(colors[i]), heldTokens.get(colors[i]) +1 );
+                    } else {
+                        heldTokens.put(colors[i], 1);
+                    }
+                   }
+            }
+            if(!logic.getTokens(heldTokens)){ //if wrong gameplay, repaint to show error
+                repaint();
+            }
     }
 
+    @Override
     public void mouseEntered(MouseEvent e){
         // TODO Auto-generated method stub
     }
 
+    @Override
     public void mouseClicked(MouseEvent e){
         // TODO Auto-generated method stub
     }
 
+    @Override
     public void mouseExited(MouseEvent e){
         // TODO Auto-generated method stub
     }
 
+    @Override
     public void mouseReleased(MouseEvent e){
         // TODO Auto-generated method stub
     }
