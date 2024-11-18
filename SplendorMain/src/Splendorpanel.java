@@ -54,8 +54,6 @@ public class Splendorpanel extends JPanel implements MouseListener{
         }
         
     }
-
-
     
     //main paint method for the entire splendorPanel
     public void paint(Graphics g){
@@ -71,11 +69,6 @@ public class Splendorpanel extends JPanel implements MouseListener{
         //drawDeck(g);   
         //drawTokens(g);
     }
-
-
-
-
-
 
     //draws the player info, cand the current player on screen
     public void drawSetUp(Graphics g){
@@ -185,25 +178,24 @@ public class Splendorpanel extends JPanel implements MouseListener{
             if(!logic.getTokens(heldTokens)){ //if wrong gameplay, repaint to show error
                 repaint();
             }
+    }
 
-            
-
-
-       // }
-        // TODO Auto-generated method stub
-
+    @Override
     public void mouseEntered(MouseEvent e){
         // TODO Auto-generated method stub
     }
 
+    @Override
     public void mouseClicked(MouseEvent e){
         // TODO Auto-generated method stub
     }
 
+    @Override
     public void mouseExited(MouseEvent e){
         // TODO Auto-generated method stub
     }
 
+    @Override
     public void mouseReleased(MouseEvent e){
         // TODO Auto-generated method stub
     }
