@@ -43,7 +43,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
         }
         addMouseListener(this);
 
-        for(int i = 0; i<3; i++){ //filling 2D matrix of cards on table
+        for(int i = 0; i<3; i++){ //filling 2D matrix of cards on table, should draw each row from separate decks
             for(int j = 0; j<4; j++){
                 mat[i][j] = logic.getDecks().get(i).drawCard();
             }
@@ -74,30 +74,30 @@ public class Splendorpanel extends JPanel implements MouseListener{
     public void drawSetUp(Graphics g){
         g.drawImage(bkg, 0, 0, getWidth(), getHeight(), null); //background
 
-        g.setFont(new Font("Times New Roman", Font.BOLD, 44));
-        g.drawString(logic.getPlayer().getName(), getWidth()/2, getHeight()/6); //Which player's turn
+        g.setFont(new Font("Times New Roman", Font.BOLD, 37));
+        g.drawString(logic.getPlayer().getName(), 656, 189); //Which player's turn
 
-        g.setFont(new Font("Times New Roman", Font.PLAIN, 22));
-        g.drawString("Player 1 - " + logic.getAllPlayers().get(0).getTotalVP() + " points", 100, 100);
-        g.drawString("Player 2" + logic.getAllPlayers().get(1).getTotalVP() + " points", 100, 1000);//set actual loc later
-        g.drawString("Player 3" + logic.getAllPlayers().get(2).getTotalVP() + " points", 1000, 100);
-        g.drawString("Player 4" + logic.getAllPlayers().get(3).getTotalVP() + " points", 1000, 1000);
+        g.setFont(new Font("Times New Roman", Font.PLAIN, 34));
+        g.drawString("Player 1 - " + logic.getAllPlayers().get(0).getTotalVP() + " points", 56, 39); //player header and points
+        g.drawString("Player 2" + logic.getAllPlayers().get(1).getTotalVP() + " points", 1392, 39);
+        g.drawString("Player 3" + logic.getAllPlayers().get(2).getTotalVP() + " points", 1392, 1000);
+        g.drawString("Player 4" + logic.getAllPlayers().get(3).getTotalVP() + " points", 56, 1000);
 
 
     }
     
     //draws the current cards that can be selected
     public void drawCards(Graphics g){
-        int cardX = 0; //set start position of cards, increment x and y by __ for the cards after in the loop
-        int cardY = 0;
+        int cardX = 714; //set start position of cards, increment x and y by __ for the cards after in the loop
+        int cardY = 251;
 
         for(int i = 0; i<3; i++){ //printing cards matrix from bottom row to top
-            //reset x for next row
-            // y-= _; 
             for(int j = 0; j<4; j++){
-                //g.drawImage(mat[i][j].getCardFront(), 0, 0, w, h, null); // need to fix correct coordinates and height and width
-                // x+= _;
+                g.drawImage(mat[i][j].getCardFront(), cardX, cardY, 95, 137, null); // need to test correct coordinates and height and width
+                cardX+= 129;
             }
+            cardX = 714;  //reset x position for next row
+            cardY+= 161; //increment y position for next row
         }
 
     }
