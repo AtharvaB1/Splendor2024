@@ -104,10 +104,11 @@ public class Splendorpanel extends JPanel implements MouseListener{
     
     //draws the current patreons that can be selected
     public void drawPatron(Graphics g){
-        // int patX = __; set patron position and increment x in loop
+        int patX = 587; //set patron position and increment x in loop
 
         for(int i = 0; i<pat.length; i++){
-            // g.drawImage(pat[i].getPatFace(), __, __, w, h, null);
+            g.drawImage(pat[i].getPatFace(), patX,732, 91,93, null);
+            patX+=125;
         }
     }
 
