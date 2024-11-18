@@ -9,6 +9,7 @@ public class Patron {
 
     //constructor
     public Patron(String input){
+        cost = new HashMap<String,Integer>();
         try {
             //img = ImageIO.read(Card.class.getResource("/Image/"+input+".png")); //pls edit when actual pictures are there
         } catch (Exception e) {

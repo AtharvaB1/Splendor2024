@@ -9,10 +9,11 @@ public class Card{
     private HashMap<String,Integer> cost;
     private String gem;
     private int victoryPoints;
-    public int tier;
+    private int tier;
 
     //constructor
     public Card(String input, int t){
+        cost = new HashMap<String,Integer>();
         try {
             //img = ImageIO.read(Card.class.getResource("src\\images\\Card Images\\" + input+ ".png")); //imgs broken
         } catch (Exception e) {
@@ -48,6 +49,10 @@ public class Card{
     //returns the front image of the card
     public Image getCardFront(){
         return img;
+    }
+
+    public int getTier(){
+        return tier;
     }
     
 }//end of class

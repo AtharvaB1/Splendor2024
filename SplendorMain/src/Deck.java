@@ -18,6 +18,7 @@ public class Deck {
         scan.nextLine();
         cards = new ArrayList<>();
         while(scan.hasNextLine()){
+            System.out.println("card make");
             cards.add(new Card(scan.nextLine(), level));
         }
     }
