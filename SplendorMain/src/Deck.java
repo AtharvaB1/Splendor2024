@@ -6,7 +6,7 @@ public class Deck {
     
     //constructor
     public Deck(int level){
-        File card = new File("src\\Cards\\Card"+level+".txt");
+        File card = new File("SplendorMain\\src\\Cards\\Card"+level+".txt");
         Scanner scan;
         try {
             scan = new Scanner(card);
@@ -18,7 +18,7 @@ public class Deck {
         scan.nextLine();
         cards = new ArrayList<>();
         while(scan.hasNextLine()){
-            System.out.println("card make");
+            System.out.println("card make" + level );
             cards.add(new Card(scan.nextLine(), level));
         }
     }
@@ -30,7 +30,7 @@ public class Deck {
     
     //returns the top card from the deck
     public Card drawCard(){
-        return cards.get(0); //remember to print deck with index 0 on top and last index on the table
+        return cards.getFirst(); //remember to print deck with index 0 on top and last index on the table
     }
 
     //returns the top card from the selected point in the deck
