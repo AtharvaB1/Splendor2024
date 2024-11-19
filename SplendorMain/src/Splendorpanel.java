@@ -8,15 +8,13 @@ import java.util.HashMap;
 import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.util.Set;
-import java.util.HashMap;
 
 public class Splendorpanel extends JPanel implements MouseListener{
     private int pCount; //num of players
    // private String tok1, tok2, tok3; //tokens players click on?
     private HashMap<String,Integer> heldTokens; //three tokens held by current player when interacted with
     private BufferedImage bkg; //, rule1, rule2, rule3, back1, back2, back3; // background and rules, backs of three diff card types
-    Logic logic; //logic class
+    Logic logic ; //logic class
     JButton endTurn, rPrev, rNext, rClose; //might not be using anymore
     private Card[][] mat;
     private Patron [] pat;
@@ -26,7 +24,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
         heldTokens = new HashMap<String,Integer>();
         mat = new Card[3][4];
         pCount = p;
-        Logic logic = new Logic(pCount);
+        logic = new Logic(pCount);
         pat = new Patron[pCount+1]; //one more patron than players
         try {
             //bkg = ImageIO.read(new File("bkg.png"));
