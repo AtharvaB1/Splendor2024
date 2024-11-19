@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import javax.imageio.ImageIO;
@@ -14,14 +15,16 @@ public class Splendorpanel extends JPanel implements MouseListener{
    // private String tok1, tok2, tok3; //tokens players click on?
     private HashMap<String,Integer> heldTokens; //three tokens held by current player when interacted with
     private BufferedImage bkg; //, rule1, rule2, rule3, back1, back2, back3; // background and rules, backs of three diff card types
-    Logic logic ; //logic class
+    Logic logic; //logic class
     JButton endTurn, rPrev, rNext, rClose; //might not be using anymore
     private Card[][] mat;
     private Patron [] pat;
+    private String[] colors;
 
     //constructor
     public Splendorpanel(int p){
         heldTokens = new HashMap<String,Integer>();
+        String[] colors = {"White", "Blue", "Green", "Red", "Black", "Wild"};
         mat = new Card[3][4];
         pCount = p;
         logic = new Logic(pCount);
@@ -32,9 +35,9 @@ public class Splendorpanel extends JPanel implements MouseListener{
             //rule1 =
             //rule2=
             //rule3=
-            //back1 = (last row of cards)
-            //back2=
-            //back3= (top row of cards)
+            back1 = ImageIO.read(Splendorpanel.class.getResource("/images/back1.png"));//(top row of cards)
+            back2=ImageIO.read(Splendorpanel.class.getResource("/images/back2.png"));
+            back3=ImageIO.read(Splendorpanel.class.getResource("/images/back3.png")); //(last row of cards)
         } catch (Exception e) {
             System.out.println(e+"image issue splendor panel");
             return;
@@ -50,6 +53,14 @@ public class Splendorpanel extends JPanel implements MouseListener{
         for(int i = 0; i<pat.length; i++){
             pat[i] = logic.getPatrons().getLast();
         }
+        for(int i = 0; i<colors.length; i++){ //fill list of token images
+            try{ 
+                tokenImgs.add(ImageIO.read(Splendorpanel.class.getResource("/images/" + colors[i] +".png")));
+            } catch (Exception e){
+                System.out.println(e+"token image issue splendorpanel");
+                return;
+            }
+        }
         
     }
     
@@ -60,12 +71,12 @@ public class Splendorpanel extends JPanel implements MouseListener{
             heldTokens.clear(); //clear temporary hand
            drawError(g); //draw error and make players remove or redraw tokens
         }
-        //need to set actual location
-        //drawSetUp(g);
-        //drawCards(g); 
-        //drawPatron(g);  
-        //drawDeck(g);   
-        //drawTokens(g);
+        //need to test locations
+        drawSetUp(g);
+        drawCards(g); 
+        drawPatron(g);  
+        drawDeck(g);   
+        drawTokens(g);
     }
 
     //draws the player info, cand the current player on screen
@@ -115,11 +126,11 @@ public class Splendorpanel extends JPanel implements MouseListener{
         for(int i = 0; i<3; i++){
             if(!logic.getDecks().get(i).deckEmpty()){
                 if(i == 0){
-                    //g.drawImage(back1, )
+                    g.drawImage(back1,587, 251, 95, 137, null );
                 } else if (i == 1){
-                    //g.drawImage(back2)
+                    g.drawImage(back1,587, 411, 95, 137, null );
                 } else {
-                    //g.drawImage(back3)
+                    g.drawImage(back1,587, 567, 95, 137, null );
                 }
             }
         }
@@ -127,19 +138,13 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
     //draws the current tokens that can be taken
     public void drawTokens(Graphics g){
-        Set<String> keys = logic.getTokens().keySet();
-        String[] colors = {"White", "Red", "Green", "Blue", "Brown", "Wild"};
-        //int x =  starting position for top token, incremented in loop
-        //int y=
+        int y= 313; //starting position for top token, incremented in loop
 
         for(int i = 0; i<colors.length; i++){
-            String name = colors[i];
-            if(logic.getTokens().get(colors[i])>0){
-                //g.drawImage(name + ".jpg", x, y, w, h, null);
-
+            if(logic.getTokens().get(colors[i])>0){ //if specific color tokens amount >0, print image
+                g.drawImage(tokenImgs.get(i), 1240, y, 61, 61, null);
             }
-            //x++ _;
-            //y++ _;
+            y+=88;
         }
     }
 
@@ -158,25 +163,47 @@ public class Splendorpanel extends JPanel implements MouseListener{
     }
 
     public void mousePressed(MouseEvent e){
-        String[] colors = {"White", "Red", "Green", "Blue", "Brown", "Wild"};
-        Integer [] tokensX = { }; //location of tokens on board, top right corner of square
-        Integer [] tokensY = {};
-        int d = 45; //diameter of token image, set actual size later
+        int tokensY = 313;//location of tokens on board, top right corner of square
+        int d = 61; //diameter of token image, set actual size later
         int mouseX = e.getX();
         int mouseY = e.getY();
+        int cardX = 714; //set start position of cards, increment x and y by __ for the cards after in the loop
+        int cardY = 251;
+        int w = 95;
+        int l = 137;
 
-            for(int i = 0; i<colors.length; i++){
-                if(mouseX>= tokensX[i] && mouseX<= tokensX[i] + d && mouseY>= tokensY[i] && mouseY<= tokensY[i]+d ){ //area of each token, moves clicked 
-                    if(heldTokens.containsKey(colors[i])){
-                       heldTokens.replace(colors[i], heldTokens.get(colors[i]), heldTokens.get(colors[i]) +1 );
-                    } else {
-                        heldTokens.put(colors[i], 1);
-                    }
-                   }
+        for(int i = 0; i<colors.length; i++){
+            if(mouseX>= 1240 && mouseX<= 1240 + d && mouseY>= tokensY && mouseY<= tokensY+d ){ //clicking each token
+                if(heldTokens.containsKey(colors[i])){
+                    heldTokens.replace(colors[i], heldTokens.get(colors[i]), heldTokens.get(colors[i]) +1 );
+                } else {
+                    heldTokens.put(colors[i], 1);
+                }
             }
-            if(!logic.getTokens(heldTokens)){ //if wrong gameplay, repaint to show error
-                repaint();
+                tokensY += 88;
+        }
+
+        if(!logic.getTokens(heldTokens)){ //if wrong gameplay, repaint to show error
+            repaint();
+        } 
+
+        //Clicking cards in matrix
+        for(int i = 0; i<3; i++){ 
+            for(int j = 0; j<4; j++){
+                if(mouseX>= cardX && mouseX<= cardX + w && mouseY>= cardY && mouseY<= cardY + l ){
+                    logic.buyCard(mat[i][j], i);
+
+                }
+                cardX+= 129;
             }
+            cardX = 714; 
+            cardY+= 161; 
+        }
+
+
+
+
+
     }
 
     @Override
