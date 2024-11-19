@@ -38,7 +38,7 @@ public class Logic {
         }
         patrons = new ArrayList<>();
         Scanner patCreate;
-        File pats = new File("SplendorMain\\src\\Patrons\\Patron.txt");
+        File pats = new File("src\\Patrons\\Patron.txt");
         try {
             patCreate = new Scanner(pats);
         } catch (FileNotFoundException e) {

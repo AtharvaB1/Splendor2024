@@ -6,7 +6,7 @@ public class Deck {
     
     //constructor
     public Deck(int level){
-        File card = new File("SplendorMain\\src\\Cards\\Card"+level+".txt");
+        File card = new File("src\\Cards\\Card"+level+".txt");
         Scanner scan;
         try {
             scan = new Scanner(card);
