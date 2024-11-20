@@ -33,7 +33,7 @@ public class MenuPanel extends JPanel implements MouseListener{
         double[] x = {width*.375, width*.612}; // button's x and y coords
         double[] y = {height*.46, height*.69};
         
-        if(e.getButton()==e.BUTTON1){
+        if(e.getButton()==1){
             if(e.getX()>=x[0] && e.getY()<=x[1] && 
                 e.getY()>=y[0] && e.getY()<=y[1]){
                     MainFrame.selectPlayers();
