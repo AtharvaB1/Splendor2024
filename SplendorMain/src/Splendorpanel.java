@@ -14,16 +14,18 @@ public class Splendorpanel extends JPanel implements MouseListener{
     private int pCount; //num of players
    // private String tok1, tok2, tok3; //tokens players click on?
     private HashMap<String,Integer> heldTokens; //three tokens held by current player when interacted with
-    private BufferedImage bkg; //, rule1, rule2, rule3, back1, back2, back3; // background and rules, backs of three diff card types
+    private BufferedImage bkg, rule1, rule2, rule3, back1, back2, back3;// background and rules, backs of three diff card types
     Logic logic; //logic class
     JButton endTurn, rPrev, rNext, rClose; //might not be using anymore
     private Card[][] mat;
     private Patron [] pat;
     private String[] colors;
+    private ArrayList <BufferedImage> tokenImgs;
 
     //constructor
     public Splendorpanel(int p){
         heldTokens = new HashMap<String,Integer>();
+        tokenImgs = new ArrayList <BufferedImage> ();
         String[] colors = {"White", "Blue", "Green", "Red", "Black", "Wild"};
         mat = new Card[3][4];
         pCount = p;
@@ -102,12 +104,16 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
         for(int i = 0; i<3; i++){ //printing cards matrix from bottom row to top
             for(int j = 0; j<4; j++){
-                g.drawImage(mat[i][j].getCardFront(), cardX, cardY, 95, 137, null); // need to test correct coordinates and height and width
+                if(mat[i][j] != null){
+                    g.drawImage(mat[i][j].getCardFront(), cardX, cardY, 95, 137, null); // need to test correct coordinates and height and width
+                }
                 cardX+= 129;
             }
             cardX = 714;  //reset x position for next row
             cardY+= 161; //increment y position for next row
         }
+
+        
 
     }
     
@@ -152,6 +158,41 @@ public class Splendorpanel extends JPanel implements MouseListener{
         g.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         g.setColor(Color.RED);
         g.drawString("Check if you have more than ten tokens\nor if you drew more than three tokens\nor more than two of the same type", 1000, 1000); //set real location later
+    } 
+
+    public void drawHands(Graphics g){//draw hands of all players and update current
+        int x = 35; 
+        int y= 121;
+        ArrayList <Card> tempHand = new ArrayList <Card> ();
+        for (int i = 1; i<=pCount; i++){ 
+            if(i == 2){ //depending on which player hand, set position of top left card
+                x= 1437;
+            } else if (i==3){
+                x= 1437;
+                y=671;
+            } else if (i==4){
+                y=671;
+            }
+            tempHand = logic.getAllPlayers().get(i-1).getTotalCards();
+            int tempX = x;
+
+            for(int j = 0; j<7; j++){ 
+                if(j ==4){  //print hand of each player
+                    x=tempX;
+                    y+=155;
+                }
+                    g.drawImage(tempHand.get(i).getCardFront(), x, y,95, 137, null);
+                    x+= 121;
+           }
+           if(tempHand.size()>7){
+            //draw highlight around card
+           }
+       }
+
+
+       
+
+        
     }
 
     //public boolean[] checkDeck(){
@@ -208,7 +249,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
     @Override
     public void mouseEntered(MouseEvent e){
-        // TODO Auto-generated method stub
+        /
     }
 
     @Override
