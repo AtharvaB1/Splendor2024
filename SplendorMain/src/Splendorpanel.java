@@ -163,15 +163,21 @@ public class Splendorpanel extends JPanel implements MouseListener{
     public void drawHands(Graphics g){//draw hands of all players and update current
         int x = 35; 
         int y= 121;
+        int x2 =409;
+        int y2 = 268;
         ArrayList <Card> tempHand = new ArrayList <Card> ();
         for (int i = 1; i<=pCount; i++){ 
             if(i == 2){ //depending on which player hand, set position of top left card
                 x= 1437;
+                x2= 1802;
             } else if (i==3){
                 x= 1437;
                 y=671;
+                x2= 1802;
+                y2=667;
             } else if (i==4){
                 y=671;
+                y2=667;
             }
             tempHand = logic.getAllPlayers().get(i-1).getTotalCards();
             int tempX = x;
@@ -185,12 +191,14 @@ public class Splendorpanel extends JPanel implements MouseListener{
                     x+= 121;
            }
            if(tempHand.size()>7){
-            //draw highlight around card
+            //draw highlight around card --> more shelved cards
            }
+
+           //g.drawImage(logic.getAllPlayers().get(i-1).getTotalReservedCards().get(0).getCardFront(), )
        }
 
 
-       
+
 
         
     }
@@ -240,16 +248,11 @@ public class Splendorpanel extends JPanel implements MouseListener{
             cardX = 714; 
             cardY+= 161; 
         }
-
-
-
-
-
     }
 
     @Override
     public void mouseEntered(MouseEvent e){
-        /
+        
     }
 
     @Override
