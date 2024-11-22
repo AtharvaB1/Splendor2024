@@ -77,12 +77,21 @@ public class Splendorpanel extends JPanel implements MouseListener{
            drawError(g); //draw error and make players remove or redraw tokens
         }
         //need to test locations
+<<<<<<< Updated upstream
         drawSetUp(g); //background and text
         drawHands(g); //held cards, tokens, and num of tokens
         drawCards(g); //draw card matrix
         drawPatron(g);  //draw patrons
         drawDeck(g);   //draw deck backs
         drawTokens(g); //draw tokens on board
+=======
+        drawSetUp(g);
+        drawHands(g);
+        drawCards(g); 
+        drawPatron(g);  
+        drawDeck(g);   
+        drawTokens(g);
+>>>>>>> Stashed changes
     }
 
     //draws the player info, cand the current player on screen
@@ -201,6 +210,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
                     g.drawImage(tempHand.get(i).getCardFront(), x, y,95, 137, null);
                     x+= 121;
            }
+<<<<<<< Updated upstream
 
            if(tempHand.size()>7){
             //draw highlight around card --> more shelved cards
@@ -211,8 +221,16 @@ public class Splendorpanel extends JPanel implements MouseListener{
            if(logic.getAllPlayers().get(i-1).getTotalReservedCards().size()>1){
             //draw highlight around reserved card --> more shelved reserved cards
             g.drawImage(rHigh, x+234 , y+356, 107, 144, null);
+=======
+           
+           if(tempHand.size()>7){
+            //draw highlight around card --> more shelved cards
+            g.drawImage(cHigh, x+ 234 , y+146, 107, 144, null);
+>>>>>>> Stashed changes
            }
+           g.drawImage(logic.getAllPlayers().get(i-1).getTotalReservedCards().get(0).getCardFront(), x2, y2, 95, 137, null); //draw first reserved card
 
+<<<<<<< Updated upstream
            for(int j = 0; j<6; j++){ //draw tokens for each player
             if(logic.getPlayer().getTokens().get(colors[j])>0){
                 g.drawImage(tokenImgs.get(j), tX, tY, 61, 61, null);
@@ -229,6 +247,22 @@ public class Splendorpanel extends JPanel implements MouseListener{
         
            
        }    
+=======
+           if(logic.getAllPlayers().get(i-1).getTotalReservedCards().size()>1){
+            //draw highlight around reserved card --> more shelved reserved cards
+            g.drawImage(cHigh, x+234 , y+356, 107, 144, null);
+           }
+       }
+          
+    }
+
+    //public boolean[] checkDeck(){
+
+    //}
+
+    public void getToken(String x){
+
+>>>>>>> Stashed changes
     }
 
     public void mousePressed(MouseEvent e){
