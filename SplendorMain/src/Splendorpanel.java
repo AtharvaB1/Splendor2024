@@ -26,7 +26,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
     public Splendorpanel(int p){
         heldTokens = new HashMap<String,Integer>();
         tokenImgs = new ArrayList <BufferedImage> ();
-        String[] colors = {"White", "Blue", "Green", "Red", "Black", "Wild"};
+        colors = new String[]{"White", "Blue", "Green", "Red", "Black", "Wild"};
         mat = new Card[3][4];
         pCount = p;
         logic = new Logic(pCount);
@@ -57,7 +57,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
         }
         for(int i = 0; i<colors.length; i++){ //fill list of token images
             try{ 
-                tokenImgs.add(ImageIO.read(Splendorpanel.class.getResource("/images/" + colors[i] +".png")));
+                tokenImgs.add(ImageIO.read(Splendorpanel.class.getResource("/images/Token Images/" + colors[i] +"Token.png")));
             } catch (Exception e){
                 System.out.println(e+"token image issue splendorpanel");
                 return;
@@ -89,10 +89,13 @@ public class Splendorpanel extends JPanel implements MouseListener{
         g.drawString(logic.getPlayer().getName(), 656, 189); //Which player's turn
 
         g.setFont(new Font("Times New Roman", Font.PLAIN, 34));
+        
         g.drawString("Player 1 - " + logic.getAllPlayers().get(0).getTotalVP() + " points", 56, 39); //player header and points
-        g.drawString("Player 2" + logic.getAllPlayers().get(1).getTotalVP() + " points", 1392, 39);
-        g.drawString("Player 3" + logic.getAllPlayers().get(2).getTotalVP() + " points", 1392, 1000);
-        g.drawString("Player 4" + logic.getAllPlayers().get(3).getTotalVP() + " points", 56, 1000);
+        g.drawString("Player 2 - " + logic.getAllPlayers().get(1).getTotalVP() + " points", 1392, 39);
+        if(pCount >= 3)
+            g.drawString("Player 3 - " + logic.getAllPlayers().get(2).getTotalVP() + " points", 1392, 1000);
+        if(pCount >= 4)
+            g.drawString("Player 4 - " + logic.getAllPlayers().get(3).getTotalVP() + " points", 56, 1000);
 
 
     }
@@ -112,9 +115,6 @@ public class Splendorpanel extends JPanel implements MouseListener{
             cardX = 714;  //reset x position for next row
             cardY+= 161; //increment y position for next row
         }
-
-        
-
     }
     
     //draws the current patreons that can be selected
@@ -132,11 +132,11 @@ public class Splendorpanel extends JPanel implements MouseListener{
         for(int i = 0; i<3; i++){
             if(!logic.getDecks().get(i).deckEmpty()){
                 if(i == 0){
-                    g.drawImage(back1,587, 251, 95, 137, null );
+                    g.drawImage(back1,587, 251, 150, 137, null );
                 } else if (i == 1){
-                    g.drawImage(back1,587, 411, 95, 137, null );
+                    g.drawImage(back1,587, 411, 150, 137, null );
                 } else {
-                    g.drawImage(back1,587, 567, 95, 137, null );
+                    g.drawImage(back1,587, 567, 150, 137, null );
                 }
             }
         }

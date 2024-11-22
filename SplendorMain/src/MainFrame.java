@@ -25,7 +25,7 @@ public class MainFrame extends JFrame
         frame.setDefaultCloseOperation(3);
         frame.setExtendedState(6);
         frame.setVisible(true);
-        frame.setResizable(false);
+        //frame.setResizable(false);
         menu = new MenuPanel();
         frame.add(menu);
         //select = new PlayerChoicePanel();
