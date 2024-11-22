@@ -43,7 +43,7 @@ public class PlayerChoicePanel extends JPanel implements MouseListener{
         double[][] p4s = {{width*.719, width*.915}, // x = 921, 1172   y = 350, 430
                             {height*.532, height*.653}};
 
-        if(e.getButton()==e.BUTTON1){
+        if(e.getButton()==1){
             if(e.getX()>=p2s[0][0] && e.getX()<=p2s[0][1] &&
                 e.getY()>=p2s[1][0] && e.getY()<=p2s[1][1]){
                     MainFrame.startGame(2);
