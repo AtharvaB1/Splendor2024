@@ -1,0 +1,21 @@
+WhiteCost BlueCost GreenCost RedCost BlackCost VP gem. THAT IS THE ORDER FOR ALL CARDS. please double check these LEVEL 2 cards.
+0 0 0 7 3 5 Black
+0 0 0 7 0 4 Black
+0 0 3 6 3 4 Black
+3 3 5 3 0 3 Black
+3 0 0 0 7 5 White
+0 0 0 0 7 4 White
+3 0 0 3 6 4 White
+0 3 3 5 3 3 White
+0 7 3 0 0 5 Green
+0 7 0 0 0 4 Green
+3 6 3 0 0 4 Green
+5 3 0 3 3 3 Green
+0 0 7 3 0 5 Red
+0 0 7 0 0 4 Red
+0 3 6 3 0 4 Red
+3 5 3 0 3 3 Red
+7 3 0 0 0 5 Blue
+7 0 0 0 0 4 Blue
+6 3 0 0 3 4 Blue
+3 0 3 3 5 3 Blue
