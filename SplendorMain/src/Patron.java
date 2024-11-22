@@ -1,6 +1,7 @@
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import javax.imageio.*;
 
 public class Patron {
     @SuppressWarnings("unused") //suppress img not being used, will be used later so please remove when implemented
@@ -11,9 +12,9 @@ public class Patron {
     public Patron(String input){
         cost = new HashMap<String,Integer>();
         try {
-            //img = ImageIO.read(Card.class.getResource("/Image/"+input+".png")); //pls edit when actual pictures are there
+            img = ImageIO.read(Card.class.getResource("/images/Patron Images/"+input+".png")); //pls edit when actual pictures are there
         } catch (Exception e) {
-            System.out.println(e+"ur imgs are screwed");
+            System.out.println(e+"ur imgs are screwed"+input+"broke");
             return;
         }
 

@@ -62,7 +62,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
             try{ 
                 tokenImgs.add(ImageIO.read(Splendorpanel.class.getResource("/images/" + colors[i] +".png")));
             } catch (Exception e){
-                System.out.println(e+"token image issue splendorpanel");
+                System.out.println(e+"token image issue splendorpanel"+colors[i]);
                 return;
             }
         }

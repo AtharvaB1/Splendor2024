@@ -15,7 +15,7 @@ public class Card{
     public Card(String input, int t){
         cost = new HashMap<String,Integer>();
         try {
-            //img = ImageIO.read(Card.class.getResource("src\\images\\Card Images\\" + input+ ".png")); //imgs broken
+            img = ImageIO.read(Card.class.getResource("/src/images/Card Images/" + input+ ".png")); //imgs broken
         } catch (Exception e) {
             System.out.println(e+"ur imgs are screwed - Card "+input);
             return;

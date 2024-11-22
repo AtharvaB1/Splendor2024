@@ -38,7 +38,7 @@ public class Logic {
         }
         patrons = new ArrayList<>();
         Scanner patCreate;
-        File pats = new File("src\\Patrons\\Patron.txt");
+        File pats = new File("src\\TextFiles\\Patrons\\Patron.txt");
         try {
             patCreate = new Scanner(pats);
         } catch (FileNotFoundException e) {
@@ -78,9 +78,9 @@ public class Logic {
         //god i want to use mod here so baddddllllyyy but i cannnt it has to start at one
         currPlayer++;
         if(currPlayer == numPlayers)
-            currPlayer = 1;
+            currPlayer = 0;
 
-        if(isLastTurn && currPlayer == 1)
+        if(isLastTurn && currPlayer == 0)
             isGameOver = true;
     }
 
