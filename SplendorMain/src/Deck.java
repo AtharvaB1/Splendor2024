@@ -21,6 +21,7 @@ public class Deck {
             System.out.println("card make" + level );
             cards.add(new Card(scan.nextLine(), level));
         }
+        Collections.shuffle(cards);
     }
     
     //returns deck

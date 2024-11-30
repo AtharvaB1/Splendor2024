@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 import javax.imageio.ImageIO;
@@ -19,7 +20,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
     Logic logic; //logic class
     JButton endTurn, rPrev, rNext, rClose; //might not be using anymore
     private Card[][] mat;
-    private Patron [] pat;
+    private ArrayList<Patron> pat;
     private String[] colors;
     private ArrayList <BufferedImage> tokenImgs;
 
@@ -27,22 +28,22 @@ public class Splendorpanel extends JPanel implements MouseListener{
     public Splendorpanel(int p){
         heldTokens = new HashMap<String,Integer>();
         tokenImgs = new ArrayList <BufferedImage> ();
-        String[] colors = {"White", "Blue", "Green", "Red", "Black", "Wild"};
+        colors = new String[]{"White", "Blue", "Green", "Red", "Black", "Wild"};
         mat = new Card[3][4];
         pCount = p;
         logic = new Logic(pCount);
-        pat = new Patron[pCount+1]; //one more patron than players
+        pat = new ArrayList<Patron>(); //one more patron than players
         try {
             //bkg = ImageIO.read(new File("bkg.png"));
             bkg = ImageIO.read(Splendorpanel.class.getResource("/images/gamebkg.jpg"));
             //rule1 =
-            //rule2=
-            //rule3=
+            //rule2 =
+            //rule3 =
             cHigh = ImageIO.read(Splendorpanel.class.getResource("/images/cHighlight.png"));
             rHigh = ImageIO.read(Splendorpanel.class.getResource("/images/rHighlight.png"));
             back1 = ImageIO.read(Splendorpanel.class.getResource("/images/back1.png"));//(top row of cards)
-            back2=ImageIO.read(Splendorpanel.class.getResource("/images/back2.png"));
-            back3=ImageIO.read(Splendorpanel.class.getResource("/images/back3.png")); //(last row of cards)
+            back2 = ImageIO.read(Splendorpanel.class.getResource("/images/back2.png"));
+            back3 = ImageIO.read(Splendorpanel.class.getResource("/images/back3.png")); //(last row of cards)
         } catch (Exception e) {
             System.out.println(e+"image issue splendor panel");
             return;
@@ -51,22 +52,22 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
         for(int i = 0; i<3; i++){ //filling 2D matrix of cards on table, should draw each row from separate decks
             for(int j = 0; j<4; j++){
-                mat[i][j] = logic.getDecks().get(i).drawCard();
+                mat[i][j] = logic.getDecks().get(i).takeCard();
             }
         }
 
-        for(int i = 0; i<pat.length; i++){
-            pat[i] = logic.getPatrons().getLast();
+        for(int i = 0; i<5; i++){
+            pat.add(logic.getPatrons().get(i));
         }
+
         for(int i = 0; i<colors.length; i++){ //fill list of token images
             try{ 
-                tokenImgs.add(ImageIO.read(Splendorpanel.class.getResource("/images/" + colors[i] +".png")));
+                tokenImgs.add(ImageIO.read(Splendorpanel.class.getResource("/images/Token Images/" + colors[i] +"Token.png")));
             } catch (Exception e){
                 System.out.println(e+"token image issue splendorpanel"+colors[i]);
                 return;
             }
         }
-        
     }
     
     //main paint method for the entire splendorPanel
@@ -77,21 +78,12 @@ public class Splendorpanel extends JPanel implements MouseListener{
            drawError(g); //draw error and make players remove or redraw tokens
         }
         //need to test locations
-<<<<<<< Updated upstream
         drawSetUp(g); //background and text
-        drawHands(g); //held cards, tokens, and num of tokens
+        //drawHands(g); //held cards, tokens, and num of tokens
         drawCards(g); //draw card matrix
         drawPatron(g);  //draw patrons
         drawDeck(g);   //draw deck backs
         drawTokens(g); //draw tokens on board
-=======
-        drawSetUp(g);
-        drawHands(g);
-        drawCards(g); 
-        drawPatron(g);  
-        drawDeck(g);   
-        drawTokens(g);
->>>>>>> Stashed changes
     }
 
     //draws the player info, cand the current player on screen
@@ -102,12 +94,12 @@ public class Splendorpanel extends JPanel implements MouseListener{
         g.drawString(logic.getPlayer().getName(), 656, 189); //Which player's turn
 
         g.setFont(new Font("Times New Roman", Font.PLAIN, 34));
-        g.drawString("Player 1 - " + logic.getAllPlayers().get(0).getTotalVP() + " points", 56, 39); //player header and points
+        g.drawString("Player 1" + logic.getAllPlayers().get(0).getTotalVP() + " points", 56, 39); //player header and points
         g.drawString("Player 2" + logic.getAllPlayers().get(1).getTotalVP() + " points", 1392, 39);
-        g.drawString("Player 3" + logic.getAllPlayers().get(2).getTotalVP() + " points", 1392, 1000);
-        g.drawString("Player 4" + logic.getAllPlayers().get(3).getTotalVP() + " points", 56, 1000);
-
-
+        if(pCount > 2)
+            g.drawString("Player 3" + logic.getAllPlayers().get(2).getTotalVP() + " points", 1392, 1000);
+        if(pCount > 3)
+            g.drawString("Player 4" + logic.getAllPlayers().get(3).getTotalVP() + " points", 56, 1000);
     }
     
     //draws the current cards that can be selected
@@ -125,17 +117,14 @@ public class Splendorpanel extends JPanel implements MouseListener{
             cardX = 714;  //reset x position for next row
             cardY+= 161; //increment y position for next row
         }
-
-        
-
     }
     
     //draws the current patreons that can be selected
     public void drawPatron(Graphics g){
         int patX = 587; //set patron position and increment x in loop
 
-        for(int i = 0; i<pat.length; i++){
-            g.drawImage(pat[i].getPatFace(), patX,732, 91,93, null);
+        for(int i = 0; i<pat.size(); i++){
+            g.drawImage(pat.get(i).getPatFace(), patX,732, 91,93, null);
             patX+=125;
         }
     }
@@ -167,13 +156,15 @@ public class Splendorpanel extends JPanel implements MouseListener{
         }
     }
 
+    //paints a clear error message if anything does wrong
     public void drawError(Graphics g){
         g.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         g.setColor(Color.RED);
         g.drawString("Check if you have more than ten tokens\nor if you drew more than three tokens\nor more than two of the same type", 1000, 1000); //set real location later
     } 
 
-    public void drawHands(Graphics g){//draw hands of all players and update current
+    //draw hands of all players and update current
+    public void drawHands(Graphics g){
         int x = 35; 
         int y= 121;
         int x2 =409;
@@ -210,7 +201,6 @@ public class Splendorpanel extends JPanel implements MouseListener{
                     g.drawImage(tempHand.get(i).getCardFront(), x, y,95, 137, null);
                     x+= 121;
            }
-<<<<<<< Updated upstream
 
            if(tempHand.size()>7){
             //draw highlight around card --> more shelved cards
@@ -221,16 +211,9 @@ public class Splendorpanel extends JPanel implements MouseListener{
            if(logic.getAllPlayers().get(i-1).getTotalReservedCards().size()>1){
             //draw highlight around reserved card --> more shelved reserved cards
             g.drawImage(rHigh, x+234 , y+356, 107, 144, null);
-=======
-           
-           if(tempHand.size()>7){
-            //draw highlight around card --> more shelved cards
-            g.drawImage(cHigh, x+ 234 , y+146, 107, 144, null);
->>>>>>> Stashed changes
            }
            g.drawImage(logic.getAllPlayers().get(i-1).getTotalReservedCards().get(0).getCardFront(), x2, y2, 95, 137, null); //draw first reserved card
 
-<<<<<<< Updated upstream
            for(int j = 0; j<6; j++){ //draw tokens for each player
             if(logic.getPlayer().getTokens().get(colors[j])>0){
                 g.drawImage(tokenImgs.get(j), tX, tY, 61, 61, null);
@@ -242,27 +225,8 @@ public class Splendorpanel extends JPanel implements MouseListener{
                 g.drawString( "" + logic.getPlayer().getTokens().get(colors[j]), tX, tY + 68); 
             }
             tX += 80;
-           }
-
-        
-           
+           }     
        }    
-=======
-           if(logic.getAllPlayers().get(i-1).getTotalReservedCards().size()>1){
-            //draw highlight around reserved card --> more shelved reserved cards
-            g.drawImage(cHigh, x+234 , y+356, 107, 144, null);
-           }
-       }
-          
-    }
-
-    //public boolean[] checkDeck(){
-
-    //}
-
-    public void getToken(String x){
-
->>>>>>> Stashed changes
     }
 
     public void mousePressed(MouseEvent e){

@@ -9,7 +9,6 @@ public class Logic {
    // @SuppressWarnings("unused")//remove later, suppress currplayer not used (lots of methods not worked on yet)
     private int numPlayers;
     private int currPlayer;
-    public ArrayList<Patron> currPatrons;
     //@SuppressWarnings("unused")//remove later, suppress boolean not used (i havent worked on the method yet)
     private boolean isLastTurn; 
     private boolean isGameOver;
@@ -50,12 +49,7 @@ public class Logic {
         while(patCreate.hasNext()){
             patrons.add(new Patron(patCreate.nextLine()));
         }
-
-        currPatrons = new ArrayList<Patron>();
-        for(int i = 0; i < 5; i++){
-            currPatrons.add(patrons.get(0));
-            patrons.remove(0);
-        }
+        Collections.shuffle(patrons);
     }
 
     //returns the current player
@@ -141,12 +135,12 @@ public class Logic {
     //will be called at the end of turn, gets ArrayList of player cards token type and checks if it matches with any patron, removes the patron if does.
     public void getAPatron(){
         Player thisPlayer = getPlayer();
-        for(int i = 0; i < currPatrons.size(); i++)
+        for(int i = 0; i < 5; i++)
         {
-            if(thisPlayer.canBuyPatreon(currPatrons.get(i)))
+            if(thisPlayer.canBuyPatreon(patrons.get(i)))
             {
-                thisPlayer.takePatron(currPatrons.get(i));
-                currPatrons.remove(i);
+                thisPlayer.takePatron(patrons.get(i));
+                patrons.remove(i);
                 i--;
             }
         }
@@ -247,18 +241,13 @@ public class Logic {
         return tokens;
     }
 
-    //returns the current patreons in play
-    public ArrayList<Patron> getCurrPatrons(){
-        return patrons;
-    }
-
-    //gets the first four cards of a selected deck
+    //gets the first four cards of a selected deck (REMOVES THE CARDS ONCE TAKEN!)
     public ArrayList<Card> getFirstFour(int deckType)
     {
         ArrayList<Card> retList = new ArrayList<Card>();
         for(int i = 0; i < 4; i++)
         {  
-            retList.add(decks.get(deckType).drawCard(i));
+            retList.add(decks.get(deckType).takeCard(i));
         }
         return retList;
     }

@@ -48,7 +48,7 @@ public class Card{
 
     //returns the front image of the card
     public Image getCardFront(){
-        return img;
+        return this.img;
     }
 
     public int getTier(){
