@@ -16,6 +16,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
     private int pCount; //num of players
    // private String tok1, tok2, tok3; //tokens players click on?
     private HashMap<String,Integer> heldTokens; //three tokens held by current player when interacted with
+    private Card heldCard;
     private BufferedImage bkg, rule1, rule2, rule3, back1, back2, back3, rHigh, cHigh;// background and rules, backs of three diff card types, highlights for the shelved cards
     Logic logic; //logic class
     JButton endTurn, rPrev, rNext, rClose; //might not be using anymore
@@ -23,16 +24,19 @@ public class Splendorpanel extends JPanel implements MouseListener{
     private ArrayList<Patron> pat;
     private String[] colors;
     private ArrayList <BufferedImage> tokenImgs;
+    private boolean isHoldingCard;
 
     //constructor
     public Splendorpanel(int p){
         heldTokens = new HashMap<String,Integer>();
+        heldCard = null;
         tokenImgs = new ArrayList <BufferedImage> ();
         colors = new String[]{"White", "Blue", "Green", "Red", "Black", "Wild"};
         mat = new Card[3][4];
         pCount = p;
         logic = new Logic(pCount);
         pat = new ArrayList<Patron>(); //one more patron than players
+        isHoldingCard = false;
         try {
             //bkg = ImageIO.read(new File("bkg.png"));
             bkg = ImageIO.read(Splendorpanel.class.getResource("/images/gamebkg.jpg"));
@@ -50,11 +54,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
         }
         addMouseListener(this);
 
-        for(int i = 0; i<3; i++){ //filling 2D matrix of cards on table, should draw each row from separate decks
-            for(int j = 0; j<4; j++){
-                mat[i][j] = logic.getDecks().get(i).takeCard();
-            }
-        }
+        mat = logic.getAllFirstFour();
 
         for(int i = 0; i<5; i++){
             pat.add(logic.getPatrons().get(i));
@@ -73,37 +73,43 @@ public class Splendorpanel extends JPanel implements MouseListener{
     //main paint method for the entire splendorPanel
     public void paint(Graphics g){
         super.paint(g);
-        if(!logic.getTokens(heldTokens)){ //if more than 10 tokens, if more than 3 tokens drawn, or if more than two of the same color
+        if(!logic.canGetTokens(heldTokens)){ //if more than 10 tokens, if more than 3 tokens drawn, or if more than two of the same color
             heldTokens.clear(); //clear temporary hand
-           drawError(g); //draw error and make players remove or redraw tokens
+            drawError(g); //draw error and make players remove or redraw tokens
         }
+
         //need to test locations
         drawSetUp(g); //background and text
-        //drawHands(g); //held cards, tokens, and num of tokens
+        drawHands(g); //held cards, tokens, and num of tokens
         drawCards(g); //draw card matrix
         drawPatron(g);  //draw patrons
         drawDeck(g);   //draw deck backs
         drawTokens(g); //draw tokens on board
+
+        g.drawString("A",1000, 900);
+        if(isHoldingCard)
+            g.drawString("holding card!",1200, 200);
     }
 
     //draws the player info, cand the current player on screen
     public void drawSetUp(Graphics g){
         g.drawImage(bkg, 0, 0, getWidth(), getHeight(), null); //background
 
-        g.setFont(new Font("Times New Roman", Font.BOLD, 37));
-        g.drawString(logic.getPlayer().getName(), 656, 189); //Which player's turn
+        g.setFont(new Font("Times New Roman", Font.BOLD, 45));
+        g.drawString(logic.getPlayer().getName(), 900, 189); //Which player's turn
 
         g.setFont(new Font("Times New Roman", Font.PLAIN, 34));
-        g.drawString("Player 1" + logic.getAllPlayers().get(0).getTotalVP() + " points", 56, 39); //player header and points
-        g.drawString("Player 2" + logic.getAllPlayers().get(1).getTotalVP() + " points", 1392, 39);
+        g.drawString("Player 1 - " + logic.getAllPlayers().get(0).getTotalVP() + " points", 56, 100); //player header and points
+        g.drawString("Player 2 - " + logic.getAllPlayers().get(1).getTotalVP() + " points", 1550, 100);
         if(pCount > 2)
-            g.drawString("Player 3" + logic.getAllPlayers().get(2).getTotalVP() + " points", 1392, 1000);
+            g.drawString("Player 3 - " + logic.getAllPlayers().get(2).getTotalVP() + " points", 1550, 1000);
         if(pCount > 3)
-            g.drawString("Player 4" + logic.getAllPlayers().get(3).getTotalVP() + " points", 56, 1000);
+            g.drawString("Player 4 - " + logic.getAllPlayers().get(3).getTotalVP() + " points", 56, 1000);
     }
     
     //draws the current cards that can be selected
     public void drawCards(Graphics g){
+        mat = logic.getAllFirstFour();
         int cardX = 714; //set start position of cards, increment x and y by __ for the cards after in the loop
         int cardY = 251;
 
@@ -151,6 +157,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
         for(int i = 0; i<colors.length; i++){
             if(logic.getTokens().get(colors[i])>0){ //if specific color tokens amount >0, print image
                 g.drawImage(tokenImgs.get(i), 1240, y, 61, 61, null);
+                g.drawString("" + logic.getTokens().get(colors[i]), 1260, y);
             }
             y+=88;
         }
@@ -163,7 +170,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
         g.drawString("Check if you have more than ten tokens\nor if you drew more than three tokens\nor more than two of the same type", 1000, 1000); //set real location later
     } 
 
-    //draw hands of all players and update current
+    //draw hands of all players and updates their current card and token counts
     public void drawHands(Graphics g){
         int x = 35; 
         int y= 121;
@@ -171,60 +178,64 @@ public class Splendorpanel extends JPanel implements MouseListener{
         int y2 = 268;
         int tX = 35 ;
         int tY = 423;
-
+        Player tempPlayer = null;
         ArrayList <Card> tempHand = new ArrayList <Card> (); //drawing all cards
         for (int i = 1; i<=pCount; i++){ 
             if(i == 2){ //depending on which player hand, set position of top left card
-                x= 1437;
+                x= 1520;
                 x2= 1802;
-                tX = 1427;
+                tX = 1520;
             } else if (i==3){
-                x= 1437;
+                x= 1520;
                 y=671;
                 x2= 1802;
                 y2=667;
-                tX = 1426;
+                tX = 1520;
                 tY = 584;
             } else if (i==4){
+                x = 35; 
                 y=671;
+                x2 =409;
                 y2=667;
+                tX = 35;
                 tY = 584;
             }
+            tempPlayer = logic.getAllPlayers().get(i-1);
             tempHand = logic.getAllPlayers().get(i-1).getTotalCards();
             int tempX = x;
 
-            for(int j = 0; j<7; j++){ 
+            for(int j = 0; j < tempHand.size(); j++){ 
                 if(j == 4){  //print hand of each player
                     x=tempX;
                     y+=155;
                 }
-                    g.drawImage(tempHand.get(i).getCardFront(), x, y,95, 137, null);
+                    g.drawImage(tempHand.get(j).getCardFront(), x, y,95, 137, null);
                     x+= 121;
            }
 
            if(tempHand.size()>7){
-            //draw highlight around card --> more shelved cards
-            g.drawImage(cHigh, x+ 234 , y+146, 107, 144, null);
+                //draw highlight around card --> more shelved cards
+                g.drawImage(cHigh, x+ 234 , y+146, 107, 144, null);
            }
-           g.drawImage(logic.getAllPlayers().get(i-1).getTotalReservedCards().get(0).getCardFront(), x2, y2, 95, 137, null); //draw first reserved card
     
-           if(logic.getAllPlayers().get(i-1).getTotalReservedCards().size()>1){
-            //draw highlight around reserved card --> more shelved reserved cards
-            g.drawImage(rHigh, x+234 , y+356, 107, 144, null);
+           if(tempPlayer.getTotalReservedCards().size()>1){
+                //draw highlight around reserved card --> more shelved reserved cards
+                g.drawImage(rHigh, x+234 , y+356, 107, 144, null);
+                g.drawImage(tempPlayer.getTotalReservedCards().get(0).getCardFront(), x2, y2, 95, 137, null); //draw first reserved card
            }
-           g.drawImage(logic.getAllPlayers().get(i-1).getTotalReservedCards().get(0).getCardFront(), x2, y2, 95, 137, null); //draw first reserved card
+          
 
            for(int j = 0; j<6; j++){ //draw tokens for each player
-            if(logic.getPlayer().getTokens().get(colors[j])>0){
-                g.drawImage(tokenImgs.get(j), tX, tY, 61, 61, null);
-            }
+                if(tempPlayer.getTokens().get(colors[j])>0){
+                    g.drawImage(tokenImgs.get(j), tX, tY, 61, 61, null);
+                }
 
-            if(i > 2){  //draw num of tokens held
-                g.drawString( "" + logic.getPlayer().getTokens().get(colors[j]), tX, tY - 68);
-            }else {
-                g.drawString( "" + logic.getPlayer().getTokens().get(colors[j]), tX, tY + 68); 
-            }
-            tX += 80;
+                if(i > 2){  //draw num of tokens held
+                    g.drawString( "" + tempPlayer.getTokens().get(colors[j]), tX, tY - 0);
+                }else {
+                    g.drawString( "" + tempPlayer.getTokens().get(colors[j]), tX, tY + 68); 
+                }
+                tX += 80;
            }     
        }    
     }
@@ -238,7 +249,9 @@ public class Splendorpanel extends JPanel implements MouseListener{
         int cardY = 251;
         int w = 95;
         int l = 137;
+        System.out.println("mouse clicked at "+ mouseX + ", " + mouseY);
 
+        //if you click a token
         for(int i = 0; i<colors.length; i++){
             if(mouseX>= 1240 && mouseX<= 1240 + d && mouseY>= tokensY && mouseY<= tokensY+d ){ //clicking each token
                 if(heldTokens.containsKey(colors[i])){
@@ -247,30 +260,63 @@ public class Splendorpanel extends JPanel implements MouseListener{
                     heldTokens.put(colors[i], 1);
                 }
             }
-                tokensY += 88;
+            tokensY += 88;
         }
 
-        if(!logic.getTokens(heldTokens)){ //if wrong gameplay, repaint to show error
-            repaint();
-        } 
-
-        //Clicking cards in matrix
+        //if you Click a card in the token matrix
         for(int i = 0; i<3; i++){ 
             for(int j = 0; j<4; j++){
-                if(mouseX>= cardX && mouseX<= cardX + w && mouseY>= cardY && mouseY<= cardY + l ){
-                    logic.buyCard(mat[i][j], i);
-
+                
+                if(mouseX>= cardX && mouseX<= cardX + w && mouseY>= cardY  && mouseY<= cardY + l && logic.getPlayer().canBuyCard(mat[i][j])&& heldTokens.size() == 0){
+                    heldCard = mat[i][j];
+                    isHoldingCard = true;
+                    repaint();
                 }
                 cardX+= 129;
             }
             cardX = 714; 
             cardY+= 161; 
         }
+        //logic.endTurn();
+
+        //dont know where the end buttone cords are for now so just assume that this is the end button, this handels everyhting that will happen when the endButton is pressed
+        if(mouseX >= 950 && mouseX <= 1050 && mouseY >= 850 && mouseY <= 950){
+           System.out.println("hit endbutton");
+           
+           //if they have tokens
+           if(logic.canGetTokens(heldTokens) && heldTokens.size() > 0){
+                logic.getPlayer().addTokens(heldTokens);
+                logic.removeTokens(heldTokens);
+                logic.endTurn();
+                heldTokens = new HashMap<String, Integer>();
+                repaint();
+                return;
+           }
+
+           //if they are holding a card
+           if(heldCard != null && heldTokens.size() == 0){
+               logic.buyCard(heldCard);
+               logic.addTokens(heldCard.getCost());
+               logic.endTurn();
+               heldCard = null;
+               isHoldingCard = false;
+               repaint();
+               return;
+           }
+
+           isHoldingCard = false;
+           heldCard = null;
+           heldTokens = new HashMap<String, Integer>();
+           logic.endTurn();
+           repaint();
+
+           System.out.println("nothing done, skipping turn");
+        }
     }
 
     @Override
     public void mouseEntered(MouseEvent e){
-        
+        // TODO Auto-generated method stub
     }
 
     @Override

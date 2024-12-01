@@ -48,7 +48,7 @@ public class Player implements Comparable<Player>{
         while(iter.hasNext())
         {
             String tokenType = iter.next();
-            tokens.put(tokenType, tokens.get(tokenType)+1);  
+            tokens.put(tokenType, tokens.get(tokenType)+addTokens.get(tokenType));  
         }  
     }
 
@@ -76,25 +76,26 @@ public class Player implements Comparable<Player>{
     //returns if the player has enough discounts to buy a patreon card
     //returns true if they can, and false if they cant, will not effect any values
     public boolean canBuyCard(Card card){
-        int wildToken = 0;
         HashMap<String,Integer> rich = new HashMap<>();
-        Iterator<String> iter = discounts.keySet().iterator();
         rich.putAll(tokens);
+        Iterator<String> iter = discounts.keySet().iterator();
         while(iter.hasNext()){
             String x = iter.next();
             rich.put(x, rich.get(x)+discounts.get(x));
         }
-        wildToken = rich.get("Wild");
+
+        int wildTokenChecker = rich.get("Wild");
         Iterator<String> check = card.getCost().keySet().iterator();
         while(check.hasNext()){
             String x = check.next();
             int y = card.getCost().get(x);
+
             if(rich.get(x)-y<0){
                 y-=rich.get(x);
-                wildToken-=y;
+                wildTokenChecker-=y;
             }
         }
-        if(wildToken<0)
+        if(wildTokenChecker<0)
             return false;
         return true;
     }
@@ -172,12 +173,13 @@ public class Player implements Comparable<Player>{
         return name;
     }
 
-    //returns the nunber of the player (order in which they play)
+    //returns the number of the player (order in which they play)
     public int getNum(){
         return num;
     }
 
     @Override
+    //comparison method, compares the scores of the players, if tied, then whichever player is earlier
     public int compareTo(Player o) {
         if(this.getTotalVP() - o.getTotalVP() != 0)
             return this.getTotalVP() - o.getTotalVP();
