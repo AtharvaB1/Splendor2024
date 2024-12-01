@@ -69,10 +69,8 @@ public class Logic {
 
     //increases curr player, and passes turn to next player, if last turn then it will check if next player is player 1
     public void endTurn(){
-        //god i want to use mod here so baddddllllyyy but i cannnt it has to start at one
-        currPlayer++;
-        if(currPlayer == numPlayers)
-            currPlayer = 0;
+        //I LOOOOOOOOOOVVVVVVVVVEEEEEEEEEEE MODDDDDDDDDDDDDD YYYYYYEEEEAAAAAAHHHHHHH USA USA USA USA USA USA USA USA USA
+        currPlayer = (currPlayer + 1) % numPlayers;
 
         if(isLastTurn && currPlayer == 0)
             isGameOver = true;
@@ -92,6 +90,11 @@ public class Logic {
 
     //buys a card for the current player, checks player’s tokens and does nothing if they do not have enough, checks all the deck if they have the card and removes the card
     public void buyCard(Card thisCard){
+        if(thisCard == null){
+            System.out.println("held card is null");
+            return;
+        }
+
         Player thisPlayer = players.get(currPlayer);
         if(thisPlayer.canBuyCard(thisCard))
         {
@@ -101,13 +104,21 @@ public class Logic {
         for(int i = 0; i < 3; i++)
         {
             if(getFirstFour(i).contains(thisCard))
+            {
                 decks.get(i).takeCard(thisCard);
-            return;
+                return;
+            }
+            System.out.println("no card Found");
         }
     }
 
     //buys a card foir the current player, checks player’s tokens and does nothing if they do not have enough automaticly does the the provided deck and removes the card, more efficant but need to know the location of the card to use
     public void buyCard(Card thisCard, int deckNum){
+        if(thisCard == null){
+            System.out.println("held card is null");
+            return;
+        }
+
         Player thisPlayer = players.get(currPlayer);
         if(thisPlayer.canBuyCard(thisCard))
         {
@@ -173,7 +184,7 @@ public class Logic {
             return false;
         }
 
-        if(tokenCount(thisTokens) == 3){
+        if(tokenCount(thisTokens) == 3 && thisTokens.size() == 3){
             return true;
         }
         else if(tokenCount(thisTokens) == 2){
@@ -183,39 +194,28 @@ public class Logic {
                 return true;
         }
         else {
-            System.out.println("WRONG NUMBER OF TOKENS!!!!!!!!!");
             return false;
         }
         return false;
+    }
+
+    //add tokens fron the array list to the total amount of tokens
+    public void addTokens(Map<String, Integer> thisTokens){
+        Iterator<String> iter = thisTokens.keySet().iterator();
+        while(iter.hasNext()){
+            String gemType = (String) iter.next();
+            tokens.replace(gemType, tokens.get(gemType)+thisTokens.get(gemType));
+        }
     }
     
-    //takes outs the inputted amount of tokens from the tokens hashmap, if it is possible
-    public boolean getTokens(HashMap<String,Integer> thisTokens){
-        Player thisPlayer = getPlayer();
-        if(thisPlayer.tokenCount() + thisTokens.size() > 10){
-            return false;
+    //removes the tokens in the arrayList from the total amount of tokens
+    public void removeTokens(Map<String, Integer> removeTokens){
+        Iterator<String> iter = removeTokens.keySet().iterator();
+        while(iter.hasNext()){
+            String gemType = (String) iter.next();
+            tokens.replace(gemType, tokens.get(gemType)-removeTokens.get(gemType));
         }
-
-        if(tokenCount(thisTokens) == 3)
-        {
-            thisPlayer.addTokens(thisTokens);
-            return true;
-        }
-        else if(tokenCount(thisTokens) == 2 )
-        {
-            Iterator<String> iter = thisTokens.keySet().iterator();
-            String gemChecked = iter.next();
-            if(tokens.get(gemChecked) >= 4)
-                thisPlayer.addTokens(thisTokens);
-                return true;
-        }
-        else 
-        {
-            System.out.println("WRONG NUMBER OF TOKENS!!!!!!!!!");
-        }
-        return false;
     }
-
 
     //gets the total acount of tokens the inputted hashMap has, identical to tokencount in player
     public int tokenCount(HashMap<String,Integer> thisTokens){
@@ -241,15 +241,26 @@ public class Logic {
         return tokens;
     }
 
-    //gets the first four cards of a selected deck (REMOVES THE CARDS ONCE TAKEN!)
+    //gets the first four cards of a selected deck
     public ArrayList<Card> getFirstFour(int deckType)
     {
         ArrayList<Card> retList = new ArrayList<Card>();
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < 3; i++)
         {  
-            retList.add(decks.get(deckType).takeCard(i));
+            retList.add(decks.get(deckType).drawCard(i));
         }
         return retList;
     }
-    
+
+    //returns the entire matrix of cards in a 2d array
+    public Card[][] getAllFirstFour(){
+        Card[][] retList = new Card[3][4];
+        for(int i = 0; i<3; i++){ 
+            for(int j = 0; j<4; j++){
+                retList[i][j] = getDecks().get(i).drawCard(j);
+            }
+        }
+        return retList;
+    }
+
 }//end of class

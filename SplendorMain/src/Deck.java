@@ -59,7 +59,6 @@ public class Deck {
         return loc; 
     }
 
-
     //returns if the deck is empty or not
     public boolean deckEmpty(){
         if(cards.isEmpty()){
