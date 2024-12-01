@@ -51,6 +51,7 @@ public class Card{
         return this.img;
     }
 
+    //returns what deck level the card is at
     public int getTier(){
         return tier;
     }

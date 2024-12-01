@@ -22,7 +22,7 @@ public class MenuPanel extends JPanel implements MouseListener{
     //main paint method
     public void paint(Graphics g){
         super.paint(g);
-        g.drawImage(background, 0, 0, getWidth(), getHeight(), null);   // background     
+        g.drawImage(background, 0, 0, getWidth(), getHeight(), null);// background     
     }
     
     //main click detection, ckeck if the start button is within the clicked range, then swithces to the playerselect panel
