@@ -16,9 +16,9 @@ public class Card{
     public Card(String input, int t){
         cost = new HashMap<String,Integer>();
         try {
-            img = ImageIO.read(Card.class.getResource("src\\Images\\Card Images\\" + input+ ".png")); //imgs broken
+            img = ImageIO.read(Card.class.getResource("Images\\Card Images\\" +input+ ".png")); //imgs broken
         } catch (Exception e) {
-            System.out.println(e+"src\\Images\\Card Images\\" + input+ ".png");
+            System.out.println(e+"Images\\Card Images\\" + input+ ".png");
             return;
         }
         String[] vars = input.split(" ");
