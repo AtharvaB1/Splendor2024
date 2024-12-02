@@ -10,14 +10,13 @@ import java.util.HashMap;
 import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.JPanel;
 
 public class Splendorpanel extends JPanel implements MouseListener{
     private int pCount; //num of players
     //private String tok1, tok2, tok3; //tokens players click on?
     private HashMap<String,Integer> heldTokens; //three tokens held by current player when interacted with
     private Card heldCard;
-    private BufferedImage bkg, rule1, rule2, rule3, back1, back2, back3, rHigh, cHigh;// background and rules, backs of three diff card types, highlights for the shelved cards
+    private BufferedImage bkg, endBkg, rule1, rule2, rule3, back1, back2, back3, rHigh, cHigh;// background and rules, backs of three diff card types, highlights for the shelved cards
     Logic logic; //logic class
     JButton endTurn, rPrev, rNext, rClose; //might not be using anymore
     private Card[][] mat;
@@ -40,6 +39,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
         try {
             //bkg = ImageIO.read(new File("bkg.png"));
             bkg = ImageIO.read(Splendorpanel.class.getResource("/images/gamebkg.jpg"));
+            endBkg = ImageIO.read(Splendorpanel.class.getResource("/images/gameEndButtonScreen.jpg"));
             //rule1 =
             //rule2 =
             //rule3 =
@@ -94,16 +94,21 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
     //draws the player info, cand the current player on screen
     public void drawSetUp(Graphics g){
-        g.drawImage(bkg, 0, 0, getWidth(), getHeight(), null); //background
+        if(logic.showEndButton()){
+            g.drawImage(endBkg, 0, 0, getWidth(), getHeight(), null); //background with end button
+        } else {
+            g.drawImage(bkg, 0, 0, getWidth(), getHeight(), null); // normal background
+        }
+        
 
-        g.setFont(new Font("Times New Roman", Font.BOLD, 45));
-        g.drawString(logic.getPlayer().getName(), 900, 189); //Which player's turn
+        g.setFont(new Font("Times New Roman", Font.BOLD, 37));
+        g.drawString(logic.getPlayer().getName(), 656, 168); //Which player's turn
 
         g.setFont(new Font("Times New Roman", Font.PLAIN, 34));
-        g.drawString("Player 1 - " + logic.getAllPlayers().get(0).getTotalVP() + " points", 56, 100); //player header and points
-        g.drawString("Player 2 - " + logic.getAllPlayers().get(1).getTotalVP() + " points", 1550, 100);
+        g.drawString("Player 1 - " + logic.getAllPlayers().get(0).getTotalVP() + " points", 56, 39); //player header and points
+        g.drawString("Player 2 - " + logic.getAllPlayers().get(1).getTotalVP() + " points", 1392, 39);
         if(pCount > 2)
-            g.drawString("Player 3 - " + logic.getAllPlayers().get(2).getTotalVP() + " points", 1550, 1000);
+            g.drawString("Player 3 - " + logic.getAllPlayers().get(2).getTotalVP() + " points", 1392, 1000);
         if(pCount > 3)
             g.drawString("Player 4 - " + logic.getAllPlayers().get(3).getTotalVP() + " points", 56, 1000);
     }
@@ -158,7 +163,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
         for(int i = 0; i<colors.length; i++){
             if(logic.getTokens().get(colors[i])>0){ //if specific color tokens amount >0, print image
                 g.drawImage(tokenImgs.get(i), 1240, y, 61, 61, null);
-                g.drawString("" + logic.getTokens().get(colors[i]), 1260, y);
+                g.drawString("" + logic.getTokens().get(colors[i]), 1260, y); //number of tokens left
             }
             y+=88;
         }
@@ -174,8 +179,8 @@ public class Splendorpanel extends JPanel implements MouseListener{
     //draw hands of all players and updates their current card and token counts
     public void drawHands(Graphics g){
         int x = 35; 
-        int y= 121;
-        int x2 =409;
+        int y = 121;
+        int x2 = 409;
         int y2 = 268;
         int tX = 35 ;
         int tY = 423;
@@ -278,10 +283,28 @@ public class Splendorpanel extends JPanel implements MouseListener{
             cardX = 714; 
             cardY+= 161; 
         }
+
+
+        if(logic.showEndButton() && mouseX >= 587 && mouseX <= 914 && mouseY >= 867 && mouseY <= 993){ //switch player button on end button screen
+            System.out.println("hit switch player button");
+            logic.switchPlayer();
+        }
+
+        if(logic.showEndButton() && mouseX >= 808 && mouseX <= 1134 && mouseY >= 859 && mouseY <= 985){ //switch player button on normal screen
+            System.out.println("hit switch player button");
+            logic.switchPlayer();
+        }
+
+
+
+
+
+
+
         //logic.endTurn();
 
         //dont know where the end buttone cords are for now so just assume that this is the end button, this handels everyhting that will happen when the endButton is pressed
-        if(mouseX >= 950 && mouseX <= 1050 && mouseY >= 850 && mouseY <= 950){
+        if( logic.showEndButton() && mouseX >= 1007 && mouseX <= 1334 && mouseY >= 867 && mouseY <= 993){ //only allows to click endbutton if it is displayed
            System.out.println("hit endbutton");
            
            //if they have tokens
@@ -317,7 +340,13 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
     @Override
     public void mouseEntered(MouseEvent e){
-        // TODO Auto-generated method stub
+        int mouseX = e.getX();
+        int mouseY = e.getY();
+     //expand shelved cards
+
+     //expand card
+     //expand reserved cards
+
     }
 
     @Override

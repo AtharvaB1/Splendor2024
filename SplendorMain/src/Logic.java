@@ -61,6 +61,16 @@ public class Logic {
         return players.get(currPlayer);
     }
 
+    public void switchPlayer(){
+        if(currPlayer < numPlayers){
+            currPlayer++;
+        } else{
+            currPlayer = 1;
+        }
+        
+
+    }
+
     //returns the entrie players arrayList
     public ArrayList <Player> getAllPlayers(){
         return players;
@@ -94,6 +104,18 @@ public class Logic {
     //returns the current matrix of cards that will be used
     public Card[][] getMatrix(){
         return matrix;
+    }
+
+    public boolean showEndButton(){ //indicates if the screen with the end button must be displayed
+        for(int i = 0; i < numPlayers; i++)
+        {
+            if(players.get(i).getTotalVP() >= 15)
+            {
+                isLastTurn = true;
+                break;
+            }
+        }
+        return isLastTurn;
     }
 
     //increases curr player, and passes turn to next player, if last turn then it will check if next player is player 1
