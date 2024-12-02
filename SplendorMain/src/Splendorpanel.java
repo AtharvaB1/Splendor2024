@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 
 public class Splendorpanel extends JPanel implements MouseListener{
     private int pCount; //num of players
-   // private String tok1, tok2, tok3; //tokens players click on?
+    //private String tok1, tok2, tok3; //tokens players click on?
     private HashMap<String,Integer> heldTokens; //three tokens held by current player when interacted with
     private Card heldCard;
     private BufferedImage bkg, rule1, rule2, rule3, back1, back2, back3, rHigh, cHigh;// background and rules, backs of three diff card types, highlights for the shelved cards
@@ -32,10 +32,10 @@ public class Splendorpanel extends JPanel implements MouseListener{
         heldCard = null;
         tokenImgs = new ArrayList <BufferedImage> ();
         colors = new String[]{"White", "Blue", "Green", "Red", "Black", "Wild"};
-        mat = new Card[3][4];
         pCount = p;
         logic = new Logic(pCount);
         pat = new ArrayList<Patron>(); //one more patron than players
+        mat = logic.getMatrix();
         isHoldingCard = false;
         try {
             //bkg = ImageIO.read(new File("bkg.png"));
@@ -53,9 +53,6 @@ public class Splendorpanel extends JPanel implements MouseListener{
             return;
         }
         addMouseListener(this);
-
-        mat = logic.getAllFirstFour();
-
         for(int i = 0; i<5; i++){
             pat.add(logic.getPatrons().get(i));
         }
@@ -89,6 +86,10 @@ public class Splendorpanel extends JPanel implements MouseListener{
         g.drawString("A",1000, 900);
         if(isHoldingCard)
             g.drawString("holding card!",1200, 200);
+        if(logic.isItLastTurn())
+            g.drawString("Last Turn!", 1200, 900);
+        if(logic.isGameOver())
+            MainFrame.endGame(logic.getSortedPlayers());
     }
 
     //draws the player info, cand the current player on screen
@@ -109,7 +110,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
     
     //draws the current cards that can be selected
     public void drawCards(Graphics g){
-        mat = logic.getAllFirstFour();
+        mat = logic.getMatrix();
         int cardX = 714; //set start position of cards, increment x and y by __ for the cards after in the loop
         int cardY = 251;
 
@@ -296,7 +297,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
            //if they are holding a card
            if(heldCard != null && heldTokens.size() == 0){
                logic.buyCard(heldCard);
-               logic.addTokens(heldCard.getCost());
+               logic.addTokens(logic.diffrenceOfTokens(heldCard.getCost(), logic.getPlayer().getTotalDiscount()));
                logic.endTurn();
                heldCard = null;
                isHoldingCard = false;

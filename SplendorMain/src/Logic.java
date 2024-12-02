@@ -13,12 +13,15 @@ public class Logic {
     private boolean isLastTurn; 
     private boolean isGameOver;
     private boolean tokenSelected;
+    private Card[][] matrix;
     
     //constructor
     public Logic(int count){
         tokens = new HashMap<>();
         numPlayers = count;
         currPlayer = 0;
+        isLastTurn = false;
+        isGameOver = false;
         
         if(count==4){
             tokens.put("White",7); tokens.put("Blue",7); tokens.put("Green",7); tokens.put("Red",7); tokens.put("Black",7); tokens.put("Wild",5);    
@@ -35,6 +38,7 @@ public class Logic {
         for(int i=1; i<=3;i++){
             decks.add(new Deck(i));
         }
+        matrix = getAllFirstFour();
         patrons = new ArrayList<>();
         Scanner patCreate;
         File pats = new File("src\\TextFiles\\Patrons\\Patron.txt");
@@ -67,6 +71,31 @@ public class Logic {
         return isLastTurn;
     }
 
+     // returns isgameover
+    public boolean isGameOver(){
+        return isGameOver;
+    }
+
+    //returns the 3 main decks for the game
+    public ArrayList<Deck> getDecks(){
+        return decks;
+    }
+    
+    //returns all patreons 
+    public ArrayList<Patron> getPatrons(){
+        return patrons;
+    }
+
+    //returns the all tokens that are not hekld by players
+    public HashMap <String, Integer> getTokens(){
+        return tokens;
+    }
+
+    //returns the current matrix of cards that will be used
+    public Card[][] getMatrix(){
+        return matrix;
+    }
+
     //increases curr player, and passes turn to next player, if last turn then it will check if next player is player 1
     public void endTurn(){
         //I LOOOOOOOOOOVVVVVVVVVEEEEEEEEEEE MODDDDDDDDDDDDDD YYYYYYEEEEAAAAAAHHHHHHH USA USA USA USA USA USA USA USA USA
@@ -74,14 +103,12 @@ public class Logic {
 
         if(isLastTurn && currPlayer == 0)
             isGameOver = true;
-    }
 
-    //called at end of every turn, will check if currPlayer has >=15 VP before passing turn
-    public void isLastTurn(){
         for(int i = 0; i < numPlayers; i++)
         {
-            if(players.get(i).getTotalVP() >= 15);
+            if(players.get(i).getTotalVP() >= 15)
             {
+                System.out.println(players.get(i).getTotalVP());
                 isLastTurn = true;
                 return;
             }
@@ -99,33 +126,10 @@ public class Logic {
         if(thisPlayer.canBuyCard(thisCard))
         {
            thisPlayer.takeCard(thisCard);
+           removeCard(thisCard);
            thisPlayer.removeTokens(thisCard.getCost());
         }
-        for(int i = 0; i < 3; i++)
-        {
-            if(getFirstFour(i).contains(thisCard))
-            {
-                decks.get(i).takeCard(thisCard);
-                return;
-            }
-            System.out.println("no card Found");
-        }
-    }
-
-    //buys a card foir the current player, checks player’s tokens and does nothing if they do not have enough automaticly does the the provided deck and removes the card, more efficant but need to know the location of the card to use
-    public void buyCard(Card thisCard, int deckNum){
-        if(thisCard == null){
-            System.out.println("held card is null");
-            return;
-        }
-
-        Player thisPlayer = players.get(currPlayer);
-        if(thisPlayer.canBuyCard(thisCard))
-        {
-           thisPlayer.takeCard(thisCard);
-           thisPlayer.removeTokens(thisCard.getCost());
-        }
-        decks.get(deckNum).takeCard(thisCard);
+     
     }
     
     //reserved a card for the current player, does nothing if they cannot reserve
@@ -225,34 +229,26 @@ public class Logic {
             count += thisTokens.get(iter.next());
         return count;
     }
-    
-    //returns the 3 main decks for the game
-    public ArrayList<Deck> getDecks(){
-        return decks;
-    }
-    
-    //returns all patreons 
-    public ArrayList<Patron> getPatrons(){
-        return patrons;
-    }
 
-    //returns the all tokens that are not hekld by players
-    public HashMap <String, Integer> getTokens(){
-        return tokens;
-    }
-
-    //gets the first four cards of a selected deck
-    public ArrayList<Card> getFirstFour(int deckType)
-    {
-        ArrayList<Card> retList = new ArrayList<Card>();
+    //finds, removes, and replaces the selected card in the matrix
+    public void removeCard(Card removed){
         for(int i = 0; i < 3; i++)
-        {  
-            retList.add(decks.get(deckType).drawCard(i));
+        {
+            for(int o = 0; o < 4; o++)
+            {
+                if(matrix[i][o].equals(removed))
+                {
+                    decks.get(i).takeCard(removed);
+                    if(decks.get(i).drawCard(3) != null)
+                        matrix[i][o] = decks.get(i).drawCard(3);
+                    else
+                        matrix[i][o] = null;
+                }
+            }
         }
-        return retList;
     }
 
-    //returns the entire matrix of cards in a 2d array
+    //returns the entire matrix of cards in a 2d array, only used once at the begening
     public Card[][] getAllFirstFour(){
         Card[][] retList = new Card[3][4];
         for(int i = 0; i<3; i++){ 
@@ -263,4 +259,21 @@ public class Logic {
         return retList;
     }
 
+    //returns the diffrence between 2 sets of tokens (can easly rework this to the addTokens method, that that is only what it is used for for now)
+    public Map<String, Integer> diffrenceOfTokens(Map<String, Integer> map1, Map<String, Integer> map2){
+
+        Map<String, Integer> difference = new HashMap<String, Integer>();
+        Iterator<String> iter = map1.keySet().iterator();
+        while(iter.hasNext()){
+            String value = iter.next();
+            if(map1.get(value) - map1.get(value) < 0){
+                difference.put(value, 0);
+            }
+            else{
+                difference.put(value, map1.get(value) - map2.get(value));
+            }
+        }
+        return difference;
+    }
+    
 }//end of class

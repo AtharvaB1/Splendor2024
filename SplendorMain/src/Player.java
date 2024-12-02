@@ -52,14 +52,24 @@ public class Player implements Comparable<Player>{
         }  
     }
 
-    //removes the tokens in the arrayList from the player, logic will check if they can remove
+    //removes the tokens in the arrayList from the player, acounting for discounts, logic will check if they can remove
     public void removeTokens(Map<String, Integer> removeTokens){
+        Map<String, Integer> withDiscount = new HashMap<String, Integer>();
         Iterator<String> iter = removeTokens.keySet().iterator();
-        iter = removeTokens.keySet().iterator();
-        while(iter.hasNext())
-        {
-            String gemType = (String) iter.next();
-            tokens.replace(gemType, tokens.get(gemType)-removeTokens.get(gemType));
+        while(iter.hasNext()){
+            String value = iter.next();
+            if(removeTokens.get(value) - discounts.get(value) < 0){
+                withDiscount.put(value, 0);
+            }
+            else{
+                withDiscount.put(value, removeTokens.get(value) - discounts.get(value));
+            }
+        }
+
+        Iterator<String> disIter = withDiscount.keySet().iterator();
+        while(disIter.hasNext()){
+            String gemType = (String) disIter.next();
+            tokens.replace(gemType, tokens.get(gemType)-withDiscount.get(gemType));
         }
     }
 
@@ -181,8 +191,8 @@ public class Player implements Comparable<Player>{
     @Override
     //comparison method, compares the scores of the players, if tied, then whichever player is earlier
     public int compareTo(Player o) {
-        if(this.getTotalVP() - o.getTotalVP() != 0)
-            return this.getTotalVP() - o.getTotalVP();
+        if(o.getTotalVP() - this.getTotalVP() != 0)
+            return o.getTotalVP() - this.getTotalVP();
         else
             return this.getNum() - o.getNum();
     }
