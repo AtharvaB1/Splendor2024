@@ -8,7 +8,7 @@ public class Rules extends JFrame {
         popFrame.setDefaultCloseOperation(3);
         
         popFrame.setBounds(getWidth()/2, getHeight()/2, 200, 200);
-
+        
     }
 
 }
