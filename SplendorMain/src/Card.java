@@ -3,7 +3,6 @@ import java.awt.image.*;
 import java.util.*;
 import javax.imageio.*;
 
-@SuppressWarnings("unused")// remove later, suppress problems of img not used
 public class Card{
     private BufferedImage img;
     private HashMap<String,Integer> cost;
@@ -16,7 +15,7 @@ public class Card{
     public Card(String input, int t){
         cost = new HashMap<String,Integer>();
         try {
-            img = ImageIO.read(Card.class.getResource("Images\\Card Images\\" +input+ ".png")); //imgs broken
+            img = ImageIO.read(Card.class.getResource("images/Card Images/  " +input+ ".png")); //imgs broken
         } catch (Exception e) {
             System.out.println(e+"Images\\Card Images\\" + input+ ".png");
             return;

@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 public class MenuPanel extends JPanel implements MouseListener{
     private BufferedImage background;
-
+    Rules rule;
     //constructor
     public MenuPanel(){
         try{
@@ -17,6 +17,7 @@ public class MenuPanel extends JPanel implements MouseListener{
             System.out.println("Image error in menu panel");
         }
         addMouseListener(this);
+        
     }
 
     //main paint method
@@ -39,6 +40,11 @@ public class MenuPanel extends JPanel implements MouseListener{
                     MainFrame.selectPlayers();
                 }
         }
+    }
+
+    public void showRules(){
+        rule = new Rules();
+        rule.setVisible(true);
     }
 
     @Override
