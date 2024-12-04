@@ -20,6 +20,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
     private HashMap<String,Integer> heldTokens; //three tokens held by current player when interacted with
     private Card heldCard;
     private BufferedImage bkg, endBkg, rule1, rule2, rule3, back1, back2, back3, rHigh, cHigh;// background and rules, backs of three diff card types, highlights for the shelved cards
+    private BufferedImage popUp, reservedPopUp;
     Logic logic; //logic class
     JButton endTurn, rPrev, rNext, rClose; //might not be using anymore
     private Card[][] mat;
@@ -27,6 +28,9 @@ public class Splendorpanel extends JPanel implements MouseListener{
     private String[] colors;
     private ArrayList <BufferedImage> tokenImgs;
     private boolean isHoldingCard;
+    private boolean showAllCards;
+    private boolean showReservedCards;
+    private ArrayList <Card> temp;
 
 
     //constructor
@@ -34,16 +38,21 @@ public class Splendorpanel extends JPanel implements MouseListener{
         heldTokens = new HashMap<String,Integer>();
         heldCard = null;
         tokenImgs = new ArrayList <BufferedImage> ();
+        temp = new ArrayList <Card> ();
         colors = new String[]{"White", "Blue", "Green", "Red", "Black", "Wild"};
         pCount = p;
         logic = new Logic(pCount);
         pat = new ArrayList<Patron>(); //one more patron than players
         mat = logic.getMatrix();
         isHoldingCard = false;
+        showAllCards = false;
+        showReservedCards = false;
         try {
             //bkg = ImageIO.read(new File("bkg.png"));
             bkg = ImageIO.read(Splendorpanel.class.getResource("/images/gamebkg.jpg"));
             endBkg = ImageIO.read(Splendorpanel.class.getResource("/images/gameEndButtonScreen.jpg"));
+            popUp = ImageIO.read(Splendorpanel.class.getResource("/images/shelvedCardsPopUp.png"));
+            reservedPopUp = ImageIO.read(Splendorpanel.class.getResource("/images/reservedPopUp.png"));
             //rule1 =
             //rule2 =
             //rule3 =
@@ -89,6 +98,32 @@ public class Splendorpanel extends JPanel implements MouseListener{
         drawPatron(g);  //draw patrons
         drawDeck(g);   //draw deck backs
         drawTokens(g); //draw tokens on board
+
+
+        if(showAllCards){ //drawing shelved cards
+            int x = 384;
+            int y =  177;
+            g.drawImage(popUp, 341, 139, 1239, 751, null);
+            for(int i = 0; i<temp.size(); i++){
+                g.drawImage(temp.get(i).getCardFront(), x, y, 206, 313, null);
+                x+=237;
+                if(i==5){
+                    x=384;
+                    y=537;
+                }
+            }
+
+        }
+
+        if(showReservedCards){ //drawing shelved reserved cards
+            int x = 619;
+            g.drawImage(reservedPopUp, 579, 290, 762, 388, null);
+            for(int i = 0; i<temp.size(); i++){
+                g.drawImage(temp.get(i).getCardFront(), x, 326, 206, 313, null);
+                x+=237;
+            }
+
+        }
 
         g.drawString("A", width / 2 , height - height / 10 );
         if(isHoldingCard)
@@ -347,26 +382,67 @@ public class Splendorpanel extends JPanel implements MouseListener{
     public void mouseEntered(MouseEvent e){
         int mouseX = e.getX();
         int mouseY = e.getY();
-     //expand shelved cards
+        int [] x = {274, 1667, 1667, 274};
+        int [] y = {272, 272, 671, 671};
 
-     //expand card
+        for(int i = 0; i<4; i++){ //expand shelved cards
+            if(mouseX>= x[i] && mouseX<= x[i]+95 && mouseY>= y[i] && mouseY <= y[i]+137){
+                temp = logic.getAllPlayers().get(i).getTotalCards();
+                showAllCards = true;
+                repaint();
+            }
+        }
+
      //expand reserved cards
+
+        int [] x2 = {395, 1788, 1788, 395};
+        int [] y2 = {272, 272, 671, 671};
+
+        for(int i = 0; i<4; i++){
+            if(mouseX>= x2[i] && mouseX<= x2[i]+95 && mouseY>= y2[i] && mouseY <= y2[i]+137){
+                temp = logic.getAllPlayers().get(i).getTotalReservedCards();
+                showReservedCards = true;
+                repaint();
+            }
+        }
 
     }
 
     @Override
     public void mouseClicked(MouseEvent e){
-        // TODO Auto-generated method stub
+        // nothing needed
     }
 
     @Override
     public void mouseExited(MouseEvent e){
-        // TODO Auto-generated method stub
+        int mouseX = e.getX();
+        int mouseY = e.getY();
+        int [] x = {274, 1667, 1667, 274};
+        int [] y = {272, 272, 671, 671};
+
+        for(int i = 0; i<4; i++){
+            if(mouseX <= x[i] && mouseX>= x[i]+95 && mouseY<= y[i] && mouseY >= y[i]+137){
+                showAllCards = false;
+                repaint();
+            }
+        }
+
+
+        int [] x2 = {395, 1788, 1788, 395};
+        int [] y2 = {272, 272, 671, 671};
+
+        for(int i = 0; i<4; i++){
+            if(mouseX<= x2[i] && mouseX>= x2[i]+95 && mouseY<= y2[i] && mouseY >= y2[i]+137){
+                showReservedCards = false;
+                repaint();
+            }
+        }
+
     }
 
     @Override
     public void mouseReleased(MouseEvent e){
-        // TODO Auto-generated method stub
+        // nothing needed
     }
 
 }//end of class
