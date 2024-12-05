@@ -293,7 +293,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
             for(int j = 0; j < tempHand.size(); j++){
                 if(j == 4){  //print hand of each player
                     x=tempX;
-                    y+= height / 11 + height / 10;
+                    y+= height / 11 + height / 25;
                 }
                     g.drawImage(tempHand.get(j).getCardFront(), x, y, cardWidth, cardHeight, null);
                     x+= width / 16;
@@ -340,7 +340,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
         System.out.println("mouse clicked at "+ mouseX + ", " + mouseY);
 
         //if you click a token
-        for(int i = 0; i<colors.length; i++){
+        for(int i = 0; i<colors.length -1; i++){ //-1 to acount for wildtoken
             if(mouseX>= tokensX && mouseX<= tokensX + d && mouseY>= tokensY && mouseY<= tokensY+d ){ //clicking each token
                 if(heldTokens.containsKey(colors[i])){
                     heldTokens.replace(colors[i], heldTokens.get(colors[i]), heldTokens.get(colors[i]) +1 );
