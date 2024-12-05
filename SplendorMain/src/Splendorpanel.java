@@ -14,6 +14,13 @@ public class Splendorpanel extends JPanel implements MouseListener{
     private int pCount; //num of players
     private int width;
     private int height;
+    private int cardWidth;
+    private int cardHeight;
+    private int patronWidth;
+    private int patronHeight;
+    private int tokenWidth;
+    private int tokenHeight;
+    private int fontSize;
     //private String tok1, tok2, tok3; //tokens players click on?
     private HashMap<String,Integer> heldTokens; //three tokens held by current player when interacted with
     private Card heldCard;
@@ -28,7 +35,8 @@ public class Splendorpanel extends JPanel implements MouseListener{
     private boolean showAllCards;
     private boolean showReservedCards;
     private ArrayList <Card> temp;
-
+    private BufferedImage reservedPopUp;
+    private BufferedImage popUp;
 
     //constructor
     public Splendorpanel(int p){
@@ -67,7 +75,6 @@ public class Splendorpanel extends JPanel implements MouseListener{
             pat.add(logic.getPatrons().get(i));
         }
 
-
         for(int i = 0; i<colors.length; i++){ //fill list of token images
             try{
                 tokenImgs.add(ImageIO.read(Splendorpanel.class.getResource("/images/Token Images/" + colors[i] +"Token.png")));
@@ -83,6 +90,15 @@ public class Splendorpanel extends JPanel implements MouseListener{
         super.paint(g);
         width = getWidth();
         height = getHeight();
+        cardWidth = width / 22;
+        cardHeight = height / 8;
+        patronWidth = width / 21;
+        patronHeight = height / 11;
+        tokenWidth = width / 32;
+        tokenHeight = height / 16;
+        fontSize = width / 130 + height / 65;
+
+        System.out.println(width + ", " + height + " this is width and height");
         if(!logic.canGetTokens(heldTokens)){ //if more than 10 tokens, if more than 3 tokens drawn, or if more than two of the same color
             heldTokens.clear(); //clear temporary hand
             drawError(g); //draw error and make players remove or redraw tokens
@@ -96,10 +112,9 @@ public class Splendorpanel extends JPanel implements MouseListener{
         drawDeck(g);   //draw deck backs
         drawTokens(g); //draw tokens on board
 
-
-        if(showAllCards){ //drawing shelved cards
+        if(showAllCards){ //drawing shelved cards //!!!!!!!!!NOT CENTERED YET!!!!!!
             int x = 384;
-            int y =  177;
+            int y = 177;
             g.drawImage(popUp, 341, 139, 1239, 751, null);
             for(int i = 0; i<temp.size(); i++){
                 g.drawImage(temp.get(i).getCardFront(), x, y, 206, 313, null);
@@ -109,24 +124,22 @@ public class Splendorpanel extends JPanel implements MouseListener{
                     y=537;
                 }
             }
-
         }
 
-        if(showReservedCards){ //drawing shelved reserved cards
+        if(showReservedCards){ //drawing shelved reserved cards//!!!!!!!!!NOT CENTERED YET!!!!!!
             int x = 619;
             g.drawImage(reservedPopUp, 579, 290, 762, 388, null);
             for(int i = 0; i<temp.size(); i++){
                 g.drawImage(temp.get(i).getCardFront(), x, 326, 206, 313, null);
                 x+=237;
             }
-
         }
 
         g.drawString("A", width / 2 , height - height / 10 );
         if(isHoldingCard)
-            g.drawString("holding card!",1200, 200);
+            g.drawString("holding card!",width / 2 + width / 3, height / 4);
         if(logic.isItLastTurn())
-            g.drawString("Last Turn!", 1200, 900);
+            g.drawString("Last Turn!", width / 2 + width / 5, height / 4);
         if(logic.isGameOver())
             MainFrame.endGame(logic.getSortedPlayers());
     }
@@ -139,10 +152,10 @@ public class Splendorpanel extends JPanel implements MouseListener{
             g.drawImage(bkg, 0, 0, getWidth(), getHeight(), null); // normal background
         }
        
-        g.setFont(new Font("Times New Roman", Font.BOLD, 45));
-        g.drawString(logic.getPlayer().getName(),  width/ 3 + width / 8 , height / 5 - height / 13); //Which player's turn
+        g.setFont(new Font("Times New Roman", Font.BOLD, fontSize * 3));
+        g.drawString(logic.getPlayer().getName(),  width/ 3 + width / 12 , height / 5 - height / 13); //Which player's turn
 
-        g.setFont(new Font("Times New Roman", Font.PLAIN, 34));
+        g.setFont(new Font("Times New Roman", Font.PLAIN, fontSize));
         g.drawString("Player 1 - " + logic.getAllPlayers().get(0).getTotalVP() + " points", width / 12, height / 10); //player header and points
         g.drawString("Player 2 - " + logic.getAllPlayers().get(1).getTotalVP() + " points", width - width / 5, height / 10);
         if(pCount > 2)
@@ -157,16 +170,15 @@ public class Splendorpanel extends JPanel implements MouseListener{
         int cardX = width / 4 + width / 7; //set start position of cards, increment x and y by __ for the cards after in the loop
         int cardY = height / 5;
 
-
         for(int i = 0; i<3; i++){ //printing cards matrix from bottom row to top
             for(int j = 0; j<4; j++){
                 if(mat[i][j] != null){
-                    g.drawImage(mat[i][j].getCardFront(), cardX, cardY, 95, 137, null); // need to test correct coordinates and height and width
+                    g.drawImage(mat[i][j].getCardFront(), cardX, cardY, cardWidth, cardHeight, null); // need to test correct coordinates and height and width
                 }
-                cardX+= 129;
+                cardX+= width / 16;
             }
             cardX = width / 4 + width / 7;  //reset x position for next row
-            cardY+= 161; //increment y position for next row
+            cardY+= height / 7 + height / 150; //increment y position for next row
         }
     }
    
@@ -175,8 +187,8 @@ public class Splendorpanel extends JPanel implements MouseListener{
         int patX = width / 4 + width / 12; //set patron position and increment x in loop
 
         for(int i = 0; i<pat.size(); i++){
-            g.drawImage(pat.get(i).getPatFace(), patX, height  - height / 3, 95,93, null);
-            patX+=127;
+            g.drawImage(pat.get(i).getPatFace(), patX, height  - height / 3, patronWidth, patronHeight, null);
+            patX+=width / 16;
         }
     }
 
@@ -185,11 +197,11 @@ public class Splendorpanel extends JPanel implements MouseListener{
         for(int i = 0; i<3; i++){
             if(!logic.getDecks().get(i).deckEmpty()){
                 if(i == 0){
-                    g.drawImage(back1, width / 4 + width / 12, height / 5, 95, 137, null );
+                    g.drawImage(back1, width / 4 + width / 12, height / 5, cardWidth, cardHeight, null );
                 } else if (i == 1){
-                    g.drawImage(back2, width / 4 + width / 12, height / 5 + 161, 95, 137, null );
+                    g.drawImage(back2, width / 4 + width / 12, height / 5 + height / 7 + height / 150, cardWidth, cardHeight, null );
                 } else {
-                    g.drawImage(back3, width / 4 + width / 12, height / 5 + 322, 95, 137, null );
+                    g.drawImage(back3, width / 4 + width / 12, height / 5 + 2*(height / 7 + height / 150), cardWidth, cardHeight, null );
                 }
             }
         }
@@ -201,88 +213,114 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
         for(int i = 0; i<colors.length; i++){
             if(logic.getTokens().get(colors[i])>0){ //if specific color tokens amount >0, print image
-                g.drawImage(tokenImgs.get(i), width / 2 + width / 7 + 15, y, 61, 61, null);
-                g.drawString("" + logic.getTokens().get(colors[i]), width / 2 + width / 7 + 33, y); //number of tokens left
+                g.drawImage(tokenImgs.get(i), width / 2 + width / 7 + width / 150, y, tokenWidth, tokenHeight, null);
+                g.setFont(new Font("Times New Roman", Font.PLAIN, fontSize)); 
+                g.drawString("" + logic.getTokens().get(colors[i]), width / 2 + width / 6 - width / 150, y); //number of tokens left
             }
-            y+=88;
+            y+=height / 12;
         }
     }
 
-
     //paints a clear error message if anything does wrong
     public void drawError(Graphics g){
-        g.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        g.setFont(new Font("Times New Roman", Font.PLAIN, fontSize));
         g.setColor(Color.RED);
         g.drawString("Check if you have more than ten tokens\nor if you drew more than three tokens\nor more than two of the same type", 1000, 1000); //set real location later
     }
 
     //draw hands of all players and updates their current card and token counts
     public void drawHands(Graphics g){
-        int x = 35;
-        int y = 121;
-        int x2 = 409;
-        int y2 = 268;
-        int tX = 35 ;
-        int tY = 423;
+        //int x = 35;
+        //int y = 121;
+        //int x2 = 409;
+        //int y2 = 268;
+        ///int tX = 35 ;
+        //int tY = 423;
+        int x = width / 50;
+        int y = height / 10 + height / 100;
+        int x2 = width / 6;  //have not tested these values yet as reserved cards are not added yet //!!!!!!!!!NOT CENTERED YET!!!!!!!!!!
+        int y2 = height / 5; //have not tested these values yet as reserved cards are not added yet //!!!!!!!!!NOT CENTERED YET!!!!!!!!!!
+        int tX = width / 50;
+        int tY = height / 3 + height / 16;
         Player tempPlayer = null;
         ArrayList <Card> tempHand = new ArrayList <Card> (); //drawing all cards
         for (int i = 1; i<=pCount; i++){
-            if(i == 2){ //depending on which player hand, set position of top left card
-                x= 1520;
-                x2= 1802;
-                tX = 1520;
+            if(i == 2){      //depending on which player hand, set position of top left card
+                x = width - width / 4 - width / 210;
+                y = height / 10 + height / 100;
+                x2 = width / width / 5;
+                y2 = height / 5;
+                tX = width - width / 4 - width / 200;
+                tY = height / 3 + height / 16;
+
+                ///x= 1520;
+                //x2= 1802;
+                //tX = 1520;
             } else if (i==3){
-                x= 1520;
-                y=671;
-                x2= 1802;
-                y2=667;
-                tX = 1520;
-                tY = 584;
+                x = width - width / 4 - width / 210;
+                y = height - height / 2 + height / 8;
+                x2 = width / width / 5;
+                y2 = height - height / 3;
+                tX = width - width / 4 - width / 200;
+                tY = height - height / 2 + height / 21;
+
+                //x= 1520;
+                //y=671;
+                //x2= 1802;
+                //y2=667;
+                //tX = 1520;
+                //tY = 584;
             } else if (i==4){
-                x = 35;
-                y=671;
-                x2 =409;
-                y2=667;
-                tX = 35;
-                tY = 584;
+                  x = width / 50 ;
+                  y = height - height / 2 + height / 8;
+                  x2 = width / 6;
+                  y2 = height - height / 3;
+                  tX = width / 50;
+                  tY = height - height / 2 + height / 21;
+
+                //x = 35;
+                //y=671;
+                //x2 =409;
+                //y2=667;
+                //tX = 35;
+                //tY = 584;
             }
+
             tempPlayer = logic.getAllPlayers().get(i-1);
             tempHand = logic.getAllPlayers().get(i-1).getTotalCards();
             int tempX = x;
 
-
             for(int j = 0; j < tempHand.size(); j++){
                 if(j == 4){  //print hand of each player
                     x=tempX;
-                    y+=155;
+                    y+= height / 11 + height / 10;
                 }
-                    g.drawImage(tempHand.get(j).getCardFront(), x, y,95, 137, null);
-                    x+= 121;
+                    g.drawImage(tempHand.get(j).getCardFront(), x, y, cardWidth, cardHeight, null);
+                    x+= width / 16;
            }
 
-
            if(tempHand.size()>7){
-                //draw highlight around card --> more shelved cards
-                g.drawImage(cHigh, x+ 234 , y+146, 107, 144, null);
+                //draw highlight around card --> more shelved cards //!!!!!!!!!NOT CENTERED YET!!!!!!!!!!
+                g.drawImage(cHigh, x+ 234 , y+146, 107, 144, null); 
            }
    
            if(tempPlayer.getTotalReservedCards().size()>1){
-                //draw highlight around reserved card --> more shelved reserved cards
-                g.drawImage(rHigh, x+234 , y+356, 107, 144, null);
-                g.drawImage(tempPlayer.getTotalReservedCards().get(0).getCardFront(), x2, y2, 95, 137, null); //draw first reserved card
+                //draw highlight around reserved card --> more shelved reserved cards //!!!!!!!!!NOT CENTERED YET!!!!!!!!!!
+                g.drawImage(rHigh, x+234 , y+356, 107, 144, null); 
+                g.drawImage(tempPlayer.getTotalReservedCards().get(0).getCardFront(), x2, y2, cardWidth, cardHeight, null); //draw first reserved card
            }
          
            for(int j = 0; j<6; j++){ //draw tokens for each player
                 if(tempPlayer.getTokens().get(colors[j])>0){
-                    g.drawImage(tokenImgs.get(j), tX, tY, 61, 61, null);
+                    g.drawImage(tokenImgs.get(j), tX, tY, tokenWidth, tokenHeight, null);
                 }
 
                 if(i > 2){  //draw num of tokens held
-                    g.drawString( "" + tempPlayer.getTokens().get(colors[j]), tX, tY - 0);
+                    g.drawString( "" + tempPlayer.getTokens().get(colors[j]), tX, tY);
                 }else {
-                    g.drawString( "" + tempPlayer.getTokens().get(colors[j]), tX, tY + 68);
+                    g.drawString( "" + tempPlayer.getTokens().get(colors[j]), tX, tY + tokenHeight);
                 }
-                tX += 80;
+                tX += width / 24;
            }    
        }    
     }
@@ -293,11 +331,11 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
         int tokensY = height / 5 + height / 23;//location of tokens on board, top right corner of square
         int tokensX = width / 2 + width / 7 + 15;
-        int d = 61; //diameter of token image
+        int d = tokenWidth; //diameter of token image
         int cardX =  width / 4 + width / 7; //set start position of cards, increment x and y by __ for the cards after in the loop
         int cardY = height / 5;
-        int w = 95;
-        int l = 137;
+        int w = cardWidth;
+        int l = cardHeight;
 
         System.out.println("mouse clicked at "+ mouseX + ", " + mouseY);
 
@@ -310,7 +348,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
                     heldTokens.put(colors[i], 1);
                 }
             }
-            tokensY += 88;
+            tokensY += height / 12;
         }
 
         //if you Click a card in the token matrix
@@ -322,18 +360,18 @@ public class Splendorpanel extends JPanel implements MouseListener{
                     isHoldingCard = true;
                     repaint();
                 }
-                cardX+= 129;
+                cardX+= width / 16;
             }
-            cardX = 714; 
-            cardY+= 161; 
+            cardX = width / 4 + width / 7; 
+            cardY+= height / 7 + height / 150; 
         }
 
-        if(logic.showEndButton() && mouseX >= 587 && mouseX <= 914 && mouseY >= 867 && mouseY <= 993){ //switch player button on end button screen
+        if(logic.showEndButton() && mouseX >= 587 && mouseX <= 914 && mouseY >= 867 && mouseY <= 993){ //switch player button on end button screen //!!!!!!!!!NOT CENTERED YET!!!!!!!!!!
             System.out.println("hit switch player button");
             logic.switchPlayer();
         }
 
-        if(logic.showEndButton() && mouseX >= 808 && mouseX <= 1134 && mouseY >= 859 && mouseY <= 985){ //switch player button on normal screen
+        if(logic.showEndButton() && mouseX >= 808 && mouseX <= 1134 && mouseY >= 859 && mouseY <= 985){ //switch player button on normal screen //!!!!!!!!!NOT CENTERED YET!!!!!!!!!!
             System.out.println("hit switch player button");
             logic.switchPlayer();
         }
@@ -341,7 +379,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
         //logic.endTurn();
 
         //dont know where the end buttone cords are for now so just assume that this is the end button, this handels everyhting that will happen when the endButton is pressed
-        if( /*logic.showEndButton() && */mouseX >= 1007 && mouseX <= 1334 && mouseY >= 867 && mouseY <= 993){ //only allows to click endbutton if it is displayed
+        if( /*logic.showEndButton() && */mouseX >= (width / 2) - 100 && mouseX <= (width / 2) + 100 && mouseY >= (height - height / 10) - 50 && mouseY <= (height - height / 10) + 50){ //only allows to click endbutton if it is displayed
            System.out.println("hit endbutton");
            
            //if they have tokens
@@ -376,7 +414,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
     }
 
     @Override
-    public void mouseEntered(MouseEvent e){
+    public void mouseEntered(MouseEvent e){ //!!!!!!!!!NOT CENTERED YET!!!!!!!!!!
         int mouseX = e.getX();
         int mouseY = e.getY();
         int [] x = {274, 1667, 1667, 274};
@@ -390,19 +428,21 @@ public class Splendorpanel extends JPanel implements MouseListener{
             }
         }
 
-     //expand reserved cards
+        //expand reserved cards -- this is broken for some reason so put in a try catch parameter -- //!!!!!!!!!NOT CENTERED YET!!!!!!!!!!
+        try{
+            int [] x2 = {395, 1788, 1788, 395};
+            int [] y2 = {272, 272, 671, 671};
 
-        int [] x2 = {395, 1788, 1788, 395};
-        int [] y2 = {272, 272, 671, 671};
-
-        for(int i = 0; i<4; i++){
-            if(mouseX>= x2[i] && mouseX<= x2[i]+95 && mouseY>= y2[i] && mouseY <= y2[i]+137){
-                temp = logic.getAllPlayers().get(i).getTotalReservedCards();
-                showReservedCards = true;
-                repaint();
+            for(int i = 0; i<4; i++){
+                if(mouseX>= x2[i] && mouseX<= x2[i]+95 && mouseY>= y2[i] && mouseY <= y2[i]+137){
+                    temp = logic.getAllPlayers().get(i).getTotalReservedCards();
+                    showReservedCards = true;
+                    repaint();
+                }
             }
+        }catch(Exception c){
+            System.out.println("error " + c);
         }
-
     }
 
     @Override
@@ -434,7 +474,6 @@ public class Splendorpanel extends JPanel implements MouseListener{
                 repaint();
             }
         }
-
     }
 
     @Override
