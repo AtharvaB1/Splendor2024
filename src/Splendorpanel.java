@@ -21,6 +21,8 @@ public class Splendorpanel extends JPanel implements MouseListener{
     private int tokenWidth;
     private int tokenHeight;
     private int fontSize;
+    private int endButtonWidth;
+    private int endButtonHeight;
     //private String tok1, tok2, tok3; //tokens players click on?
     private HashMap<String,Integer> heldTokens; //three tokens held by current player when interacted with
     private Card heldCard;
@@ -32,6 +34,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
     private String[] colors;
     private ArrayList <BufferedImage> tokenImgs;
     private boolean isHoldingCard;
+    private boolean isIllegal;
     private boolean showAllCards;
     private boolean showReservedCards;
     private ArrayList <Card> temp;
@@ -54,7 +57,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
         showReservedCards = false;
         try {
             //bkg = ImageIO.read(new File("bkg.png"));
-            bkg = ImageIO.read(Splendorpanel.class.getResource("/images/gamebkg.jpg"));
+            bkg = ImageIO.read(Splendorpanel.class.getResource("/Splendor2024/images/gamebkg.jpg"));
             endBkg = ImageIO.read(Splendorpanel.class.getResource("/images/gameEndButtonScreen.jpg"));
             popUp = ImageIO.read(Splendorpanel.class.getResource("/images/shelvedCardsPopUp.png"));
             reservedPopUp = ImageIO.read(Splendorpanel.class.getResource("/images/reservedPopUp.png"));
@@ -97,12 +100,14 @@ public class Splendorpanel extends JPanel implements MouseListener{
         tokenWidth = width / 32;
         tokenHeight = height / 16;
         fontSize = width / 130 + height / 65;
+        endButtonHeight = height / 5 - height / 10;
+        endButtonWidth = width / 10;
 
         System.out.println(width + ", " + height + " this is width and height");
-        if(!logic.canGetTokens(heldTokens)){ //if more than 10 tokens, if more than 3 tokens drawn, or if more than two of the same color
-            heldTokens.clear(); //clear temporary hand
-            drawError(g); //draw error and make players remove or redraw tokens
-        }
+        //if(!logic.canGetTokens(heldTokens)){ //if more than 10 tokens, if more than 3 tokens drawn, or if more than two of the same color
+           // heldTokens.clear(); //clear temporary hand
+           ///drawError(g); //draw error and make players remove or redraw tokens
+      //  }
 
         //need to test locations
         drawSetUp(g); //background and text
@@ -116,7 +121,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
             int x = 384;
             int y = 177;
             g.drawImage(popUp, 341, 139, 1239, 751, null);
-            for(int i = 0; i<temp.size(); i++){
+           for(int i = 0; i<temp.size(); i++){
                 g.drawImage(temp.get(i).getCardFront(), x, y, 206, 313, null);
                 x+=237;
                 if(i==5){
@@ -135,7 +140,15 @@ public class Splendorpanel extends JPanel implements MouseListener{
             }
         }
 
-        g.drawString("A", width / 2 , height - height / 10 );
+        g.drawRect((width / 2 - width / 20), (height - height / 6) , endButtonWidth, endButtonHeight);
+        g.fillRect((width / 2 - width / 20), (height - height / 6) , endButtonWidth, endButtonHeight);
+
+        if(isHoldingCard){
+            g.setColor(new Color(255, 255, 255));
+            g.drawRect((width / 2 + width / 15 ), (height - height / 6) , endButtonWidth, endButtonHeight);
+            g.fillRect((width / 2 + width / 15 ), (height - height / 6) , endButtonWidth, endButtonHeight);
+            g.setColor(new Color(0,0,0));
+        }
         if(isHoldingCard)
             g.drawString("holding card!",width / 2 + width / 3, height / 4);
         if(logic.isItLastTurn())
@@ -216,6 +229,10 @@ public class Splendorpanel extends JPanel implements MouseListener{
                 g.drawImage(tokenImgs.get(i), width / 2 + width / 7 + width / 150, y, tokenWidth, tokenHeight, null);
                 g.setFont(new Font("Times New Roman", Font.PLAIN, fontSize)); 
                 g.drawString("" + logic.getTokens().get(colors[i]), width / 2 + width / 6 - width / 150, y); //number of tokens left
+
+                if(heldTokens.containsKey(colors[i])){
+                    g.drawString("" + heldTokens.get(colors[i]), width / 2 + width / 5 - width / 100, y + y/ 100); //tokens selected
+                }
             }
             y+=height / 12;
         }
@@ -344,14 +361,18 @@ public class Splendorpanel extends JPanel implements MouseListener{
             if(mouseX>= tokensX && mouseX<= tokensX + d && mouseY>= tokensY && mouseY<= tokensY+d ){ //clicking each token
                 if(heldTokens.containsKey(colors[i])){
                     heldTokens.replace(colors[i], heldTokens.get(colors[i]), heldTokens.get(colors[i]) +1 );
+                    System.out.println("TOKEN HIT!");
+                    repaint();
                 } else {
                     heldTokens.put(colors[i], 1);
+                    System.out.println("TOKEN HIT!");
+                    repaint();
                 }
             }
             tokensY += height / 12;
         }
 
-        //if you Click a card in the token matrix
+        //if you Click a card in the card matrix
         for(int i = 0; i<3; i++){ 
             for(int j = 0; j<4; j++){
                 
@@ -366,20 +387,9 @@ public class Splendorpanel extends JPanel implements MouseListener{
             cardY+= height / 7 + height / 150; 
         }
 
-        if(logic.showEndButton() && mouseX >= 587 && mouseX <= 914 && mouseY >= 867 && mouseY <= 993){ //switch player button on end button screen //!!!!!!!!!NOT CENTERED YET!!!!!!!!!!
-            System.out.println("hit switch player button");
-            logic.switchPlayer();
-        }
-
-        if(logic.showEndButton() && mouseX >= 808 && mouseX <= 1134 && mouseY >= 859 && mouseY <= 985){ //switch player button on normal screen //!!!!!!!!!NOT CENTERED YET!!!!!!!!!!
-            System.out.println("hit switch player button");
-            logic.switchPlayer();
-        }
-
         //logic.endTurn();
 
-        //dont know where the end buttone cords are for now so just assume that this is the end button, this handels everyhting that will happen when the endButton is pressed
-        if( /*logic.showEndButton() && */mouseX >= (width / 2) - 100 && mouseX <= (width / 2) + 100 && mouseY >= (height - height / 10) - 50 && mouseY <= (height - height / 10) + 50){ //only allows to click endbutton if it is displayed
+        if( /*logic.showEndButton() && */mouseX >= (width / 2 - width / 20) && mouseX <= (width / 2 - width / 20) + endButtonWidth && mouseY >= (height - height / 6)  && mouseY <= (height - height / 6) + endButtonHeight){ //only allows to click endbutton if it is displayed
            System.out.println("hit endbutton");
            
            //if they have tokens
@@ -406,11 +416,16 @@ public class Splendorpanel extends JPanel implements MouseListener{
            isHoldingCard = false;
            heldCard = null;
            heldTokens = new HashMap<String, Integer>();
-           logic.endTurn();
+           //logic.endTurn();
            repaint();
 
            System.out.println("nothing done, skipping turn");
         }
+
+        if(isHoldingCard && mouseX >= (width / 2 + width / 15) && mouseX <= (width / 2 + width / 15) + endButtonWidth && mouseY >= (height - height / 6)  && mouseY <= (height - height / 6) + endButtonHeight){
+            //ADD RESERVING SYSTEM HERRE
+        }
+
     }
 
     @Override

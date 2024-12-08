@@ -67,8 +67,6 @@ public class Logic {
         } else{
             currPlayer = 1;
         }
-        
-
     }
 
     //returns the entrie players arrayList
@@ -216,7 +214,7 @@ public class Logic {
         else if(tokenCount(thisTokens) == 2){
             Iterator<String> iter = thisTokens.keySet().iterator();
             String gemChecked = iter.next();
-            if(tokens.get(gemChecked) >= 4)
+            if(tokens.get(gemChecked) >= 4 && thisTokens.size() == 1)
                 return true;
         }
         else {
