@@ -145,8 +145,8 @@ public class Logic {
         Player thisPlayer = players.get(currPlayer);
         if(thisPlayer.canBuyCard(thisCard))
         {
-           thisPlayer.takeCard(thisCard);
            removeCard(thisCard);
+           thisPlayer.takeCard(thisCard);
            thisPlayer.removeTokens(thisCard.getCost());
         }
      
@@ -162,7 +162,10 @@ public class Logic {
             {
                 Map<String,Integer> temp = new HashMap<String,Integer>();
                 temp.put("Wild", 1);
-                thisPlayer.addTokens(temp);
+                if(tokens.get("Wild") >= 1){
+                    thisPlayer.addTokens(temp);
+                    removeTokens(temp);
+                }
             }
         }
     }
@@ -263,7 +266,17 @@ public class Logic {
                         matrix[i][o] = decks.get(i).drawCard(3);
                     else
                         matrix[i][o] = null;
+                    return;
                 }
+            }
+        }
+
+        for(int i = 0; i < getPlayer().getTotalReservedCards().size(); i++)
+        {
+            if(removed.equals(getPlayer().getTotalReservedCards().get(i)))
+            {
+                getPlayer().getTotalReservedCards().remove(i);
+                return;
             }
         }
     }

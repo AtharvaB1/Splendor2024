@@ -175,7 +175,7 @@ public class Player implements Comparable<Player>{
 
     //reserves card, logic checks if they can reserve it
     public void reserveCard(Card reserve){
-          reservedCards.add(reserve);
+        reservedCards.add(reserve);
     }
     
     //returns name
@@ -194,7 +194,7 @@ public class Player implements Comparable<Player>{
         if(o.getTotalVP() - this.getTotalVP() != 0)
             return o.getTotalVP() - this.getTotalVP();
         else
-            return this.getNum() - o.getNum();
+            return this.getTotalCards().size() - o.getTotalCards().size();
     }
    
 }//end of class
