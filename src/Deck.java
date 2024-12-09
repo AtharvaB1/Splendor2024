@@ -6,11 +6,11 @@ public class Deck {
     
     //constructor
     public Deck(int level){
-        File card = new File("src\\TextFiles\\Cards\\Card"+level+".txt");
+        InputStream card = getClass().getResourceAsStream("/TextFiles/Cards/Card" + level + ".txt");
         Scanner scan;
         try {
             scan = new Scanner(card);
-        } catch (FileNotFoundException e) {
+        } catch (Error e) {
             System.out.println(e+"your file is screwed - Deck");
             e.printStackTrace();
             return;

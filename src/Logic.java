@@ -25,7 +25,7 @@ public class Logic {
         } else if(count==3){
             tokens.put("White",5); tokens.put("Blue",5); tokens.put("Green",5); tokens.put("Red",5); tokens.put("Black",5); tokens.put("Wild",5);    
         } else{
-            tokens.put("White",7); tokens.put("Blue",7); tokens.put("Green",7); tokens.put("Red",7); tokens.put("Black",7); tokens.put("Wild",5);
+            tokens.put("White",4); tokens.put("Blue",4); tokens.put("Green",4); tokens.put("Red",4); tokens.put("Black",4); tokens.put("Wild",5);
         }
         players = new ArrayList<>();
         for(int i=0; i<count;i++){
@@ -37,11 +37,11 @@ public class Logic {
         }
         matrix = getAllFirstFour();
         patrons = new ArrayList<>();
+        InputStream pats = getClass().getResourceAsStream("/TextFiles/Patrons/Patron.txt");
         Scanner patCreate;
-        File pats = new File("src\\TextFiles\\Patrons\\Patron.txt");
         try {
             patCreate = new Scanner(pats);
-        } catch (FileNotFoundException e) {
+        } catch (Error e) {
             System.out.println(e+"your file is screwed- patron");
             e.printStackTrace();
             return;
