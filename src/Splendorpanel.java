@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
+import javax.lang.model.util.ElementScanner14;
 import javax.swing.*;
 
 
@@ -23,7 +24,12 @@ public class Splendorpanel extends JPanel implements MouseListener{
     private int fontSize;
     private int endButtonWidth;
     private int endButtonHeight;
-    //private String tok1, tok2, tok3; //tokens players click on?
+
+    private int nextButtonX;
+    private int reserveButtonX;
+    private int dropButtonX;
+    private int endButtonY;
+
     private HashMap<String,Integer> heldTokens; //three tokens held by current player when interacted with
     private Card heldCard;
     private BufferedImage bkg, endBkg, back1, back2, back3, rHigh, cHigh;// background and rules, backs of three diff card types, highlights for the shelved cards
@@ -56,7 +62,6 @@ public class Splendorpanel extends JPanel implements MouseListener{
         showAllCards = false;
         showReservedCards = false;
         try {
-            //bkg = ImageIO.read(new File("bkg.png"));
             bkg = ImageIO.read(Splendorpanel.class.getResource("/Splendor2024/images/gamebkg.jpg"));
             endBkg = ImageIO.read(Splendorpanel.class.getResource("/images/gameEndButtonScreen.jpg"));
             popUp = ImageIO.read(Splendorpanel.class.getResource("/images/shelvedCardsPopUp.png"));
@@ -102,6 +107,10 @@ public class Splendorpanel extends JPanel implements MouseListener{
         fontSize = width / 130 + height / 65;
         endButtonHeight = height / 5 - height / 10;
         endButtonWidth = width / 10;
+        nextButtonX = (width / 2 - width / 20);
+        reserveButtonX = (width / 2 + (width / 20) * 2);
+        dropButtonX = (width / 2 - (width / 20) * 4);
+        endButtonY = (height - height / 6); 
 
         System.out.println(width + ", " + height + " this is width and height");
         //if(!logic.canGetTokens(heldTokens)){ //if more than 10 tokens, if more than 3 tokens drawn, or if more than two of the same color
@@ -140,19 +149,41 @@ public class Splendorpanel extends JPanel implements MouseListener{
             }
         }
 
-        g.drawRect((width / 2 - width / 20), (height - height / 6) , endButtonWidth, endButtonHeight);
-        g.fillRect((width / 2 - width / 20), (height - height / 6) , endButtonWidth, endButtonHeight);
-
         if(isHoldingCard){
             g.setColor(new Color(255, 255, 255));
-            g.drawRect((width / 2 + width / 15 ), (height - height / 6) , endButtonWidth, endButtonHeight);
-            g.fillRect((width / 2 + width / 15 ), (height - height / 6) , endButtonWidth, endButtonHeight);
+            g.drawRect(reserveButtonX, endButtonY , endButtonWidth, endButtonHeight);
+            g.fillRect(reserveButtonX, endButtonY , endButtonWidth, endButtonHeight);
             g.setColor(new Color(0,0,0));
+
+            g.setColor(new Color(0, 255, 0));
+            g.drawRect(dropButtonX, endButtonY, endButtonWidth, endButtonHeight);
+            g.fillRect(dropButtonX, endButtonY, endButtonWidth, endButtonHeight);
+            g.setColor(new Color(0,0,0));
+
+            g.drawString("holding card!", width/ 3 + width / 8 ,  height / 5 - height / 13);
         }
-        if(isHoldingCard)
-            g.drawString("holding card!",width / 2 + width / 3, height / 4);
+        else if (heldTokens.size() > 0){
+            nextButtonX = (width / 2 + (width / 20) * 2);
+            g.drawRect(nextButtonX, endButtonY, endButtonWidth, endButtonHeight);
+            g.fillRect(nextButtonX, endButtonY, endButtonWidth, endButtonHeight);
+
+            g.setColor(new Color(0, 255, 0));
+            g.drawRect(dropButtonX, endButtonY, endButtonWidth, endButtonHeight);
+            g.fillRect(dropButtonX, endButtonY, endButtonWidth, endButtonHeight);
+            g.setColor(new Color(0, 0, 0));
+        }
+        else{
+            nextButtonX = (width / 2 - width / 20);
+            reserveButtonX = (width / 2 + (width / 20) * 2);
+            dropButtonX = (width / 2 - (width / 20) * 3);
+            endButtonY = (height - height / 6); 
+            g.drawRect(nextButtonX, endButtonY, endButtonWidth, endButtonHeight);
+            g.fillRect(nextButtonX, endButtonY, endButtonWidth, endButtonHeight);
+        }
+
         if(logic.isItLastTurn())
             g.drawString("Last Turn!", width / 2 + width / 5, height / 4);
+
         if(logic.isGameOver())
             MainFrame.endGame(logic.getSortedPlayers());
     }
@@ -389,7 +420,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
         //logic.endTurn();
 
-        if( /*logic.showEndButton() && */mouseX >= (width / 2 - width / 20) && mouseX <= (width / 2 - width / 20) + endButtonWidth && mouseY >= (height - height / 6)  && mouseY <= (height - height / 6) + endButtonHeight){ //only allows to click endbutton if it is displayed
+        if(mouseX >= nextButtonX && mouseX <= nextButtonX + endButtonWidth && mouseY >= endButtonY && mouseY <= endButtonY + endButtonHeight){
            System.out.println("hit endbutton");
            
            //if they have tokens
@@ -412,20 +443,19 @@ public class Splendorpanel extends JPanel implements MouseListener{
                repaint();
                return;
            }
-
-           isHoldingCard = false;
-           heldCard = null;
-           heldTokens = new HashMap<String, Integer>();
-           //logic.endTurn();
-           repaint();
-
-           System.out.println("nothing done, skipping turn");
+           System.out.println("nothing done");
         }
 
-        if(isHoldingCard && mouseX >= (width / 2 + width / 15) && mouseX <= (width / 2 + width / 15) + endButtonWidth && mouseY >= (height - height / 6)  && mouseY <= (height - height / 6) + endButtonHeight){
-            //ADD RESERVING SYSTEM HERRE
+        if(isHoldingCard && mouseX >= reserveButtonX && mouseX <= reserveButtonX + endButtonWidth && mouseY >= endButtonY && mouseY <= endButtonY + endButtonHeight){
+            //add reserving system here
         }
 
+        if((isHoldingCard || heldTokens.size() > 0) && mouseX >= dropButtonX && mouseX <= dropButtonX + endButtonWidth && mouseY >= endButtonY && mouseY <= endButtonY + endButtonHeight){
+            isHoldingCard = false;
+            heldCard = null;
+            heldTokens = new HashMap<String, Integer>();
+            repaint();
+        }
     }
 
     @Override
