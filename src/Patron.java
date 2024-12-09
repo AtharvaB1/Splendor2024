@@ -1,6 +1,8 @@
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.Iterator;
+
 import javax.imageio.*;
 
 public class Patron {
@@ -33,6 +35,16 @@ public class Patron {
     //returns the patreon image
     public Image getPatFace(){
         return img;
+    }
+
+    public boolean adder(HashMap<String,Integer> card){
+        Iterator<String> iter = cost.keySet().iterator();
+        while(iter.hasNext()){
+            String x = iter.next();
+            if(cost.get(x)-card.get(x)>0)
+            return false;
+        }
+        return true;
     }
 
 }//end of class

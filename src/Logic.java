@@ -25,7 +25,7 @@ public class Logic {
         } else if(count==3){
             tokens.put("White",5); tokens.put("Blue",5); tokens.put("Green",5); tokens.put("Red",5); tokens.put("Black",5); tokens.put("Wild",5);    
         } else{
-            tokens.put("White",4); tokens.put("Blue",4); tokens.put("Green",4); tokens.put("Red",4); tokens.put("Black",4); tokens.put("Wild",5);
+            tokens.put("White",7); tokens.put("Blue",7); tokens.put("Green",7); tokens.put("Red",7); tokens.put("Black",7); tokens.put("Wild",5);
         }
         players = new ArrayList<>();
         for(int i=0; i<count;i++){
@@ -115,6 +115,7 @@ public class Logic {
 
     //increases curr player, and passes turn to next player, if last turn then it will check if next player is player 1
     public void endTurn(){
+        getAPatron();
         //I LOOOOOOOOOOVVVVVVVVVEEEEEEEEEEE MODDDDDDDDDDDDDD YYYYYYEEEEAAAAAAHHHHHHH USA USA USA USA USA USA USA USA USA
         currPlayer = (currPlayer + 1) % numPlayers;
 
@@ -145,10 +146,16 @@ public class Logic {
            removeCard(thisCard);
            thisPlayer.takeCard(thisCard);
            thisPlayer.removeTokens(thisCard.getCost());
+           
         }
      
     }
     
+    public void patronCheck(){
+        Player p = players.get(currPlayer);
+        getAPatron();
+    }
+
     //reserved a card for the current player, does nothing if they cannot reserve
     public void reserveCard(Card thisCard){
         Player thisPlayer = players.get(currPlayer);
