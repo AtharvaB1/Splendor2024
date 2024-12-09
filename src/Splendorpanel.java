@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
-import javax.lang.model.util.ElementScanner14;
 import javax.swing.*;
 
 public class Splendorpanel extends JPanel implements MouseListener{
@@ -33,14 +32,14 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
     private HashMap<String,Integer> heldTokens; //three tokens held by current player when interacted with
     private Card heldCard;
-    private BufferedImage bkg, endBkg, back1, back2, back3, rHigh, cHigh;// background and rules, backs of three diff card types, highlights for the shelved cards
+    private BufferedImage bkg, endBkg, back1, back2, back3, rHigh, cHigh, reserveButton, endButton, dropButton;// background and rules, backs of three diff card types, highlights for the shelved cards
     Logic logic; //logic class
-    JButton endTurn, rPrev, rNext, rClose; //might not be using anymore
     private Card[][] mat;
     private ArrayList<Patron> pat;
     private String[] colors;
     private ArrayList <BufferedImage> tokenImgs;
     private boolean isHoldingCard;
+    private boolean alreadyHolding;
     private boolean isIllegal;
     private boolean showAllCards;
     private boolean showReservedCards;
@@ -65,13 +64,16 @@ public class Splendorpanel extends JPanel implements MouseListener{
         showReservedCards = false;
          playerReserveShown = -1;
         try {
-            bkg = ImageIO.read(Splendorpanel.class.getResource("/Splendor2024/images/gamebkg.jpg"));
+            bkg = ImageIO.read(Splendorpanel.class.getResource("/images/gamebkg.jpg"));
             endBkg = ImageIO.read(Splendorpanel.class.getResource("/images/gameEndButtonScreen.jpg"));
             popUp = ImageIO.read(Splendorpanel.class.getResource("/images/shelvedCardsPopUp.png"));
             reservedPopUp = ImageIO.read(Splendorpanel.class.getResource("/images/reservedPopUp.png"));
             //rule1 =
             //rule2 =
             //rule3 =
+            reserveButton = ImageIO.read(Splendorpanel.class.getResource("/images/ReserveCard.png"));
+            endButton = ImageIO.read(Splendorpanel.class.getResource("/images/NextButton.png"));
+            dropButton = ImageIO.read(Splendorpanel.class.getResource("/images/CancelButton.png"));
             cHigh = ImageIO.read(Splendorpanel.class.getResource("/images/cHighlight.png"));
             rHigh = ImageIO.read(Splendorpanel.class.getResource("/images/rHighlight.png"));
             back1 = ImageIO.read(Splendorpanel.class.getResource("/images/back1.png"));//(top row of cards)
@@ -153,38 +155,21 @@ public class Splendorpanel extends JPanel implements MouseListener{
         }
 
         if(isHoldingCard){
-            g.setColor(new Color(255, 255, 255));
-            g.drawRect(reserveButtonX, endButtonY , endButtonWidth, endButtonHeight);
-            g.fillRect(reserveButtonX, endButtonY , endButtonWidth, endButtonHeight);
-            g.setColor(new Color(0,0,0));
-
-            g.setColor(new Color(0, 255, 0));
-            g.drawRect(dropButtonX, endButtonY, endButtonWidth, endButtonHeight);
-            g.fillRect(dropButtonX, endButtonY, endButtonWidth, endButtonHeight);
-            g.setColor(new Color(0,0,0));
-
-            g.drawRect(nextButtonX, endButtonY, endButtonWidth, endButtonHeight);
-            g.fillRect(nextButtonX, endButtonY, endButtonWidth, endButtonHeight);
-
+            g.drawImage(reserveButton, reserveButtonX, endButtonY , endButtonWidth, endButtonHeight, null);
+            g.drawImage(dropButton, dropButtonX, endButtonY, endButtonWidth, endButtonHeight, null);
+            g.drawImage(endButton, nextButtonX, endButtonY, endButtonWidth, endButtonHeight, null);
             g.drawString("holding card!", width/ 3 + width / 8 ,  height / 5 - height / 50);
         }
         else if (heldTokens.size() > 0){
             nextButtonX = (width / 2 + (width / 20) * 2);
-            g.drawRect(nextButtonX, endButtonY, endButtonWidth, endButtonHeight);
-            g.fillRect(nextButtonX, endButtonY, endButtonWidth, endButtonHeight);
-
-            g.setColor(new Color(0, 255, 0));
-            g.drawRect(dropButtonX, endButtonY, endButtonWidth, endButtonHeight);
-            g.fillRect(dropButtonX, endButtonY, endButtonWidth, endButtonHeight);
-            g.setColor(new Color(0, 0, 0));
+            g.drawImage(endButton, nextButtonX, endButtonY, endButtonWidth, endButtonHeight, null);
+            g.drawImage(dropButton, dropButtonX, endButtonY, endButtonWidth, endButtonHeight, null);
         }
         else{
             nextButtonX = (width / 2 - width / 20);
             reserveButtonX = (width / 2 + (width / 20) * 2);
             dropButtonX = (width / 2 - (width / 20) * 3);
             endButtonY = (height - height / 6); 
-            g.drawRect(nextButtonX, endButtonY, endButtonWidth, endButtonHeight);
-            g.fillRect(nextButtonX, endButtonY, endButtonWidth, endButtonHeight);
         }
 
         if(logic.isItLastTurn())
@@ -429,8 +414,8 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
            //if they are holding a card
            if(heldCard != null && logic.getPlayer().canBuyCard(heldCard) && heldTokens.size() == 0){
-               logic.buyCard(heldCard);
                logic.addTokens(logic.diffrenceOfTokens(heldCard.getCost(), logic.getPlayer().getTotalDiscount()));
+               logic.buyCard(heldCard);
                logic.endTurn();
                heldCard = null;
                isHoldingCard = false;

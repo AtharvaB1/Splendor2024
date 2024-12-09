@@ -36,7 +36,9 @@ public class Deck {
 
     //returns the top card from the selected point in the deck
     public Card drawCard(int loc){
+        if(cards.size()>3)
         return cards.get(loc);
+        return null;
     }
     
     //retrurns the top card from the deck, and them removes the top card from the deck

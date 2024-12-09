@@ -6,13 +6,10 @@ public class Logic {
     private ArrayList<Player> players;
     private ArrayList<Deck> decks;
     private HashMap<String, Integer> tokens;
-   // @SuppressWarnings("unused")//remove later, suppress currplayer not used (lots of methods not worked on yet)
     private int numPlayers;
     private int currPlayer;
-    //@SuppressWarnings("unused")//remove later, suppress boolean not used (i havent worked on the method yet)
     private boolean isLastTurn; 
     private boolean isGameOver;
-    private boolean tokenSelected;
     private Card[][] matrix;
     
     //constructor
@@ -26,9 +23,9 @@ public class Logic {
         if(count==4){
             tokens.put("White",7); tokens.put("Blue",7); tokens.put("Green",7); tokens.put("Red",7); tokens.put("Black",7); tokens.put("Wild",5);    
         } else if(count==3){
-            tokens.put("White",5); tokens.put("Blue",5); tokens.put("Green",5); tokens.put("Red",5); tokens.put("Black",5); tokens.put("Wild",3);    
+            tokens.put("White",5); tokens.put("Blue",5); tokens.put("Green",5); tokens.put("Red",5); tokens.put("Black",5); tokens.put("Wild",5);    
         } else{
-            tokens.put("White",4); tokens.put("Blue",4); tokens.put("Green",4); tokens.put("Red",4); tokens.put("Black",4); tokens.put("Wild",2);
+            tokens.put("White",4); tokens.put("Blue",4); tokens.put("Green",4); tokens.put("Red",4); tokens.put("Black",4); tokens.put("Wild",5);
         }
         players = new ArrayList<>();
         for(int i=0; i<count;i++){
@@ -299,7 +296,7 @@ public class Logic {
         Iterator<String> iter = map1.keySet().iterator();
         while(iter.hasNext()){
             String value = iter.next();
-            if(map1.get(value) - map1.get(value) < 0){
+            if(map1.get(value) - map2.get(value) < 0){
                 difference.put(value, 0);
             }
             else{
