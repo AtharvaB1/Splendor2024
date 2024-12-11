@@ -264,7 +264,7 @@ public class Splendorpanel extends JPanel implements MouseListener{
     //paints a clear error message if anything does wrong
     public void drawError(Graphics g){
         g.setFont(new Font("Times New Roman", Font.PLAIN, fontSize));
-        g.setColor(Color.RED);
+        //g.setColor(Color.RED);
         g.drawString("Check if you have more than ten tokens\nor if you drew more than three tokens\nor more than two of the same type", 1000, 1000); //set real location later
     }
 
