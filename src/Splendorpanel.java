@@ -374,6 +374,24 @@ public class Splendorpanel extends JPanel implements MouseListener{
 
         System.out.println("mouse clicked at "+ mouseX + ", " + mouseY);
 
+        if(showReservedCards && playerReserveShown == logic.getPlayer().getNum()-1){
+            int rY = height / 2 - height /6 + height / 72;
+            int rX = width / 3;
+            for(int i = 0; i < logic.getPlayer().getTotalReservedCards().size(); i++)
+            {
+                System.out.println("" + rX + " " + rY);
+                if(mouseX >= rX && mouseX <= rX + reserveCardWidth && mouseY >= rY && mouseY <= rY + reserveCardHeight)
+                {
+                    heldCard = logic.getPlayer().getTotalReservedCards().get(i);
+                    isHoldingReserve = true;
+                    isHoldingCard = true;
+                    repaint();
+                    return;
+                }
+                rX+=width / 9 + width / 100;
+            }
+        } 
+
         //if you click a token
         for(int i = 0; i<colors.length -1; i++){ //-1 to acount for wildtoken
             if(mouseX>= tokensX && mouseX<= tokensX + d && mouseY>= tokensY && mouseY<= tokensY+d ){ //clicking each token
@@ -390,28 +408,11 @@ public class Splendorpanel extends JPanel implements MouseListener{
             tokensY += height / 12;
         }
 
-        if(showReservedCards && playerReserveShown == logic.getPlayer().getNum()-1){
-            int rY = height / 2 - height /6 + height / 72;
-            int rX = width / 3;
-            for(int i = 0; i < logic.getPlayer().getTotalReservedCards().size(); i++)
-            {
-                System.out.println("" + rX + " " + rY);
-                if(mouseX >= rX && mouseX <= rX + reserveCardWidth && mouseY >= rY && mouseY <= rY + reserveCardHeight && logic.getPlayer().canBuyCard(logic.getPlayer().getTotalReservedCards().get(i)))
-                {
-                    heldCard = logic.getPlayer().getTotalReservedCards().get(i);
-                    isHoldingReserve = true;
-                    repaint();
-                    return;
-                }
-                rX+=width / 9 + width / 100;
-            }
-        } 
-
         //if you Click a card in the card matrix
         for(int i = 0; i<3; i++){ 
             for(int j = 0; j<4; j++){
                 
-                if(mouseX>= cardX && mouseX<= cardX + w && mouseY>= cardY  && mouseY<= cardY + l && heldTokens.size() == 0 && heldCard == null){
+                if(!isHoldingReserve && mouseX>= cardX && mouseX<= cardX + w && mouseY>= cardY  && mouseY<= cardY + l && heldTokens.size() == 0 && heldCard == null){
                     heldCard = mat[i][j];
                     isHoldingCard = true;
                     repaint();
@@ -535,7 +536,6 @@ public class Splendorpanel extends JPanel implements MouseListener{
                 repaint();
             }
         }
-
     }
 
     @Override
