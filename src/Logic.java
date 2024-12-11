@@ -177,7 +177,7 @@ public class Logic {
     //will be called at the end of turn, gets ArrayList of player cards token type and checks if it matches with any patron, removes the patron if does.
     public void getAPatron(){
         Player thisPlayer = getPlayer();
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < numPlayers + 1; i++)
         {
             if(thisPlayer.canBuyPatreon(patrons.get(i)))
             {
@@ -211,10 +211,10 @@ public class Logic {
     //returns if the current player can take the selected amount of tokens
     public boolean canGetTokens(HashMap<String,Integer> thisTokens){
         Player thisPlayer = getPlayer();
+         Iterator<String> tokIter = tokens.keySet().iterator();
         if(thisPlayer.tokenCount() + thisTokens.size() > 10){
             return false;
         }
-
         if(tokenCount(thisTokens) == 3 && thisTokens.size() == 3){
             return true;
         }
@@ -223,11 +223,22 @@ public class Logic {
             String gemChecked = iter.next();
             if(tokens.get(gemChecked) >= 4 && thisTokens.size() == 1)
                 return true;
+            else{
+                int count = 0;
+                while(tokIter.hasNext())
+                {
+                    if(tokens.get(tokIter.next()) >= 1)
+                        count++;
+                }
+                if(count >2)
+                    return false;
+                else
+                    return true;
+            }
         }
         else {
             return false;
         }
-        return false;
     }
 
     //add tokens fron the array list to the total amount of tokens
@@ -273,6 +284,11 @@ public class Logic {
                     return;
                 }
             }
+            if(removed == decks.get(i).drawCard(4))
+            {
+                decks.get(i).takeCard(removed);
+                return;
+            }
         }
 
         for(int i = 0; i < getPlayer().getTotalReservedCards().size(); i++)
@@ -311,6 +327,36 @@ public class Logic {
             }
         }
         return difference;
+        //return addsWilds(difference, getPlayer().getTokens().get("Wilds"));
+    }
+
+    public void fixCountingError(){
+        Iterator<String> iter = getPlayer().getTokens().keySet().iterator();
+        while(iter.hasNext()){
+            String value = iter.next();
+            if(numPlayers == 4)
+            {
+                if(tokens.get(value) > numPlayers+3){
+                    tokens.replace("Wild", tokens.get("Wild") + (tokens.get(value) - (numPlayers+3)));
+                    tokens.replace(value, numPlayers+3);
+                }
+            }
+            else{
+                if(tokens.get(value) > numPlayers+2){
+                    tokens.replace("Wild", tokens.get("Wild") + (tokens.get(value) - (numPlayers+2)));
+                    tokens.replace(value, numPlayers+2); 
+                }
+            }
+           // if(numPlayers == 4){
+            //    while(getPlayer().getTokens().get(value) + tokens.get(value) > (numPlayers+3)){
+           //         getPlayer().getTokens().replace(value, getPlayer().getTokens().get(value) - 1);
+            //    }
+            //}
+            //else{
+            //    while(getPlayer().getTokens().get(value) + tokens.get(value) > (numPlayers+2)){
+            //        getPlayer().getTokens().replace(value, getPlayer().getTokens().get(value) - 1);
+            //    }
+        }
     }
     
 }//end of class

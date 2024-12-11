@@ -5,7 +5,9 @@ import javax.imageio.*;
 
 public class Card{
     private BufferedImage img;
+    private BufferedImage back;
     private HashMap<String,Integer> cost;
+    private HashMap<String,Integer> wildTokenAmounts;
     private String gem;
     private int victoryPoints;
     private int tier;
@@ -16,6 +18,7 @@ public class Card{
         cost = new HashMap<String,Integer>();
         try {
             img = ImageIO.read(Card.class.getResource("images/Card Images/" +input+ ".png")); //imgs broken
+            back = ImageIO.read(Card.class.getResource("images/back" +t+ ".png")); //imgs broken
         } catch (Exception e) {
             System.out.println(e+"Images\\Card Images\\" + input+ ".png");
             return;
@@ -26,6 +29,7 @@ public class Card{
         cost.put("Green",Integer.parseInt(vars[2]));
         cost.put("Red",Integer.parseInt(vars[3]));
         cost.put("Black",Integer.parseInt(vars[4]));
+        wildTokenAmounts = new HashMap<String,Integer>();
         victoryPoints = Integer.parseInt(vars[5]);
         gem = vars[6];
         tier = t;
@@ -49,6 +53,11 @@ public class Card{
     //returns the front image of the card
     public Image getCardFront(){
         return this.img;
+    }
+
+    //returns the back image of the card
+    public Image getCardBack(){
+        return this.back;
     }
 
     //returns what deck level the card is at

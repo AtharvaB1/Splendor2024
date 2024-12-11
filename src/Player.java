@@ -70,6 +70,11 @@ public class Player implements Comparable<Player>{
         while(disIter.hasNext()){
             String gemType = (String) disIter.next();
             tokens.replace(gemType, tokens.get(gemType)-withDiscount.get(gemType));
+
+            if(tokens.get(gemType) < 0){
+                tokens.replace("Wild", tokens.get("Wild") + tokens.get(gemType));
+                tokens.replace(gemType, 0);
+            }
         }
     }
 
@@ -83,7 +88,7 @@ public class Player implements Comparable<Player>{
         return discounts.get(thisGem);
     }
 
-    //returns if the player has enough discounts to buy a patreon card
+    //returns if the player has enough discounts to buy a card
     //returns true if they can, and false if they cant, will not effect any values
     public boolean canBuyCard(Card card){
         HashMap<String,Integer> rich = new HashMap<>();
