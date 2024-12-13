@@ -230,7 +230,7 @@ public class Logic {
                     if(tokens.get(tokIter.next()) >= 1)
                         count++;
                 }
-                if(count >2)
+                if(count >3)
                     return false;
                 else
                     return true;
@@ -326,12 +326,40 @@ public class Logic {
                 difference.put(value, map1.get(value) - map2.get(value));
             }
         }
+        System.out.println(difference+" "+map1+" "+map2);
         return difference;
         //return addsWilds(difference, getPlayer().getTokens().get("Wilds"));
     }
 
     public void fixCountingError(){
-        Iterator<String> iter = getPlayer().getTokens().keySet().iterator();
+        int checker = 0;
+        int max = 0;
+        if(numPlayers==2)
+            max=4;
+        else if(numPlayers==3)
+            max=5;
+        else
+            max=7;
+        
+        Iterator<String> gems = players.get(0).getTokens().keySet().iterator();
+        while(gems.hasNext()){
+            String gem = gems.next();
+            for(int i=0; i<players.size();i++){
+                checker+=players.get(i).getTokenType(gem);
+                System.out.println(gem+" "+checker);
+            }
+            if(checker>max){
+                System.out.println("ran,"+checker+" "+max+" "+(checker-max));
+                Player p = players.get(currPlayer);
+                p.getTokens().remove("Wild", checker-max);
+                tokens.put("Wild", tokens.get("Wild")+ (checker-max));
+                
+            }
+            checker=0;
+        }
+        
+
+        /*Iterator<String> iter = getPlayer().getTokens().keySet().iterator();
         while(iter.hasNext()){
             String value = iter.next();
             if(numPlayers == 4)
@@ -356,7 +384,7 @@ public class Logic {
             //    while(getPlayer().getTokens().get(value) + tokens.get(value) > (numPlayers+2)){
             //        getPlayer().getTokens().replace(value, getPlayer().getTokens().get(value) - 1);
             //    }
-        }
+        }*/
     }
     
 }//end of class
